@@ -40,10 +40,12 @@ const FIRST_BUTTON_BOTH_WAYS: ReadonlySet<SettingsSectionId> = new Set(["screens
 /**
  * Sections whose last row is a row of buttons with a button it is always entered on: coming up from the line below,
  * the ring enters on that button (Default, in the spoiler tier row), not on the far end of the row. The value is the
- * entry button's own marker, read inside the section body only.
+ * entry button's own marker, read inside the section body only. Data, the last section, is entered from below by Up
+ * from the Open all button, and enters on Clear cache..., the button Down leaves from (plan 106 F1).
  */
 const ENTRY_BUTTON_OF_LAST_ROW: Readonly<Partial<Record<SettingsSectionId, string>>> = {
   spoilers: '[data-bonsai-spoiler-tier-row="true"] [data-bonsai-choice-entry="true"]',
+  data: '.bonsai-settings-cache-row [data-bonsai-choice-entry="true"]',
 };
 
 /** The stops inside `host`, top to bottom: the innermost matches only. */

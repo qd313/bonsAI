@@ -3,7 +3,9 @@
  * Purpose: Pin the Deck check P91-FOLD-ALL-BUTTON: Right from a section line, or Down from the last one
  *          (plan 93), puts Steam's ring on the button; A opens every section, the label reads "Close all"
  *          and the ring stays on the button; Up, Left and B each put the ring back on the line it came from,
- *          also after the tab was unmounted and mounted again in between (lessons-learned § 3); Down and
+ *          also after the tab was unmounted and mounted again in between (lessons-learned § 3), except that Up after
+ *          Down from the tab's end goes back into the last section when it is open, onto its last control (plan 106
+ *          F1: the Deck found Up skipping that section's controls); Down and
  *          Right hold still; and its fill, text and border are the AI models button's own, by construction.
  * Used for: FoldAllButton.tsx, FoldedSection.tsx (Right), foldedTabsStore.ts (the way back).
  * Does not: Model Steam's spatial walk; every move here is one the plugin makes itself, through Steam's
@@ -18,9 +20,9 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, Focusable: SteamRingFocusable };
 });
 
-import { FoldedSection, chainIds, type FoldChainSection } from "./FoldedSection";
+import { FoldedSection, foldLineBelow, type FoldChainSection } from "./FoldedSection";
 import { FoldAllButton } from "./FoldAllButton";
-import { resetFoldedTabsForTests } from "./foldedTabsStore";
+import { resetFoldedTabsForTests, toggleSection } from "./foldedTabsStore";
 import { registerShoulderSwitch, resetShoulderSwitchForTests } from "../../shared/dpad/shoulderSwitch";
 import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
@@ -37,7 +39,7 @@ function Tab() {
           <span>rows</span>
         </FoldedSection>
       ))}
-      <FoldAllButton tab={TAB} sections={chainIds(CHAIN)} />
+      <FoldAllButton tab={TAB} chain={CHAIN} />
     </div>
   );
 }
@@ -181,5 +183,76 @@ describe("LB and RB with the ring on the floating button (Deck, 2026-10-12: LB d
     expect(step).not.toHaveBeenCalled();
     stop();
     expect(host.__nav?.onButtonDown?.({ detail: { button: 5 } })).toBeFalsy();
+  });
+});
+
+describe("Up after Down from the tab's end (plan 106 F1: the Deck found Up skipping the last section's controls)", () => {
+  /* A tab whose sections hold two buttons each, entered from below on the second: a plain focus inside the column. */
+  const lastRows = new Map<string, HTMLButtonElement | null>();
+  const ROWS: FoldChainSection[] = CHAIN.map(({ id }) => ({
+    id,
+    enterFromBottom: () => {
+      const last = lastRows.get(id);
+      last?.focus();
+      return Boolean(last);
+    },
+  }));
+  const ids = ROWS.map((s) => s.id);
+  function RowsTab() {
+    return (
+      <div>
+        {ROWS.map((s) => (
+          <FoldedSection key={s.id} tab={TAB} chain={ROWS} id={s.id} title={s.id} summary="">
+            <button>first of {s.id}</button>
+            <button ref={(el) => void lastRows.set(s.id, el)}>last of {s.id}</button>
+          </FoldedSection>
+        ))}
+        <FoldAllButton tab={TAB} chain={ROWS} />
+      </div>
+    );
+  }
+  /* Down from the last control of the open last section: the tab's own hand-over onto the button. */
+  function downFromTheEnd(c: HTMLElement) {
+    act(() => {
+      putSteamRingOn(lastRows.get("models")!);
+      foldLineBelow(TAB, ROWS, "models");
+    });
+    expect(steamRingHolder()).toBe(buttonOf(c));
+  }
+
+  it("the last section open: Steam's own transfer onto its line, then its own way in from below, onto the control Down came from", () => {
+    const { container } = render(<RowsTab />);
+    act(() => toggleSection(TAB, ids, "models"));
+    downFromTheEnd(container);
+    act(() => {
+      hostOf(container).__nav?.onMoveUp?.();
+    });
+    /* Steam's ring went by its own transfer onto the line inside the column, never by a plain focus out of the button's container... */
+    expect(steamRingHolder()).toBe(lineOf(container, "models"));
+    /* ...and the page's focus went on to the last control, a sibling inside that column, where Steam's ring follows it. */
+    expect(document.activeElement).toBe(lastRows.get("models"));
+  });
+
+  it("Left and B still go back to the line, and Up after Right from a line goes back to that line, not into its section", () => {
+    const { container } = render(<RowsTab />);
+    act(() => {
+      toggleSection(TAB, ids, "models");
+      toggleSection(TAB, ids, "kb");
+    });
+    for (const way of ["onMoveLeft", "onCancelButton"] as const) {
+      downFromTheEnd(container);
+      act(() => {
+        (hostOf(container).__nav?.[way] as ((e?: unknown) => unknown) | undefined)?.({ preventDefault() {} });
+      });
+      expect(steamRingHolder()).toBe(lineOf(container, "models"));
+      expect(document.activeElement).toBe(lineOf(container, "models"));
+    }
+    downFromTheEnd(container);
+    rightFrom(container, "kb");
+    act(() => {
+      hostOf(container).__nav?.onMoveUp?.();
+    });
+    expect(steamRingHolder()).toBe(lineOf(container, "kb"));
+    expect(document.activeElement).toBe(lineOf(container, "kb"));
   });
 });

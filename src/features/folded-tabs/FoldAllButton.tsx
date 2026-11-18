@@ -13,7 +13,9 @@
  *   Right from any section line puts the ring here (FoldedSection's line does it), and so does Down
  *   from the tab's end: the last section's line, or its last control while it is open (plan 93).
  *   A opens or closes every section and keeps the ring here.
- *   Up, Left or B put the ring back on the section line it came from. Right holds still. Down goes on to the
+ *   Up, Left or B put the ring back on the section line it came from; Up after Down from the tab's end,
+ *   with that last section open, goes on into it from below, onto its last control (plan 106 F1: on the
+ *   Deck Up landed on the line and skipped the section's own controls). Right holds still. Down goes on to the
  *   bar at the bottom of the panel while a download's card is out of sight (downloads/JobBar.tsx, plan 105 D4),
  *   and holds still otherwise: the button is then the tab's last stop, and Down going back up would walk in a circle.
  * The section it came from is the last one the ring landed in, kept in foldedTabsStore, so it
@@ -35,12 +37,14 @@ import { textPx } from "../../styles/textPx";
 import { FOLD_ALL_HEIGHT_PX } from "./foldedTabs";
 import {
   allSectionsOpen,
+  foldAllCameFromEnd,
   foldSectionToReturnTo,
   foldedTabsVersion,
+  isSectionOpen,
   setAllSections,
   subscribeFoldedTabs,
 } from "./foldedTabsStore";
-import { foldAllNavId, takeFoldLine } from "./FoldedSection";
+import { chainIds, foldAllNavId, takeFoldLine, type FoldChainSection } from "./FoldedSection";
 import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
 import { takeJobBar } from "../downloads/JobBar";
 
@@ -49,18 +53,35 @@ const FOLD_ALL_CLOSE_LABEL = "Close all";
 
 export type FoldAllButtonProps = {
   tab: string;
-  /** The tab's section ids, in order. */
-  sections: readonly string[];
+  /** The tab's sections in order, as its FoldedSections have them: Up uses the last one's way in from below. */
+  chain: readonly FoldChainSection[];
 };
 
-/** Back to the section line the ring came from (the first line when it came from none). */
-function returnToFoldLine(tab: string, sections: readonly string[]): boolean {
+/** The section the ring came from (the first when it came from none). */
+function sectionToReturnTo(tab: string, sections: readonly string[]): string {
   const section = foldSectionToReturnTo(tab);
-  return takeFoldLine(tab, section && sections.includes(section) ? section : sections[0] ?? "");
+  return section && sections.includes(section) ? section : sections[0] ?? "";
 }
 
-export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.ReactElement {
+/**
+ * Up from the button: back to the line the ring came from, and, when it came Down from the tab's end with that last
+ * section open, on into it from below, onto the control Down left. First Steam's own transfer onto the line, which is
+ * inside the tab's column; then the section's own way in from below, a plain hop between siblings of that one column,
+ * the same hop Up from the line under an open section makes (FoldedSection). Should that hop not land, the ring stays
+ * on the line.
+ */
+function upFromButton(tab: string, chain: readonly FoldChainSection[]): void {
+  const sections = chainIds(chain);
+  const section = sectionToReturnTo(tab, sections);
+  const intoSection = foldAllCameFromEnd(tab) && isSectionOpen(tab, sections, section);
+  if (!takeFoldLine(tab, section) || !intoSection) return;
+  chain.find((s) => s.id === section)?.enterFromBottom?.();
+}
+
+/** The button and its registered node: A opens or closes every section; the moves are the ones the header lists. */
+export function FoldAllButton({ tab, chain }: FoldAllButtonProps): React.ReactElement {
   useSyncExternalStore(subscribeFoldedTabs, foldedTabsVersion);
+  const sections = chainIds(chain);
   const allOpen = allSectionsOpen(tab, sections);
   const navRef = useRef<NavRefHolder["current"]>(null);
   useEffect(() => {
@@ -70,7 +91,7 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
   }, [tab]);
 
   const back = (): boolean => {
-    returnToFoldLine(tab, sections);
+    takeFoldLine(tab, sectionToReturnTo(tab, sections));
     return true;
   };
 
@@ -80,7 +101,10 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
       data-bonsai-fold-all={tab}
       {...({
         navRef,
-        onMoveUp: back,
+        onMoveUp: () => {
+          upFromButton(tab, chain);
+          return true;
+        },
         onMoveDown: () => takeJobBar(foldAllNavId(tab)) || true,
         onMoveLeft: back,
         onMoveRight: () => true,

@@ -260,11 +260,18 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
   }
 
   let ringEl: HTMLElement | null = null;
-  /** Where the ring is after a move: Steam's marker when a transfer put it there, else the page's focus. */
+  /**
+   * Where the ring is after a move: Steam's marker when a transfer put it there, else the page's focus. A transfer onto
+   * a stop in the tab body followed by a plain hop to another stop in it (Up from the Open all button: onto the last
+   * section's line, then into that section from below) ends where the hop went: the page here has the browser's
+   * focus, and Steam's ring follows a plain focus inside the tab's column (lostFocusPanel.tsx models the page without).
+   */
   const readRing = (beforeMarker: HTMLElement | null, beforeActive: Element | null): HTMLElement | null => {
     const marker = steamRingHolder(view.container.ownerDocument);
-    if (marker && marker !== beforeMarker) return marker;
     const active = view.container.ownerDocument.activeElement as HTMLElement | null;
+    if (marker && marker !== beforeMarker) {
+      return active && active !== marker && root.contains(marker) && root.contains(active) ? active : marker;
+    }
     if (active && active !== beforeActive && active !== view.container.ownerDocument.body) return active;
     return ringEl;
   };

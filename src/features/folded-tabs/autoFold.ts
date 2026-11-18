@@ -29,7 +29,8 @@
  *
  * Gotchas: With the switch on, Open all opens every section only until the ring lands in the list again; then the
  * rule folds them back (the session's call, plan 105 consult 3). Up from the Open all button lands on a section's
- * line, not its last setting, so the line of an open section opens the one above as its first setting does; without
+ * line (after Right from that line; after Down from the tab's end it passes the last section's line on its way into
+ * that section, plan 106 F1), so the line of an open section opens the one above as its first setting does; without
  * that, the walk back up from the button found every section above shut and went line to line (found by the walk
  * test, autoFold.walk.test.tsx).
  */
@@ -48,8 +49,8 @@ export interface WalkPlace {
 /**
  * The sections open after a landing at `place`, given the tab's sections in order and the ones open now. A first
  * setting opens the section above, a last setting the one below; the line of an open section opens the one above too
- * (both are open there, as on its first setting, and it is where Up from the Open all button lands); a line never
- * opens its own section, so a section the person closed stays closed. The ring's own section, and the neighbour
+ * (both are open there, as on its first setting, and Up from the Open all button lands on it or passes it); a line
+ * never opens its own section, so a section the person closed stays closed. The ring's own section, and the neighbour
  * across the boundary it is next to, are kept if open; every other section closes.
  */
 export function sectionsOpenAfterLanding(order: readonly string[], open: ReadonlySet<string>, place: WalkPlace): Set<string> {

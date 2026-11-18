@@ -165,15 +165,14 @@ function expectedOpen(order: string[], start: string[], seen: Seen[], direction:
 
 /**
  * Every landing on screen and clear of the strip; the page moved no more than a third; the redraw held the row still.
- * `unlimitedMoves` leading landings may move the page further: Up from the floating button returns to the line of the
- * section the ring came from, which on the Developer tab (its last section, Logging & exports, long and open) lies more
- * than a third of the pane up, with the switch off too (DeveloperTab.foldedWalk.test.tsx exempts the same landing).
+ * Up from the floating button too: it lands on the last section's last control, just above the button (plan 106 F1);
+ * its line, where it used to land, lay more than a third of the pane up on the Developer tab.
  */
-function checkLandings(seen: Seen[], viewport: number, label: string, unlimitedMoves = 0): void {
-  for (const [i, { l, section }] of seen.entries()) {
+function checkLandings(seen: Seen[], viewport: number, label: string): void {
+  for (const { l, section } of seen) {
     if (section === null) continue;
     const at = `${label}: press ${l.press} onto ${l.name}`;
-    if (i >= unlimitedMoves) expect(l.pageMoved, `${at}: the page moved`).toBeLessThanOrEqual(viewport / 3);
+    expect(l.pageMoved, `${at}: the page moved`).toBeLessThanOrEqual(viewport / 3);
     expect(l.top, `${at}: top`).toBeGreaterThanOrEqual(PANE_TOP - 0.5);
     expect(l.bottom, `${at}: bottom`).toBeLessThanOrEqual(PANE_TOP + viewport + 0.5);
     if (l.stripTop !== null) expect(l.bottom + RING_REACH + 6, `${at}: clear of the strip`).toBeLessThanOrEqual(l.stripTop);
@@ -224,7 +223,7 @@ export function checkAutoFoldWalk(t: TabCase, viewport: number, steam: SteamFocu
   expect(repeats(up), names(up).join(" | ")).toBe(0);
   expect(names(up)).toEqual(reference.up);
   expect(up.map((s) => [...s.open].sort())).toEqual(expectedOpen(t.ids, down[down.length - 1]!.open, up, "up"));
-  checkLandings(up, viewport, `${t.name} ${steam} up`, 1);
+  checkLandings(up, viewport, `${t.name} ${steam} up`);
   /* On the Deck's own pane the page scrolls, so a section above the ring closing (Down) and opening (Up) gave the hold work to do. */
   if (viewport === DECK_PANE) {
     expect(down.some((s) => Math.abs(s.l.held) > 1), "a hold going Down").toBe(true);

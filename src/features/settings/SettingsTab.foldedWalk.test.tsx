@@ -153,8 +153,8 @@ describe("the folded Settings tab, every section open", () => {
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up");
         expect(repeats(up), names(up).join(" | ")).toBe(0);
-        /* Up from the button: the line of the section the ring came from. */
-        expect(up[0]!.name).toMatch(/^Data section/);
+        /* Up from the button: the last section is open, so its last control, the one Down came from (plan 106 F1). */
+        expect(up[0]!.name).toBe("Clear cache...");
         expect(up[up.length - 1]!.name).toMatch(/^Screenshot quality/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();

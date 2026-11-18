@@ -41,6 +41,7 @@ import { applyHeldFoldStop, rememberFoldChain } from "./autoFold";
 import {
   foldedTabsVersion,
   isSectionOpen,
+  noteFoldAllArrival,
   notePersonPress,
   rememberFoldSection,
   subscribeFoldedTabs,
@@ -104,8 +105,8 @@ export function chainIds(chain: readonly FoldChainSection[]): string[] {
  * Down from the last control of section `section` (and from its line, when it is closed): the next
  * section's line, or, from the last section, the tab's floating Open all button. That button is drawn
  * outside the scroll pane, so the move is Steam's own transfer onto its registered node; Up from it
- * comes back to this section's line (FoldAllButton). Always claims the press, so Steam never carries it
- * past the tab's end; with no button on screen the ring holds still.
+ * comes back to this section (FoldAllButton): its last control while it is open, else its line. Always
+ * claims the press, so Steam never carries it past the tab's end; with no button on screen the ring holds still.
  */
 export function foldLineBelow(tab: string, chain: readonly FoldChainSection[], section: string): boolean {
   const next = chain[chain.findIndex((s) => s.id === section) + 1];
@@ -114,6 +115,7 @@ export function foldLineBelow(tab: string, chain: readonly FoldChainSection[], s
     return true;
   }
   rememberFoldSection(tab, section);
+  noteFoldAllArrival(tab, true);
   takeNavFocus(foldAllNavId(tab));
   return true;
 }
@@ -201,6 +203,7 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
           onMoveRight: () => {
             notePersonPress();
             rememberFoldSection(tab, id);
+            noteFoldAllArrival(tab, false);
             return takeNavFocus(foldAllNavId(tab));
           },
         } as Record<string, unknown>)}

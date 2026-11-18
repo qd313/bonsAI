@@ -16,8 +16,9 @@
  * Does not: Clear anything itself: the caller's `onResetSession` and `onClearAllPluginData` do.
  *
  * Focus: Up from the switch goes to the section's line, Down from the pair to the next line (here none:
- * Data is the last section, so it holds still), both handed in by the tab. The pair is one `Focusable`
- * with `flow-children="horizontal"`. It sits inside a panel row, so it takes Steam's own 16 point inset
+ * Data is the last section, so the floating Open all button), both handed in by the tab. Up from that
+ * button comes back to Clear cache..., the pair's entry button (useSettingsTabFocus.ts). The pair is one
+ * `Focusable` with `flow-children="horizontal"`. It sits inside a panel row, so it takes Steam's own 16 point inset
  * on each side like every other button on the tab.
  */
 import React from "react";
@@ -109,6 +110,7 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
         <Button
           className={FOCUS_RING_BTN_CLASS}
           ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-cache", el)}
+          data-bonsai-choice-entry="true"
           onClick={() => {
             rememberModalReturnFocus("settings-clear-cache");
             onBeforeDeckyModal();

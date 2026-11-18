@@ -53,7 +53,7 @@ import { PanelSection } from "@decky/ui";
 import type { DesktopAppLogLevel, TabResumeMode } from "../settings/bonsaiSettingsSchema";
 import { formatDeckyRpcError } from "../../shared/deckyCall";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
-import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
+import { FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
 import {
@@ -231,7 +231,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
       {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
       <div className="bonsai-fold-tail" aria-hidden="true" />
       <TabHelpStrip tab={DEVELOPER_FOLD_TAB}>
-        <FoldAllButton tab={DEVELOPER_FOLD_TAB} sections={chainIds(chain)} />
+        <FoldAllButton tab={DEVELOPER_FOLD_TAB} chain={chain} />
       </TabHelpStrip>
     </div>
   );

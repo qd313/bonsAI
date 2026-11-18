@@ -71,7 +71,7 @@ import { SettingsTabCharacterSection } from "../characters/SettingsTabCharacterS
 import { SettingsTabDataSection } from "./SettingsTabDataSection";
 import { useSettingsTabFocus } from "./useSettingsTabFocus";
 import type { VoiceSttModelId } from "./bonsaiSettingsSchema";
-import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
+import { FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
@@ -325,7 +325,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
       <div className="bonsai-fold-tail" aria-hidden="true" />
       <TabHelpStrip tab={SETTINGS_FOLD_TAB}>
-        <FoldAllButton tab={SETTINGS_FOLD_TAB} sections={chainIds(chain)} />
+        <FoldAllButton tab={SETTINGS_FOLD_TAB} chain={chain} />
       </TabHelpStrip>
     </div>
   );

@@ -1,8 +1,8 @@
 /**
  * Title: Which folded sections are open, kept outside the tab
  *
- * Purpose: A small memory, outside React, of which sections of a folded tab are open, and which
- * section the ring was last in. A folded tab (plan 91 § 2b) shows each section as one line; A opens
+ * Purpose: A small memory, outside React, of which sections of a folded tab are open, which
+ * section the ring was last in, and whether it reached the Open all button from the tab's end. A folded tab (plan 91 § 2b) shows each section as one line; A opens
  * or closes it, several can be open at once, and the floating Open all button opens or closes them
  * all and then hands the ring back to the section line it came from.
  *
@@ -35,6 +35,8 @@ interface TabFold {
 const tabs = new Map<string, TabFold>();
 /** Per tab, the section the ring last landed in (its line or a control inside it). */
 const lastSections = new Map<string, string>();
+/** Per tab, true when the ring last reached the Open all button Down from the tab's end, false when Right from a line. */
+const foldAllFromEnd = new Map<string, boolean>();
 const listeners = new Set<() => void>();
 let version = 0;
 
@@ -119,6 +121,7 @@ export function setOpenSections(tab: string, sections: readonly string[], open: 
 export function closeAllFoldedSections(): void {
   tabs.clear();
   lastSections.clear();
+  foldAllFromEnd.clear();
   changed();
 }
 
@@ -148,6 +151,16 @@ export function foldSectionToReturnTo(tab: string): string | null {
   return lastSections.get(tab) ?? null;
 }
 
+/** The ring is going onto the Open all button: Down from the tab's end (`fromEnd`), or Right from a line. Quiet. */
+export function noteFoldAllArrival(tab: string, fromEnd: boolean): void {
+  foldAllFromEnd.set(tab, fromEnd);
+}
+
+/** True when the ring last reached the Open all button Down from the tab's end (Up then goes back into that section). */
+export function foldAllCameFromEnd(tab: string): boolean {
+  return foldAllFromEnd.get(tab) === true;
+}
+
 export function subscribeFoldedTabs(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -162,5 +175,6 @@ export function foldedTabsVersion(): number {
 export function resetFoldedTabsForTests(): void {
   tabs.clear();
   lastSections.clear();
+  foldAllFromEnd.clear();
   changed();
 }

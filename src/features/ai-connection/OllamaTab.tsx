@@ -57,7 +57,7 @@ import {
 import { useOllamaTabFocus } from "./useOllamaTabFocus";
 import { useThinkingNoticeGate } from "./useThinkingNoticeGate";
 import { textPx } from "../../styles/textPx";
-import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
+import { FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
 import { DenseRow, DenseSwitchRow } from "../folded-tabs/DenseRow";
@@ -420,7 +420,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
       {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
       <div className="bonsai-fold-tail" aria-hidden="true" />
       <TabHelpStrip tab={OLLAMA_FOLD_TAB}>
-        <FoldAllButton tab={OLLAMA_FOLD_TAB} sections={chainIds(chain)} />
+        <FoldAllButton tab={OLLAMA_FOLD_TAB} chain={chain} />
       </TabHelpStrip>
     </div>
   );

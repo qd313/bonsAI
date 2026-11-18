@@ -99,15 +99,14 @@ function walk(viewport: number, steam: SteamFocusScroll, overrides: Partial<Deve
 }
 
 /**
- * Every landing on screen, clear of the strip, and the pane moved no more than a third of it at each.
- * `unlimitedMoves` leading landings may move the pane further: Up from the floating button returns to the
- * line of the section the ring came from (returnToFoldLine). With the tab's last section, Logging & exports,
- * open and longer than a third of the pane, that line sits further up than a third (222 of 430 on the
- * Deck's pane). That landing must still be wholly on screen, clear of the strip; only its move is not capped.
+ * Every landing on screen, clear of the strip, and the pane moved no more than a third of it at each. Up from the
+ * floating button too: with Logging & exports open it lands on that section's last control, just above the button,
+ * not on its line, which lay more than a third of the pane up (222 of 430 on the Deck's pane) and was exempt until
+ * plan 106 F1.
  */
-function checkLandings(landings: FoldedLanding[], viewport: number, label: string, unlimitedMoves = 0) {
-  for (const [i, l] of landings.entries()) {
-    if (i >= unlimitedMoves) expect(l.moved, `${label}: press ${l.press} onto ${l.name}`).toBeLessThanOrEqual(viewport / 3);
+function checkLandings(landings: FoldedLanding[], viewport: number, label: string) {
+  for (const l of landings) {
+    expect(l.moved, `${label}: press ${l.press} onto ${l.name}`).toBeLessThanOrEqual(viewport / 3);
     expect(l.top, `${label}: ${l.name} top`).toBeGreaterThanOrEqual(24 - 0.5);
     expect(l.bottom, `${label}: ${l.name} bottom`).toBeLessThanOrEqual(24 + viewport + 0.5);
     if (l.stripTop !== null) {
@@ -208,10 +207,10 @@ describe("the folded Developer tab, every section open", () => {
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up", 80);
         expect(repeats(up), names(up).join(" | ")).toBe(0);
-        /* Up from the button: the line of the section the ring came from. */
-        expect(up[0]!.name).toMatch(/^Logging & exports section/);
+        /* Up from the button: the last section is open, so its last control, the one Down came from (plan 106 F1). */
+        expect(up[0]!.name).toBe("Clear frozen test chips");
         expect(up[up.length - 1]!.name).toMatch(/^Knowledge base section/);
-        checkLandings(up, viewport, `${steam} up`, 1);
+        checkLandings(up, viewport, `${steam} up`);
         w.unmount();
       });
     }

@@ -31,7 +31,6 @@ from __future__ import annotations
 import hashlib
 import os
 import shutil
-import subprocess
 import threading
 import time
 import urllib.request
@@ -39,6 +38,9 @@ from typing import Any, Callable, Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.voice.voice_stoppable_run import run_stoppable
+
+CANCELLED_LINE = "Download cancelled."
 
 VALID_VOICE_STT_MODELS = frozenset({"tiny.en", "base.en"})
 DEFAULT_VOICE_STT_MODEL = "base.en"
@@ -177,24 +179,28 @@ def _download_model_file(
     curl = shutil.which("curl")
     env = _env_for_host_system_tools()
     if curl:
-        proc = subprocess.run(
-            [
-                curl,
-                "-fL",
-                "--retry",
-                "3",
-                "--retry-delay",
-                "2",
-                *(["--max-filesize", str(max_bytes)] if max_bytes else []),
-                "-o",
-                tmp_path,
-                url,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=900,
-            env=env,
-        )
+        # Run curl so a Cancel is heard within half a second (voice_stoppable_run), not after up to 15 minutes.
+        try:
+            proc = run_stoppable(
+                [
+                    curl,
+                    "-fL",
+                    "--retry",
+                    "3",
+                    "--retry-delay",
+                    "2",
+                    *(["--max-filesize", str(max_bytes)] if max_bytes else []),
+                    "-o",
+                    tmp_path,
+                    url,
+                ],
+                env=env,
+                timeout=900,
+                cancel_event=cancel_event,
+            )
+        except RuntimeError:
+            _remove_quietly(tmp_path)
+            raise RuntimeError(CANCELLED_LINE) from None
         if proc.returncode == 0 and os.path.isfile(tmp_path) and os.path.getsize(tmp_path) > 1024:
             if max_bytes and os.path.getsize(tmp_path) > max_bytes:
                 _remove_quietly(tmp_path)
@@ -207,6 +213,8 @@ def _download_model_file(
         except OSError:
             pass
 
+    if cancel_event.is_set():
+        raise RuntimeError(CANCELLED_LINE)
     req = urllib.request.Request(url, headers={"User-Agent": "bonsAI/1.0"})
     with urlopen_with_ca_fallback(req, timeout=120) as resp:
         total = int(resp.headers.get("Content-Length") or 0)
@@ -217,7 +225,7 @@ def _download_model_file(
         with open(tmp_path, "wb") as out:
             while True:
                 if cancel_event.is_set():
-                    raise RuntimeError("Download cancelled.")
+                    raise RuntimeError(CANCELLED_LINE)
                 chunk = resp.read(chunk_size)
                 if not chunk:
                     break
@@ -302,6 +310,9 @@ def download_voice_model(
         )
         stage("verifying")
         _check_downloaded_model(tmp_path, spec)
+        # A stop that came while the file was being checked: do not install what was asked to stop.
+        if cancel_event.is_set():
+            raise RuntimeError(CANCELLED_LINE)
         os.replace(tmp_path, dest_path)
         state.update({"phase": "done", "done": True, "error": "", "progress_pct": 100})
         stage("model_ready")

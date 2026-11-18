@@ -265,3 +265,34 @@ The oldest watched sightings, moved word for word out of roadmap-shelved.md to m
   (it stuck on the first half-visible answer part, then nothing had focus). Not reproduced in three tries. Evidence
   `workshop:test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `workshop:test-evidence/plan76-S9.json`.
   Unshelves when: a new sighting.
+
+## Watched sightings moved out 2026-11-17 (plan 106 sweep K0)
+
+Seven watched sightings from 2026-09-30 to 2026-10-12, moved word for word out of roadmap-shelved.md to make room for the four items the maintainer shelved on 2026-11-17 (D143). Each comes back to the live list on a new sighting.
+
+- ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen
+  once, 2026-10-01 (plan 78, block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01
+  (plan 78, Deck block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **In carousel style, Down can land on a chip slid mostly off screen** — one sighting; seven tries
+  since did not reproduce it. Evidence `workshop:test-evidence/plan76-S2.json`. [Detail](roadmap-details.md#flow-2b-bugs).
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
+  **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `workshop:test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
+  ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
+  Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92), recorded as a quirk, not judged a bug; the session owner's call is that it is Steam's normal behaviour for a shoulder switch. Word for word: [Detail](archive/roadmap-trimmed-2026-10-roadmap-details.md#plan-98-sweep-4-notes-moved-from-the-shelved-roadmap-2026-10-24).
+  Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
+
+- ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `workshop:test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
+  Unshelves when: a new sighting.

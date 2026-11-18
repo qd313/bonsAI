@@ -12,8 +12,20 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 ## Parked on purpose
 
 
+- ★ `[docs]` **The changelog says nothing about the old chip and answer animation settings** — **shelved 2026-11-17, the maintainer's call (plan 106 § 2, D143).** Someone who had set static chips or turned the letter scramble off on the Developer tab now gets decoding chips and scrambled answers (Decode is the default and the settings left the Developer tab, on purpose). Reduced motion and a running game still turn the effects off. The open part is one line in the changelog. [Review report](planning/assets/105-review-report.md#the-findings-most-important-first), entry 12.
+  Unshelves when: the maintainer asks for the line.
+
+- ★ `[docs]` **The characters document does not cover the small character pictures** — **shelved 2026-11-17, the maintainer's call (plan 106 § 2, D143).** The document covers voices only; the small emblems that still ship (a letter, a prop and a colour per character) are not reviewed in it. Nothing changes on the Deck. The fix is one sentence on what ships now and one saying the emblems were not reviewed. [Review report](planning/assets/105-review-report.md#the-findings-most-important-first), entry 13.
+  Unshelves when: the maintainer asks for the sentences.
+
 - ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** Steam's links take only a page name, so A on a setting opens the right page at its top; nothing was built. Full note, word for word: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02).
   Unshelves when: Steam offers a way to open a settings page at one setting.
+
+- ★ `[ui]` **Search packs imported in versions 0.4.6 to 0.4.9 can no longer be removed** — **shelved 2026-11-17, the maintainer's call (plan 106 § 2, D143).** Only someone who imported a settings-search pack in those versions is touched (0.6.0 had no import screen). Their pack still loads, and nothing removes it except Clear all data. The fix would be to drop imported packs once, on load; or leave it. [Review report](planning/assets/105-review-report.md#the-findings-most-important-first), entry 9.
+  Unshelves when: the maintainer asks, or someone reports an old pack they cannot remove.
+
+- ★★ `[docs]` **The licence file says nothing about the game characters or what is downloaded later** — **shelved 2026-11-17, the maintainer's call (plan 106 § 2, D143).** A reader of the licence file would not learn that the 31 characters' names belong to their games' owners and that the plugin is not linked to them, nor the licences of what it downloads when asked (Ollama, the speech engine and models, the two starter models). Nothing in the zip needs this: it is a gap in what people are told, not a breach. The fix is two short paragraphs in `NOTICE`. [Review report](planning/assets/105-review-report.md#the-findings-most-important-first), entry 4.
+  Unshelves when: the maintainer asks for the paragraphs.
 
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — **shelved 2026-09-12.** From the popup, the menu would show
   only the answer, large, with the chips, question box and tab bar out of the way. Open, read, close in a couple of
@@ -46,33 +58,6 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 Sorted by star, then tag, then title. The last item is a tool note, kept at the end.
 
 Nine of the oldest sightings (each seen once or twice between 2026-09-04 and 2026-09-27 and never reproduced) moved to [the trimmed-shelved archive](archive/roadmap-trimmed-2026-10-roadmap-shelved.md#watched-sightings-moved-out-2026-11-14-plan-104-sweep-k0) on 2026-11-14, word for word; each comes back to this list on a new sighting.
-
-- ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
-  ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
-  Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92), recorded as a quirk, not judged a bug; the session owner's call is that it is Steam's normal behaviour for a shoulder switch. Word for word: [Detail](archive/roadmap-trimmed-2026-10-roadmap-details.md#plan-98-sweep-4-notes-moved-from-the-shelved-roadmap-2026-10-24).
-  Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
-
-- ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `workshop:test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen
-  once, 2026-10-01 (plan 78, block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01
-  (plan 78, Deck block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **In carousel style, Down can land on a chip slid mostly off screen** — one sighting; seven tries
-  since did not reproduce it. Evidence `workshop:test-evidence/plan76-S2.json`. [Detail](roadmap-details.md#flow-2b-bugs).
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
-  **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `workshop:test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
-  Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **Four 180-second stalls with a game running (plan 98 block K1), not seen again in block K3** — seen 2026-10-24, four asks in a row gave no answer within 180 seconds.
   Block K1's chat held many error turns. In block K3 the AI was two to three times slower with the game on its title screen but always finished (reading in the knowledge-base doc). Watch for it. Evidence `workshop:test-evidence/plan98-P98-GAME-ANSWER-TIME.json`.

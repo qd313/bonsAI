@@ -2805,3 +2805,34 @@ Asked by the planning chat for [plan 105](../planning/105-main-roadmap-wave-bugs
     logged, and the report says whether the trial should become the rule (§ 7).
 31. **One pass by the security reviewer and the open-source reviewer over the whole session, with a report you
     review.** Nothing in that report is fixed, waved away or filed before you have read it (§ 5r).
+
+### D143 — LOCKED 2026-11-17 (raised 2026-11-17) — Plan 106, plan 105's wrap-up: the eight calls
+
+Asked by the chat that ran plan 105, for [plan 106](../planning/106-plan-105-wrap-up.md) (its section 2). Calls 1 to 4 were answered in the chat on 2026-11-17. Calls 5 to 8 took the default shown in square brackets when the maintainer said "run plan 106" on the evening of 2026-11-17, before the week reset. **Usage at go:** 81 percent of the week (it resets Wednesday 18 November at 08:00 EST) and 5 percent of the five-hour window. The maintainer chose to start before the reset, knowing the week would likely pass 90 percent. Number 143 because D142 was plan 105's and D141 plan 104's. The plan's section 2, word for word:
+
+**Answered in the chat on 2026-11-17 (they become decision D143; D142 is plan 105's):**
+
+1. **Review items 4, 9, 12 and 13 are shelved for now:** the licence file's two missing paragraphs (the characters'
+   owners and what is downloaded later), search packs imported in version 0.4 that can no longer be removed, the
+   changelog line for the old animation settings, and the characters document not covering the small emblems. The
+   bookkeeper writes each into the shelved list, marked as the maintainer's call.
+2. **Headline first is on, as the house style, with no setting.** Done the same afternoon (commit `2c8145fd9`); it
+   reaches the Deck with this plan's first build. **Later the same day: "your notes" win over it** (lane H1). A player
+   who writes an every-game note asking for a different opening (say, "give me the full answer, no summary line
+   first") gets that, not the house style. The bigger idea, ready-made "style notes" listed with your own notes on the
+   Search tab, waits until more house-style rules pile up.
+3. **Yes to a real Ollama update on the Deck,** to test the download card's Cancel (it updates the Deck's Ollama to the
+   newest version; today it is 0.40.16).
+4. **Steam on the PC:** the maintainer restarts it (or updates Decky to 3.3.1), which unblocks the stand-in blocks.
+
+**Still open, each with the default "go" takes:**
+5. **Asking with ten chats saved, Cancel or B:** keep the question in the box, unsent *[as built; the pictures page shows
+   both boxes]*. The other choice is "send it into the newest chat anyway" (the old way).
+6. **The five settings backups in the Deck's home folder** (`p105-settings-backup*.json`): delete them *[yes, at the
+   end of block W1, after the settings compare]*. They are copies of the settings file, which holds the Steam Web API
+   key. The live settings file already holds the same key, so this is tidiness, not a leak: five fewer copies of a key
+   sitting in plain files.
+7. **The knowledge library download on the Deck** (needed to see the new card on it): turn Internet downloads on for
+   that one test and back off after *[no: the card on the library is checked by tests and on the stand-in only]*.
+8. **The ten October notes on the checks page:** paste them in the chat to have each answered *[not part of this plan
+   unless pasted]*.

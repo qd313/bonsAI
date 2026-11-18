@@ -68,7 +68,7 @@ describe("the first screen, as drawn", () => {
     await open();
     expect(text()).toContain(FIRST_RUN_POPUP_WORDS.title);
     for (const words of [
-      "AI engine (Ollama)about 1.5 GB · neededollama.com",
+      "AI engine (Ollama)about 1.5 GB · neededollama.com, github.com",
       "Answer model gemma4:e2b-it-qatabout 4.3 GB · neededregistry.ollama.ai",
       `${NOTE}about 270 MB · for the knowledge baseregistry.ollama.ai`,
       `${SPEECH}about 230 MB · for voice input, ticks with the row belowhuggingface.co`,

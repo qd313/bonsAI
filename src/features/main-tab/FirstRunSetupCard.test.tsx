@@ -94,7 +94,7 @@ describe("the first-time setup's card", () => {
     expect(calls("start_local_ollama_setup").map((c) => c.args[0])).toEqual([{ profile: "tier1_essentials", leave_out: ["voice"] }]);
     expect(document.body.textContent).not.toContain("Ask anything");
     expect(card()).toContain("Setting up the AI on this Deck");
-    expect(card()).toContain("Downloads come from ollama.com and registry.ollama.ai.");
+    expect(card()).toContain("Downloads come from ollama.com, github.com and registry.ollama.ai.");
     expect(card()).not.toContain("huggingface.co");
     // Ollama (1,510 MB) done and half of the answer model (4,336 MB) of 6,120 MB: about 60%.
     expect(bar()).toBe("60%");

@@ -25,8 +25,8 @@ import type { StarterLeftOut } from "../models/starterSetLeftOut";
 
 type Piece = "ollama" | "answer" | "note_search" | "speech" | "voice";
 
-const PIECES: readonly { id: Piece; name: string; mb: number; site: string }[] = [
-  { id: "ollama", name: "Ollama", mb: OLLAMA_DOWNLOAD_SIZE.mb, site: "ollama.com" },
+const PIECES: readonly { id: Piece; name: string; mb: number; site: string; also?: string }[] = [
+  { id: "ollama", name: "Ollama", mb: OLLAMA_DOWNLOAD_SIZE.mb, site: "ollama.com", also: "github.com" },
   { id: "answer", name: "the answer model", mb: ANSWER_MODEL_DOWNLOAD_SIZE.mb, site: "registry.ollama.ai" },
   { id: "note_search", name: "the note-search model", mb: NOTE_SEARCH_MODEL_DOWNLOAD_SIZE.mb, site: "registry.ollama.ai" },
   { id: "speech", name: "the speech models", mb: SPEECH_MODELS_DOWNLOAD_SIZE.mb, site: "huggingface.co" },
@@ -42,7 +42,7 @@ function joinNames(names: string[]): string {
 
 /** The sites the run reaches, for the card's small print. */
 export function setupSitesLine(leaveOut: readonly StarterLeftOut[]): string {
-  const sites = [...new Set(PIECES.filter((p) => !leftOutPiece(p.id, leaveOut)).map((p) => p.site))];
+  const sites = [...new Set(PIECES.filter((p) => !leftOutPiece(p.id, leaveOut)).flatMap((p) => (p.also ? [p.site, p.also] : [p.site])))];
   return `Stop works at any moment. Downloads come from ${joinNames(sites)}.`;
 }
 

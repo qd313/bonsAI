@@ -55,7 +55,7 @@ type ChecklistItem = {
 
 /** The five downloads, as drawn. Sizes are named constants with their source and date (downloadSizes.ts). */
 const CHECKLIST_ITEMS: readonly ChecklistItem[] = [
-  { name: "AI engine (Ollama)", size: OLLAMA_DOWNLOAD_SIZE, site: "ollama.com", why: "needed", tick: null, row: null },
+  { name: "AI engine (Ollama)", size: OLLAMA_DOWNLOAD_SIZE, site: "ollama.com, github.com", why: "needed", tick: null, row: null },
   { name: `Answer model ${TIER1_ESSENTIALS_TAG}`, size: ANSWER_MODEL_DOWNLOAD_SIZE, site: "registry.ollama.ai", why: "needed", tick: null, row: null },
   {
     name: `Note-search model ${STARTER_NOTE_SEARCH_TAG}`,

@@ -160,6 +160,23 @@ def _prune_voice_bin_non_libs(bin_dir: str, keep_paths: Optional[set[str]] = Non
             pass
 
 
+# The compiler comes from the image's own package servers. The build only goes ahead when apt will check
+# the signature of every package: the source lists must not switch checking off, and the three apt
+# switches that would allow unsigned packages are set to "false" on the command line (a command-line
+# setting beats any apt config file in the image). `BONSAI_APT_DIR` is only for the test that runs this piece.
+_APT_SIGNED_ONLY_SCRIPT = r"""
+set -e
+export DEBIAN_FRONTEND=noninteractive
+APT_DIR="${BONSAI_APT_DIR:-/etc/apt}"
+if grep -rEqi 'trusted[ =:]*yes|allow-insecure[ =:]*yes' "$APT_DIR/sources.list" "$APT_DIR/sources.list.d" 2>/dev/null; then
+  echo "bonsAI: this image's package sources switch off signature checks, so the build is refused." >&2
+  exit 1
+fi
+APT_SIGNED="-o Acquire::AllowInsecureRepositories=false -o Acquire::AllowDowngradeToInsecureRepositories=false -o APT::Get::AllowUnauthenticated=false"
+apt-get $APT_SIGNED update -qq
+apt-get $APT_SIGNED install -y -qq g++ make
+"""
+
 _WHISPER_CONTAINER_CMAKE = r"""
 cmake -S /app -B /tmp/bonsai-whisper-build -DCMAKE_BUILD_TYPE=Release \
   -DGGML_NATIVE=OFF \
@@ -230,12 +247,7 @@ def _build_whisper_cli_in_container(
     os.makedirs(bin_dir, exist_ok=True)
 
     build_script = (
-        r"""
-set -e
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq
-apt-get install -y -qq g++ make
-"""
+        _APT_SIGNED_ONLY_SCRIPT
         + _WHISPER_CONTAINER_CMAKE
         + r"""
 cmake --build /tmp/bonsai-whisper-build --target whisper-cli whisper-server -j4
@@ -278,12 +290,7 @@ def _build_whisper_server_in_container(
     os.makedirs(bin_dir, exist_ok=True)
 
     build_script = (
-        r"""
-set -e
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq
-apt-get install -y -qq g++ make
-"""
+        _APT_SIGNED_ONLY_SCRIPT
         + _WHISPER_CONTAINER_CMAKE
         + r"""
 cmake --build /tmp/bonsai-whisper-build --target whisper-server -j4

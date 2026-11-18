@@ -82,5 +82,42 @@ class AStoppedRunLeavesTheEverydayAiRunning(unittest.TestCase):
         self.assertFalse(ai.up, "an engine started only for the stopped run should not be left behind")
 
 
+class AStopAfterTheRunReplacedTheAiLeavesAnAiRunning(unittest.TestCase):
+    """The restart step stops the person's AI and starts the run's own; a later Stop must not leave nothing."""
+
+    def setUp(self) -> None:
+        setup.forget_setup_started_ollama_serve()
+
+    def _update_then_stop(self, ai: FakeAI) -> dict:
+        cancel = asyncio.Event()
+
+        async def installed(**kw):
+            kw["state"]["stage"] = "install"
+            return "/x/ollama"
+
+        def restart(log, ollama_bin, control):
+            ai.run(["pkill", "-x", "ollama"])  # the person's AI is stopped ...
+            setup.ensure_ollama_server_listening_before_pull(log, ollama_bin, lambda: False)  # ... and the run's own starts
+            return {}
+
+        def stopped_pull(*args):
+            cancel.set()
+            return False, "Cancelled."
+
+        extra = {
+            f"{S}._install_or_update_ollama_binary": {"side_effect": installed},
+            f"{S}.restart_server_onto_new_binary": {"side_effect": restart},
+            f"{S}.list_installed_ollama_tags": {"return_value": ["a:1"]},
+        }
+        return run_custom_setup(ai, stopped_pull, cancel, profile="update_installed", extra=extra)
+
+    def test_a_stop_during_the_model_downloads_leaves_the_replacement_ai_running(self):
+        ai = FakeAI(up=True)
+        state = self._update_then_stop(ai)
+        self.assertEqual(state["phase"], "cancelled")
+        self.assertEqual(ai.started, 1, "the restart step should have started the run's own engine")
+        self.assertTrue(ai.up, "the AI the person was using was replaced, then switched off by Stop")
+
+
 if __name__ == "__main__":
     unittest.main()

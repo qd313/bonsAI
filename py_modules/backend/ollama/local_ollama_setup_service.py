@@ -427,7 +427,7 @@ def _leave_ai_running(shell_log: Callable[[str], None], ollama_bin: str) -> None
             shell_log("[bonsAI] Stopped while Ollama was being set up again — starting Ollama again so it keeps running.")
             try_restart_ollama_user_service(shell_log)
             time.sleep(1.0)
-            if not probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
+            if ollama_bin and not probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
                 ensure_ollama_server_listening_before_pull(
                     shell_log, ollama_bin, lambda: False, max_listen_probe_iterations=40
                 )
@@ -836,6 +836,8 @@ async def run_local_setup(
     prof = (profile or "").strip()
     last_stage_emitted = ""
     forget_setup_started_ollama_serve()  # an engine started before this run (the connection test's wake-up) is not this run's
+    ai_was_running = probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5)  # the person's AI, before this run touches it
+    ollama_bin: Optional[str] = None
 
     async def emit_stage(stage: str, extra: Optional[dict[str, Any]] = None) -> None:
         nonlocal last_stage_emitted
@@ -1017,6 +1019,9 @@ async def run_local_setup(
                 pass
     finally:
         if cancel_event.is_set():
+            if ai_was_running:
+                # The run may have replaced the person's AI (the restart step, the keys step): a Stop must leave one running.
+                await asyncio.to_thread(_leave_ai_running, log, ollama_bin or resolve_ollama_executable() or "")
             terminate_setup_started_ollama_serve()
         forget_setup_started_ollama_serve()
 

@@ -64,11 +64,13 @@ async def _no_wait(_seconds: float) -> None:
 
 
 def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio.Event, *,
-                     sleep: Optional[Callable[[float], None]] = None, keys_ready: bool = True) -> dict:
+                     sleep: Optional[Callable[[float], None]] = None, keys_ready: bool = True,
+                     profile: str = "custom", extra: Optional[dict] = None) -> dict:
     """Run one custom setup run on the pretend engine and return its status.
 
     `pull` stands in for the model download; `sleep` for time.sleep (a test presses Stop from it);
-    `keys_ready` False runs the real missing-keys step instead of skipping it.
+    `keys_ready` False runs the real missing-keys step instead of skipping it; `profile` and `extra` (more
+    patches, target -> patch arguments) let a test reach the install and restart steps too.
     """
     from backend.ollama import local_ollama_setup_service as setup
 
@@ -87,10 +89,11 @@ def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio
         "subprocess.Popen": {"side_effect": ai.popen},
         "subprocess.run": {"side_effect": ai.run},
     }
+    patches.update(extra or {})
     if keys_ready:
         patches[f"{S}.ensure_ollama_cli_home_ready"] = {"return_value": True}
     with ExitStack() as stack:
         for target, kw in patches.items():
             stack.enter_context(patch(target, **kw))
-        asyncio.run(setup.run_local_setup(profile="custom", state=state, logger=logger, cancel_event=cancel_event))
+        asyncio.run(setup.run_local_setup(profile=profile, state=state, logger=logger, cancel_event=cancel_event))
     return state

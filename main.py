@@ -111,6 +111,7 @@ from backend.ask.ollama_service import (
     spawn_ollama_stop_thread,
 )
 from backend.core.async_task_lifecycle import cancel_and_await
+from backend.core.stop_downloads_when_off import stop_running_downloads_if_turned_off
 from backend.ask.background_request_state import (
     OMIT as _OMIT_SHORTCUT_SETUP_FIELD,
     OMIT as _UNSET_REASONING_FIELD,
@@ -861,6 +862,7 @@ class Plugin:
             next_mic = next_caps.get("microphone_access") is True
             if prev_mic and not next_mic:
                 await self._stop_voice_transcription_internal()
+            await stop_running_downloads_if_turned_off(self, prev_caps, next_caps)
             return saved
 
     async def _reset_voice_install_after_clear(self) -> None:

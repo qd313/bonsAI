@@ -282,6 +282,9 @@ def install_corpus_from_manifest(
         for url in (url_hf, url_gh):
             if not url:
                 continue
+            # A stop during the first site must not open a connection to the second.
+            if cancel_event.is_set():
+                raise RuntimeError("Cancelled.")
             try:
                 log(f"[bonsAI] Downloading {fname} from {url[:80]}…")
 
@@ -304,6 +307,8 @@ def install_corpus_from_manifest(
                             os.remove(leftover)
                         except OSError:
                             pass
+                if cancel_event.is_set():
+                    raise RuntimeError("Cancelled.")
         if last_err:
             raise RuntimeError(last_err or f"Failed to download {fname}")
 

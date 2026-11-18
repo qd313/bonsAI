@@ -15,6 +15,8 @@ Does not: Decide the reasoning budget or word-count ceiling used for the actual 
 that lives in ollama_ask_budgets. This file only writes prose instructions the model reads.
 """
 
+import re
+
 _REPLY_VERBOSITY_SHARED = (
     "REPLY VERBOSITY: This block shapes visible coaching prose only (the answer body after the required "
     "<bonsai-status> line — not the status tag itself). Structural topic/mode injects and mandatory fences "
@@ -88,9 +90,51 @@ HEADLINE_FIRST_LINE = (
 )
 
 
-def build_headline_first_block() -> str:
-    """The Headline-first sentence as its own paragraph, or nothing while the switch is off."""
-    if not HEADLINE_FIRST_ON:
+# Plan 106 (lane H1): words and phrases that mean "a note about how my answers open or are shaped". When one of the
+# notes picked for a turn holds one, that turn leaves the Headline sentence out, so the note decides and the house
+# style steps aside. Asking the AI to choose between the note and the sentence did not work on the answer test (the
+# note won about one answer in five); with no sentence no answer opened with a one-line summary. The list is plain
+# on purpose and matched on whole words, with no model call. A false match only costs that one person the house
+# opening, on turns where one of their own notes mentions one of these words.
+OPENING_NOTE_PHRASES = (
+    "summary",
+    "summarise",
+    "summarize",
+    "headline",
+    "tl;dr",
+    "tldr",
+    "first line",
+    "first sentence",
+    "opening line",
+    "full answer",
+    "short answer",
+    "get to the point",
+    "no intro",
+)
+_OPENING_NOTE_RE = re.compile(
+    r"(?<!\w)(?:" + "|".join(r"\s+".join(re.escape(w) for w in ph.split()) for ph in OPENING_NOTE_PHRASES) + r")(?!\w)",
+    re.IGNORECASE,
+)
+
+
+def notes_ask_about_the_opening(user_notes_block: str) -> bool:
+    """Does any note line in the turn's notes block (the lines that start with "- ") hold a phrase from the list?
+
+    The block's own heading line is never looked at, only the person's notes.
+    """
+    for line in (user_notes_block or "").splitlines():
+        if line.startswith("- ") and _OPENING_NOTE_RE.search(line[2:]):
+            return True
+    return False
+
+
+def build_headline_first_block(user_notes_block: str = "") -> str:
+    """The Headline-first sentence as its own paragraph, or nothing while the switch is off.
+
+    Also nothing on a turn whose picked notes ask about how an answer opens (``user_notes_block`` is the same block
+    ``pick_notes_for_turn`` made for the turn): the person's note decides.
+    """
+    if not HEADLINE_FIRST_ON or notes_ask_about_the_opening(user_notes_block):
         return ""
     return f"\n\n{HEADLINE_FIRST_LINE}\n"
 

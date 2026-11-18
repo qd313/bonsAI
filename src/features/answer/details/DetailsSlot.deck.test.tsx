@@ -5,7 +5,8 @@
  *          the level the Deck check looks at: what the slot above the question box shows (the computed
  *          visibility, with the plugin's real stylesheet) at each place in the chat, where the ring is
  *          after each press, where the real line sits on screen, and whether the details opened in the
- *          chat under the real line.
+ *          chat under the real line. Also Left on both lines, the slot's and the answer's own, with the help
+ *          chip up as on the Deck (two Lefts hold, the third reaches Steam's menu; plan 105 C5, plan 106 F2).
  * Used for: DetailsSlot.tsx, detailsSlotStore.ts, buildReplyActionsElement.tsx (the real line) and
  *           useMainTabAskBarFocus.ts (Up from the question box), rendered together in the real MainTab.
  * Solves: jsdom has no layout, so every box is given in the Deck's numbers (the pane from y 88 to 366,
@@ -187,7 +188,8 @@ function snapshot(): TransparencySnapshot {
 
 /** `live`: the answer is the live turn (still asking, settling, or finished before the chat's reload). */
 type LiveTurn = { text: string; asking: boolean; streaming: boolean };
-function Harness({ asking = false, prompts, live }: { asking?: boolean; prompts?: string[]; live?: LiveTurn }) {
+/** `helpChip`: the "How to use bonsAI" chip still up, so the Main tab draws it in place of the slot (MainTabPresetRow). */
+function Harness({ asking = false, prompts, live, helpChip = false }: { asking?: boolean; prompts?: string[]; live?: LiveTurn; helpChip?: boolean }) {
   const expanded = "t1";
   const turn: AskThreadCollapsedTurn = { id: "t1", question: QUESTION, answer: ANSWER, transparency: snapshot() };
   const props = {
@@ -198,7 +200,7 @@ function Harness({ asking = false, prompts, live }: { asking?: boolean; prompts?
     lastExchange: { question: QUESTION, answer: ANSWER }, transparencySnapshot: snapshot(),
     liveReplyFeedbackRating: null, onReplyFeedback: () => {}, onReplyMicroAction: () => {},
     onAskOllama: async () => {}, onTurnActivate: () => {}, onRetryLastResponse: () => {},
-    suggestedPrompts: (prompts ?? ["How can I optimize for battery life?"]).map((text) => ({ text })), showPluginHelpChip: false,
+    suggestedPrompts: (prompts ?? ["How can I optimize for battery life?"]).map((text) => ({ text })), showPluginHelpChip: helpChip,
     recentScreenshots: [],
     setUnifiedInput: () => {}, presetCarouselInject: null, setIsUnifiedInputFocused: () => {},
     isUnifiedInputFocused: false, ollamaIp: "127.0.0.1",
@@ -220,7 +222,7 @@ function Harness({ asking = false, prompts, live }: { asking?: boolean; prompts?
   return <MainTab {...props} />;
 }
 
-function renderChat(asking = false, live?: LiveTurn) {
+function renderChat(asking = false, live?: LiveTurn, helpChip = false) {
   const scope = document.createElement("div");
   scope.className = "bonsai-scope";
   pane = document.createElement("div");
@@ -229,7 +231,7 @@ function renderChat(asking = false, live?: LiveTurn) {
   Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
   scope.appendChild(pane);
   document.body.appendChild(scope);
-  const view = render(<Harness asking={asking} live={live} />, { container: pane });
+  const view = render(<Harness asking={asking} live={live} helpChip={helpChip} />, { container: pane });
   pane.querySelectorAll<HTMLElement>('[data-decky-ui="Focusable"], [data-decky-ui="TextField"]').forEach((el) => {
     if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
   });
@@ -984,14 +986,15 @@ describe("an answer finishing while the ring is on a chip, size watchers live", 
 });
 
 /* ---------- Left out to Steam's menu (plan 105, lane C5) ---------- */
+/** Steam's ring for steamLeftPress.ts: the page's focus, moved by Steam's own step. */
+const leftWorld = { ring: () => (ring() === document.body ? null : ring()), move: (el: HTMLElement) => el.focus() };
 /** Up to `n` Lefts as Steam delivers them (steamLeftPress.ts), each followed by Steam's glide; stops once one moves. */
 function threeLefts(n = 3): LeftResult[] {
-  const world = { ring: () => (ring() === document.body ? null : ring()), move: (el: HTMLElement) => el.focus() };
   const out: LeftResult[] = [];
   for (let i = 0; i < n && out[out.length - 1] !== "moved" && out[out.length - 1] !== "out"; i++) {
     let r: LeftResult = "held";
     act(() => {
-      r = pressLeft(world).result;
+      r = pressLeft(leftWorld).result;
     });
     steamGlide(ring());
     settle();
@@ -1021,6 +1024,62 @@ describe("Left out to Steam's menu from the dock's slot (plan 105, lane C5, row 
     act(() => hearPress(ring()!, DIR_RIGHT));
     expect(press("onMoveRight")).toBe(true);
     expect(nameOf(ring())).toBe("slot line");
+    expect(threeLefts()).toEqual(["held", "held", "out"]);
+  });
+});
+
+/*
+ * Plan 106 lane F2. The "Show details" line plan 105's block D3b pressed was the answer's own, in the chat: the help
+ * chip was still up, so the Main tab drew it and no slot at all (the page held no "details-slot" element,
+ * workshop:test-evidence/plan105-P105-ANSWER-END-01-d3b.json; the picture -show-details-out.png shows the line above the
+ * help chip). Up from the question box met the help chip, the next Up that line, and its first Left went out
+ * (plan105-P105-LEFT-TO-MENU-01-d3b.json). Only the slot's copy counted Left; the answer's own line left it to Steam.
+ */
+describe("Left out to Steam's menu from the answer's own Show details line (plan 106 lane F2, row P105-LEFT-TO-MENU-01)", () => {
+  /** The Deck's walk in block D3b: help chip up, chat at the newest answer, Up and Up from the question box. */
+  function ringOnTheLineTheDeckPressed(r: "top" | "padded" = "top") {
+    rule = r;
+    renderChat(false, undefined, true);
+    scrollChatTo(560);
+    expect(pane.querySelector(".bonsai-details-slot")).toBeNull();
+    focusQuestionBox();
+    press("onMoveUp");
+    expect(ring()?.getAttribute("aria-label")).toBe("How to use bonsAI — open quick start");
+    press("onMoveUp");
+    expect(nameOf(ring())).toBe("real line");
+  }
+
+  it.each(["top", "padded"] as const)(
+    "help chip up, as on the Deck: Up, Up from the question box reaches the answer's own line, where two Lefts hold and the third reaches Steam's menu (%s glide)",
+    (r) => {
+      ringOnTheLineTheDeckPressed(r);
+      expect(threeLefts()).toEqual(["held", "held", "out"]);
+      expect(ring()?.getAttribute("aria-label")).toBe("Steam's menu");
+    },
+  );
+
+  it("Left, Right, Left, Left on the answer's own line keeps the ring there: the Right heard at the page starts the run again", () => {
+    ringOnTheLineTheDeckPressed();
+    expect(threeLefts(1)).toEqual(["held"]);
+    act(() => hearPress(ring()!, DIR_RIGHT));
+    press("onMoveRight");
+    expect(nameOf(ring())).toBe("real line");
+    expect(threeLefts()).toEqual(["held", "held", "out"]);
+  });
+
+  it("a Left held down on the answer's own line never leaves", () => {
+    ringOnTheLineTheDeckPressed();
+    const out: LeftResult[] = [];
+    for (let i = 0; i < 12; i++) act(() => void out.push(pressLeft(leftWorld, i > 0).result));
+    expect(out).toEqual(Array(12).fill("held"));
+    expect(nameOf(ring())).toBe("real line");
+  });
+
+  it("suggestion chips up instead: the answer's own line counts the same", () => {
+    renderChat();
+    scrollChatTo(560);
+    expect(slotHolds()).toBe("chip");
+    ringOnRealLine();
     expect(threeLefts()).toEqual(["held", "held", "out"]);
   });
 });

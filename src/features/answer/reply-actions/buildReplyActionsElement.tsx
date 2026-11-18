@@ -52,7 +52,9 @@
  *    greyed by then, and still landed on), Down from Helpful is Bad info, and
  *    Down from Not really is Wrong game or topic (plan 79). The first choice is
  *    also a named stop ("reason-chips"), so a Down that leaves the answer's
- *    corner icons lands on the choices rather than stepping over them.
+ *    corner icons lands on the choices rather than stepping over them. Left
+ *    on the Show details line has nowhere to go: the first and second Left
+ *    in a row hold and the third goes out to Steam's menu (leftEdge.ts).
  * 4. Each row answers presses two ways — its own onMoveUp/onMoveDown, and a
  *    shared pressHandler() wired to onButtonDown — because Decky delivers a
  *    directional press through onButtonDown in practice, though onMoveUp and
@@ -96,6 +98,7 @@ import {
 } from "../../../shared/dpad/replyStopRegistry";
 import { elementHasFocus, elementHasGamepadFocus, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { pressThenHandRingOn } from "../../../shared/dpad/handRingOnWhenGone";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
@@ -859,6 +862,9 @@ export function buildReplyActionsElement(
           {...({
             onMoveUp: upFromDivider,
             onMoveDown: downFromDivider,
+            /* A dead end, as the dock's copy of this line is: two Lefts in a row hold, the third goes to Steam's menu
+               (leftEdge.ts). Left unclaimed it went out on the first press (plan 106 lane F2). */
+            onMoveLeft: (evt: unknown) => leftAtEdge("show-details-line", evt),
             onButtonDown: pressHandler(dividerEl, downFromDivider, upFromDivider),
             /*
              * B on "Hide details" shuts the panel and the ring stays on this line, which does not

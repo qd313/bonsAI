@@ -177,3 +177,42 @@ describe("a chat that cannot be read when it is picked", () => {
     expect(toaster.toast).not.toHaveBeenCalled();
   });
 });
+
+describe("the open chat is deleted and the next chat cannot be read", () => {
+  /** Chat A is open with its rows; A is deleted; the read of B, the chat that follows, fails as `mode` says. */
+  async function deleteThenFail(mode: "null" | "throw") {
+    const both = [
+      { id: "slot-a", label: "A", created_at: 0, updated_at: 0 },
+      { id: "slot-b", label: "B", created_at: 0, updated_at: 0 },
+    ];
+    vi.mocked(api.listChatSlots).mockResolvedValue(both as never);
+    const s = setup("slot-a");
+    vi.mocked(api.getChatSlot).mockResolvedValueOnce(slot("slot-a") as never);
+    await act(async () => {
+      await s.hook.result.current.refreshSummaries();
+      await s.hook.result.current.reloadActiveSlotTranscript();
+    });
+    vi.mocked(api.listChatSlots).mockResolvedValue([both[1]] as never);
+    vi.mocked(api.getChatSlot).mockReset();
+    if (mode === "throw") vi.mocked(api.getChatSlot).mockRejectedValue(new Error("RPC timeout after 15000ms"));
+    else vi.mocked(api.getChatSlot).mockResolvedValue(null as never);
+    s.setAskThreadCollapsed.mockClear();
+    vi.mocked(toaster.toast).mockClear();
+    await act(async () => {
+      await s.hook.result.current.deleteSlot("slot-a");
+    });
+    return s;
+  }
+
+  it.each(["null", "throw"] as const)("lands on no chat, never on the deleted one, and says so (%s)", async (mode) => {
+    const s = await deleteThenFail(mode);
+    expect(s.hook.result.current.activeSlotId).toBeNull();
+    const last = s.setAskThreadCollapsed.mock.calls.at(-1)![0] as unknown[];
+    expect(last).toEqual([]);
+    const titles = vi.mocked(toaster.toast).mock.calls.map((c) => (c[0] as { title: string }).title);
+    expect(titles).toEqual(["Could not open that chat"]);
+    /* The deleted chat is never read again. */
+    const asked = vi.mocked(api.getChatSlot).mock.calls.map((c) => c[0]);
+    expect(asked).not.toContain("slot-a");
+  });
+});

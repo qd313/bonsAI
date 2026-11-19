@@ -310,6 +310,7 @@ export function useChatSlots({
   const goBackTo = useCallback(
     async (leavingId: string | null) => {
       setActiveSlot(leavingId);
+      if (!leavingId) lastShownSlotRef.current = null;
       const shown = lastShownSlotRef.current;
       if (leavingId && shown?.id === leavingId) presentSlot(shown, leavingId);
       toaster.toast({
@@ -335,9 +336,11 @@ export function useChatSlots({
    *
    * `restoring` is the plugin coming back to the chat it remembers: the rows on screen are already that
    * chat's (the session note put them back), so they are left alone while the chat is read again.
+   * `leavingGone` is the delete path: the chat being left no longer exists, so a read that fails lands
+   * on no chat, never back on the deleted one, and there is nothing to sweep.
    */
   const selectSlotChecked = useCallback(
-    async (slotId: string | null, restoring = false): Promise<boolean> => {
+    async (slotId: string | null, { restoring = false, leavingGone = false } = {}): Promise<boolean> => {
       /* Captured before anything below overwrites them: they describe the slot being LEFT. */
       const leavingId = activeSlotIdRef.current;
       const leavingTurnCount = activeSlotTurnCountRef.current;
@@ -383,12 +386,12 @@ export function useChatSlots({
         if (slot) {
           presentSlot(slot, slotId);
         } else if (!restoring && activeSlotIdRef.current === slotId) {
-          await goBackTo(leavingId);
+          await goBackTo(leavingGone ? null : leavingId);
           /* No sweep: the chat gone back to is open again, not left. */
           return false;
         }
       }
-      if (leavingId && leavingId !== slotId) {
+      if (leavingId && leavingId !== slotId && !leavingGone) {
         sweepIfNeverUsed(leavingId, leavingTurnCount);
       }
       return loaded;
@@ -421,7 +424,7 @@ export function useChatSlots({
    */
   const restoreRememberedSlot = useCallback(
     async (slotId: string) => {
-      const loaded = await selectSlotChecked(slotId, true);
+      const loaded = await selectSlotChecked(slotId, { restoring: true });
       if (!loaded && activeSlotIdRef.current === slotId) await selectSlotChecked(null);
     },
     [activeSlotIdRef, selectSlotChecked],
@@ -473,11 +476,11 @@ export function useChatSlots({
       await refreshSummaries();
       if (wasActive) {
         const rows = await listChatSlots();
-        await selectSlot(rows[0]?.id ?? null);
+        await selectSlotChecked(rows[0]?.id ?? null, { leavingGone: true });
       }
       return true;
     },
-    [refreshSummaries, selectSlot],
+    [refreshSummaries, selectSlotChecked],
   );
 
   const ensureActiveSlotForAsk = useCallback(

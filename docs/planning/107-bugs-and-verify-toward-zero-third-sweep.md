@@ -34,7 +34,7 @@ with both lists as short as honesty allows.
 
 | List | Today | What this plan can close by itself | What stays, and why |
 |---|---|---|---|
-| Main roadmap, Bugs | 19 | up to 12 | 6 wait for your pick on the mock-up page; the README clips close only on your yes to the new ones |
+| Main roadmap, Bugs | 19 | up to 12 by itself, and up to 5 more through your picks of 2026-11-19 (§ 4) | one still waits for a pick (tab 5), and half of another (what X does, tab 7); the README clips close only on your yes to the new ones |
 | Main roadmap, Verify | 38 | about 22 to 26 | about 8 need your hands (a finger, a locked account, a real fight, your eye); a few can only ever be proven by tests and come to you as a yes-or-no list |
 | Knowledge base, Bugs | 7 open, 5 accepted | 2 to 5 | the two hard ones close only if the fifth try meets the bar you set; the accepted five move to their own list |
 | Knowledge base, Deck checks | 7 | 3 to 4 | two cannot be produced on a real screen; one needs a game played once by hand |
@@ -66,24 +66,42 @@ its case is written "could not run", never "passed". A fix that misses its bar l
    is left. A fifth try at the two hard search bugs: yes, in your words "Use fable max worker for the two hard
    search bugs". **Push as we go: not ticked.** Only this plan is pushed; every later commit waits for your word.
 
-## 4. Calls still open
+## 4. Your picks, and the calls still open
 
 **Drawn, on mock-up board 6:** <https://claude.ai/artifact/QGFsXVuRXkDcH3YDcqjsKv> (open it in a web browser signed
 in to claude.ai, not in the Claude app's own panel, or your picks are not saved; notes in
 [the board's folder](../demos/mockup-board-6/README.md)). One tab per call. The session builds only what is picked; with no pick,
 nothing is built and the entry stays open.
 
-| Tab | The call | If you do not pick |
-|---|---|---|
-| 1 | Where the "summed itself up before this answer" row sits | not built |
-| 2 | The cut-off "Keep the Deck awake…" line on the download card: shorter words or two lines | not built |
-| 3 | Reinstall on a voice engine that is already there; the library's line after a reload | Reinstall not built; the library line becomes one neutral line (lane D2) |
-| 4 | Community copies of models (a name with a slash): bonsAI's name box refuses them, and one that is already installed is passed over without a word under "Open source only" | stays as it is; the roadmap's wrong sentence about it is corrected |
-| 5 | The Ollama tab's "AI models" takes two presses | not built |
-| 6 | Reaching the download bar's Cancel on Main with the D-pad | not built |
-| 7 | X anywhere stops a long job; Update starts at one press | both stay as they are |
-| 8 | Ten chats, then Cancel: the question stays in the box (as built) or is cleared; the Pyro chip | both stay as they are |
-| 9 | Tell the AI when a game has no notes; remove the honest answer's unused Speed option; the starter box's last paragraph | all stay as they are |
+**Picked on 2026-11-19** (read from the page that evening; your notes are quoted word for word). The first
+bookkeeping sweep files these under this plan's decision number.
+
+| Tab | The call | Your pick | What it starts |
+|---|---|---|---|
+| 1 | Where the "summed itself up before this answer" row sits | **A:** above the answer it speaks of | lane T1. The D-pad meets the row on the way down to the answer |
+| 2 | The cut-off "Keep the Deck awake…" line on the download card | **A1:** "Keep the Deck awake and online until done." | lane C1, words only |
+| 3 | Reinstall on a voice engine that is already there | **B:** Reinstall really removes it and downloads it again (about 650 MB, plus the build's own tools, then a rebuild of some minutes) | lane R1, after the voice safety lanes |
+| 3 | The library's line after a reload | **One line for both:** "✓ Library ready." | lane D2, already in wave 1 |
+| 4 | Community copies of models (a name with a slash) | **B:** used from the middle level up ("Also try open-weight models"). "Open source only" still passes them over, and says so. The name box takes such names | lane M1, with a licence read and a security read |
+| 6 | Reaching the download bar's Cancel on Main with the D-pad | **B:** Down from any stop of the question strip lands on Cancel; Up goes back | lane M3, after its Deck measurement |
+| 7 | Update on the Ollama tab starts at one press | **A:** ask first ("Update Ollama?", with the size) | the first half of lane X1. It brings back the box that was taken away on 10 October |
+| 8 | Ten chats, then Cancel | **1A:** the question stays in the box | nothing to build: it is built. Filed as your word |
+| 8 | The Pyro character's suggestion line | **2A:** on the chip only | lane S1 |
+| 8 | "Ask anyway" reads "Asking…" from the press | **Liked**, with the note "Make the button look more like the other buttons in steam os and bonsai, this looks cheap" | lane A1 builds "Asking…" (wave 1). The look is a new call, in the next table |
+| 9 | Tell the AI when a game has no notes | **Leave it:** only the player sees the line | nothing to build. The call is closed |
+
+**Still open.** In the chat you wrote that some calls were hard to understand. Three things were at fault and were
+put right the same evening: the page could only be driven from a keyboard (it now has tap buttons for the D-pad at
+its foot), tab 5 opened an empty grey box on a tap and could not close it, and two calls were written in the
+session's own words. The calls below were redrawn or reworded.
+
+| Tab | The call | Where it stands | If you do not pick |
+|---|---|---|---|
+| 5 | The Ollama tab's "AI models" takes A, Down, A to open | Your note: "This one doesn't work". Redrawn: each choice has a "Show me" button that plays the presses | not built |
+| 7 | What X does while a long job runs | Your note: "I don't want x to stop anything". Drawn as a new choice C: X stops nothing, only A on Cancel stops, and the small X beside Cancel goes away | stays as it is. The X half of lane X1 waits, and so does X on Main's bar in lane M3 |
+| 8 | The look of the "Ask anyway" button | Two looks drawn: wide and frosted like bonsAI's own buttons (Look A), or wide and flat grey like Steam's (Look B) | keeps today's small look |
+| 9 | An unused switch inside the code (the honest answer's Speed option) | Reworded. No screen shows it, so you can skip it | stays, switched off |
+| 9 | The box that asks before the first downloads: its explaining sentence comes last | Reworded | stays as it is |
 
 **Not drawn, because nothing on screen changes:**
 - **Old backups in the Deck's home folder:** the 208 MB one from plan 100 and six smaller ones from August and
@@ -107,14 +125,18 @@ nothing is built and the entry stays open.
 - **The voice engine's build is safer** in eight small ways nobody should ever notice.
 - **Search:** a Left 4 Dead 2 pouncing question finds the Hunter note; the two hard search bugs get one more try
   against the same bar.
-- Plus whatever you pick on the board.
+- **From your picks (§ 4):** the download card's line reads whole; the "summed itself up" row sits above the answer
+  it speaks of; Reinstall really reinstalls the voice engine; a community copy of an open-source model can be
+  downloaded by name and is used from the middle level up; on Main, Down from the question strip reaches the
+  download bar's Cancel; Update asks first; the Pyro character's suggestion shows on the chip only.
+- Plus whatever you pick of the five calls still open.
 
 ## 6. Who does what
 
 | Who | Model | Does |
 |---|---|---|
 | The one running the session | Fable 5.2, high | Writes the task texts and the Deck checks, reads every change before it lands, lands, reads every Deck failure, keeps the run log. Never writes code; never edits the roadmap or testing files by hand |
-| Mechanical one-star fixes | Haiku 5.5, high | Lanes A2 and D2, and the words-only picks (T1-B, C1). Kept under 100,000 tokens: see below |
+| Mechanical one-star fixes | Haiku 5.5, high | Lanes A2 and D2, and the words-only pick (C1). Kept under 100,000 tokens: see below |
 | Fixes that need a judgment | Sonnet 5.5, high | Most lanes |
 | Small fixes with one clear way, the bookkeeper, the Deck drivers, the runbook writer | Sonnet 5.5, medium | Never Haiku on the Deck |
 | D-pad and layout fixes | Opus 5.5, medium (high for the Down loop and the bar on Main) | Only with a Deck measurement in hand |
@@ -173,7 +195,21 @@ Facts, files and pass sentences for each: [assets/107-lane-briefs.md](assets/107
 | FT | Developer tab: the last row clears the Open all band | Opus medium, second opinion | Deck measurement in block A1 |
 | FW | Size watchers that answer late | Opus medium, second opinion | Deck measurement in block C; **only if something is late** |
 
-**Wave 3, each after your pick** (table at the end of the briefs file): T1, C1, R1, M1, M2, M3, X1, S1, N1.
+**Wave 3, started by your picks of 2026-11-19** (§ 4; the code facts are in the table at the end of the briefs
+file).
+
+| Lane | What a person gets | Model | Waits for |
+|---|---|---|---|
+| C1 | The download card's line reads whole: "Keep the Deck awake and online until done." | Haiku high | O1 landed (same file) |
+| S1 | The Pyro character's suggestion shows on the chip only, no longer as the answer's last line | Sonnet medium | nothing |
+| M1 | A community copy of an open-source model can be downloaded by name and is used from the middle level up; "Open source only" passes it over and says so | Sonnet high; licence read and security read | P1 and O1 landed (same folder, same site list) |
+| R1 | Reinstall really removes the voice engine and its speech model and downloads them again | Sonnet high, security read | V1, V2 and D1 landed (same files) |
+| T1 | The "summed itself up" row sits above the answer it speaks of | Opus medium, second opinion | FL landed (same D-pad files) |
+| M3 | On Main, Down from the question strip reaches the bar's Cancel | **Opus high**, second opinion | its Deck measurement. Whether X also cancels there waits for your pick on tab 7 |
+| X1 | Update asks first | Sonnet high, security read | M3 landed (same files). Its X half waits for your pick on tab 7 |
+
+**Still waiting for a pick:** M2 (tab 5), the X half of X1 (tab 7), the "Ask anyway" button's look (tab 8; a small
+lane after A1), N1 (tab 9, the box before the first downloads). The session reads the page at every check-in.
 
 **Given more than a Sonnet helper, and why:**
 - **The Down loop in a stopped answer (FL): Opus high and the hard second opinion.** It is a come-back: an entry
@@ -321,7 +357,9 @@ from result lists the session copies out of the evidence files; the session spot
 bookkeeper never commits while a landing runs.
 
 **K0, the bookkeeper's first sweep, before any lane:**
-- Decision D144: § 3 word for word.
+- Decision D144: § 3 word for word, and the picks of § 4 with your notes word for word.
+- Two calls close on your picks: the open question on the ten-chats entry (the question stays in the box), and the
+  knowledge-base call on telling the AI when a game has no notes (it is not told).
 - The "accepted" entries move to their own short list in each roadmap file (five in the knowledge-base Bugs list,
   one in its Deck checks), and house rule 3 says so. Nothing is closed or deleted.
 - The roadmap and the changelog say community copies "need the unlock before they download". The code does not do
@@ -382,7 +420,8 @@ the plan landed in the code. The checks page gets a "Plan 107" round with pictur
 1. Unplug the outside screen's cable from the Deck; leave the charger in.
 2. On this PC: restart Steam, set it to offline, open Big Picture and leave it as the front window.
 3. Open a new chat, pick Fable 5.2 at high effort, and say "Run plan 107".
-4. Pick on mock-up board 6 whenever you like; each pick starts its lane at the next check-in.
+4. Most picks are in (§ 4). Five calls are still open on mock-up board 6; pick whenever you like, and each pick
+   starts its lane at the next check-in.
 5. Confirm the rename check (answer 7) and say what to do with the old backups (§ 4).
 6. Say which goes first, this plan or plan 108 (the feature plans another chat is drafting). They cannot share
    the Deck or land at the same time.

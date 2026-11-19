@@ -171,3 +171,27 @@ shown as a mock-up of each choice before it is asked (AGENTS.md, "Writing to the
   first.
 - **Worked example:** `docs/demos/mockup-headline-first` (a plain side-by-side page) and board 5 `74-firstrun.js`
   (a box drawn at the Deck's size; read only the part that draws the box).
+
+## Changed on 2026-11-19, after the maintainer's picks
+
+The maintainer picked on most tabs and wrote that some calls were hard to understand; the notes on the page were
+"This one doesn't work" (tab 5), "I don't want x to stop anything" (tab 7) and "Make the button look more like the
+other buttons in steam os and bonsai, this looks cheap" (tab 8, the "Asking…" button). The session (Fable) changed
+the page the same evening:
+
+- **New files `60-pad.css` and `70-pad.js`:** an on-screen D-pad fixed at the foot of the page. The kit drives a
+  panel from the keyboard only, so on a phone or a tablet no choice about presses could be felt. The pad sends the
+  same presses to the panel last tapped, or to the panel nearest the middle of the screen.
+- **Tab 5, redrawn:** a tap on the line or the button opened a stand-in box of grey bars that only Esc could
+  close, and the count read "0 presses". Now the ring starts on AI models, a tap counts as a press, the box says
+  what it is and has a Close button, and "Show me" plays the presses (three today; one in A and in B).
+- **Tab 7, new choice C** (`t7-C`): X stops nothing; only A on Cancel stops; the X sign beside Cancel goes.
+- **Tab 8, the "Ask anyway" button:** today's button is now drawn from the plugin's own values
+  (`src/styles/settingsGlassButton.ts:63-81` with the row's size at `ChatTranscriptHintRows.tsx:116`); the first
+  drawing used a darker fill than this button has. Two looks were added as a call: `t8-lookA` (full width,
+  frosted, 36 px) and `t8-lookB` (full width, Steam's flat grey as the kit's `.k-btn`).
+- **Tab 9, reworded:** call two is "an unused switch inside the code" and says it can be skipped; call three is
+  "the box that asks before the first downloads".
+
+**A rule for the next board:** every pressable panel must work by tap alone, and every stand-in box must say what
+it is and close by tap. Check each tab with a mouse and no keyboard before publishing.

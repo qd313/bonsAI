@@ -24,10 +24,10 @@ is not stored in git. `sh build.sh some-name.html` writes to another file (used 
 | 2 | The cut-off "Keep the Deck awake…" line on the download card | Bugs ★ `[ui]` | C1 |
 | 3 | Reinstall on a voice engine that is already there; the library's line after a reload | Bugs ★ `[voice]` `[ollama]` | R1 (and D2's wording) |
 | 4 | Community copies of models under "Open source only" | Bugs ★ `[ollama]` | M1 |
-| 5 | The Ollama tab's "AI models" takes two presses | Bugs ★ `[ui]` | M2 |
+| 5 | The Ollama tab's "AI models" takes A, Down, A to open | Bugs ★ `[ui]` | M2 |
 | 6 | Reaching the download bar's Cancel on Main with the D-pad | Bugs ★ `[ollama]` | M3 |
 | 7 | X anywhere stops a long job; Update starts at one press | Bugs ★ (security leftovers, gap 6) and a knowledge-base call | X1 |
-| 8 | Ten chats then Cancel; the Pyro chip; "Asking…" for the eye | Verify ★★ `[chat]`; plan 106 § 13.1 | S1 |
+| 8 | Ten chats then Cancel; the Pyro chip; the "Ask anyway" button's look | Verify ★★ `[chat]`; plan 106 § 13.1 | S1, L1 |
 | 9 | Tell the AI when a game has no notes; the unused Speed option; the starter box's last paragraph | Knowledge-base calls; Verify ★★ `[first-run]` | N1 |
 
 Who drew what, and from which lines of the code: [the briefs](../../planning/assets/107-mockup-briefs.md). Tabs 4
@@ -36,4 +36,16 @@ rest by Opus.
 
 ## Where things stand
 
-Drawn 2026-11-19. No picks yet.
+Drawn 2026-11-19. The maintainer picked the same evening; the picks are in
+[plan 107, section 4](../../planning/107-bugs-and-verify-toward-zero-third-sweep.md), with the notes word for word.
+
+Picked: tab 1 (A), tab 2 (A1), tab 3 (B, and one library line), tab 4 (B), tab 6 (B), tab 7's Update call (ask
+first), tab 8 (the question stays; the chip only; "Asking…" liked), tab 9 call one (leave it).
+
+Still open, redrawn or reworded after the maintainer wrote that some calls were hard to understand: tab 5 (it
+opened an empty box on a tap; now has "Show me"), tab 7's X call (a new choice C, drawn from the note "I don't
+want x to stop anything"), tab 8's button look (Look A, Look B), tab 9 calls two and three.
+
+The page now has an on-screen D-pad at its foot (`60-pad.css`, `70-pad.js`), so every panel can be driven by a
+tap with no keyboard. What changed and why: the last section of
+[the briefs](../../planning/assets/107-mockup-briefs.md).

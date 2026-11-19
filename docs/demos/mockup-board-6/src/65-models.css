@@ -28,17 +28,22 @@
 .b6t5-all .b6t5-alli { font-size: 13px; }
 .qam .b6t5-all[data-stop].ring { outline: none; box-shadow: 0 3px 10px rgba(0,0,0,.55); background: #fff; color: #0e141b; }
 
-/* The AI models box: a stand-in over the panel, title only, grey bars where its rows would be. */
+/* The AI models box: a stand-in over the panel. Its title and the licence level are the plugin's words; the
+   rest is a plain note saying the rows are not drawn, and a Close button so a tap can shut it. */
 .b6t5-box { position: absolute; inset: 0; z-index: 9; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; }
 .b6t5-box[hidden] { display: none; }
-.b6t5-boxin { width: 272px; background: rgb(14,20,27); border: 1px solid #2a323c; padding: 16px; }
-.b6t5-boxt { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-.b6t5-bar { height: 12px; border-radius: 2px; background: #1f2731; margin-bottom: 8px; }
-.b6t5-bar.s { width: 60%; }
-.b6t5-boxin .b6t5-bar:last-child { margin-bottom: 0; }
+.b6t5-boxin { width: 272px; box-sizing: border-box; background: rgb(14,20,27); border: 1px solid #2a323c; padding: 16px; }
+.b6t5-boxt { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.b6t5-boxl { font-size: 12px; color: #dcdedf; margin-bottom: 8px; }
+.b6t5-boxl b { font-weight: 600; color: #9fb7d5; }
+.b6t5-boxn { font-size: 11px; line-height: 1.4; color: #8b929a; font-style: italic; margin-bottom: 12px; }
+.b6t5-close { display: block; width: 100%; height: 30px; border-radius: 2px; border: 0; background: #32373d; color: #dcdedf; font-size: 12px; cursor: pointer; }
+.qam .b6t5-close[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
 
-/* The press counter under each panel */
-.b6t5-count { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+/* Under each panel: Show me, the press count, Start again, and what the last shown press did */
+.b6t5-count { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
 .b6t5-count b { font-family: var(--font-mono); font-size: 13px; color: var(--leaf); font-weight: 500; }
-.b6t5-count button { font: inherit; font-size: 12px; padding: 1px 8px; border-radius: 6px; border: 1px solid var(--card-line); background: transparent; color: var(--ink-2); cursor: pointer; }
+.b6t5-count button { font: inherit; font-size: 12px; padding: 3px 10px; border-radius: 6px; border: 1px solid var(--card-line); background: transparent; color: var(--ink-2); cursor: pointer; }
+.b6t5-count button.b6t5-show { background: var(--leaf); border-color: var(--leaf); color: var(--leaf-ink); font-weight: 600; }
+.b6t5-count .b6t5-said { flex-basis: 100%; color: var(--ink); }
 </style>

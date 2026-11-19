@@ -232,18 +232,26 @@ for the rest, Opus 5.5 where a lane says so, Fable 5.2 max for the two hard sear
 
 ---
 
-## Wave 3: each waits for a pick on mock-up board 6
+## Wave 3: the lanes the maintainer's picks start (board 6, read 2026-11-19)
 
-The session reads the page's picks at every check-in and starts the lane whose pick is in. No pick, no build.
+The picks and the maintainer's notes are in the plan, section 4. A lane below starts when what it waits for has
+landed. The session reads the page's picks again at every check-in; the rows marked "no pick yet" do not start.
+Every fact here is a pointer: find it again in the code before you build on it.
 
-| Lane | Board tab | Builds | Model |
-|---|---|---|---|
-| T1 | 1, the "summed itself up" row | A (row above the answer): Opus medium, second opinion. B (words only): Haiku high | by pick |
-| C1 | 2, the cut-off line on the download card | Shorter words in both copies (`statusJob.ts:28`, `ollamaSetupJob.ts:35`): Haiku high. Two lines: Sonnet medium | by pick |
-| R1 | 3, Reinstall on a ready voice engine | `VoiceInputSettingsSection.tsx:276-285` | Sonnet medium |
-| M1 | 4, community copies of models | `model_policy.py`, the list tag, and (for picks A to C) the name box's shape rule on both sides (`mergePullModelCatalog.ts:27`, `ollama_catalog_service.py:31`), which refuses any name with a slash today; the licence reviewer reads it | Sonnet high |
-| M2 | 5, "AI models" in one press | `OllamaTab.tsx:371-417`, `ollamaTabFolds.ts`, `useOllamaTabFocus.ts` | Opus medium, second opinion |
-| M3 | 6, the bar's Cancel on Main | `JobBar.tsx`, `AskStripSendButtons.tsx`, `useMainTabAskBarFocus.ts`; Deck measurement M-BAR first | Opus high, second opinion |
-| X1 | 7, presses that start or stop something big (security gap 6, the Update press) | `runningJobs.ts`, `TabBodyFocusRoot.tsx`, `JobBar.tsx`; after M3 (same files) | Sonnet high; security read |
-| S1 | 8, the small ones | ten chats (only if "cleared" is picked), the Pyro chip | Sonnet medium |
-| N1 | 9, words | the AI told when a game has no notes; the Speed-mode option removed; the starter box's paragraph first | Sonnet high |
+| Lane | Board tab and pick | Builds | Model | Waits for |
+|---|---|---|---|---|
+| C1 | 2, pick A1 | The line "Keep the Deck awake and online until this finishes." becomes "Keep the Deck awake and online until done." in both copies (`statusJob.ts:28`, `ollamaSetupJob.ts:35`); the card stays 110 px. Pass on the Deck: the line shows whole, no "…" | Haiku high | O1 landed (`ollamaSetupJob.ts`) |
+| S1 | 8, pick 2A | The Pyro character is no longer told to end an answer with one of the five fixed lines (`ai_character_service.py`, `PYRO_MANAGER_TIP_LINES`; search for "Smoke-test the Ask flow"); the chip still shows the line (`MainTabPresetRow.tsx`). Pass: ten Pyro answers, none ends with a chip line | Sonnet medium | nothing |
+| M1 | 4, pick B | (1) A community copy of an open-source family counts as usable from the middle level ("Also try open-weight models") up, the way copies of open-weight families already do; "Open source only" still passes it over (`model_policy.py:144,146,173`, levels `:218-228`). (2) The list tags such a copy and says why it is passed over at the lowest level. (3) The name box takes a name with a slash, on both sides (`mergePullModelCatalog.ts:27`, `ollama_catalog_service.py:31`). **Settle before building, and say so in the report:** a name with a host in front (`hf.co/...`) is downloaded from that host, not from Ollama's registry, so the download notice and the site line must name the real site (`downloadSites.ts`), and the shape rule must still refuse anything that is not a model name. The licence reviewer and the security reviewer both read it | Sonnet high | P1 landed (the pull-box folder), O1 landed (`downloadSites.ts`) |
+| R1 | 3, pick B | Reinstall on a ready voice engine really removes the engine and the speech model and downloads and builds them again, so the notice is true (`VoiceInputSettingsSection.tsx:276-285`; the back end skips both today: `voice_transcription_service.py:278-280`, `voice_model_download_service.py:326-329`). The notice's size must match what is downloaded. Cancel part way must leave a state Install can recover from. Security read | Sonnet high | V1, V2 and D1 landed (same files) |
+| T1 | 1, pick A | The "summed itself up" row is drawn above the answer it speaks of, and the D-pad meets it on the way down to the answer (`MainTabChatTranscript.tsx:1285-1286`, `buildChatSummaryNoteElement.tsx:21-27,48,112`). Walk tests for every answer shape; Deck measurement before landing | Opus medium, second opinion | FL landed (the same D-pad files) |
+| M3 | 6, pick B | On Main, while a download runs and the bar shows, Down from any stop of the question strip lands on the bar's Cancel; Up goes back to the stop it came from (`JobBar.tsx:48-58`, `AskStripSendButtons.tsx:185-211`, `useMainTabAskBarFocus.ts:250-278`, `docs/focus-graph.md:1031-1032`). **Leave X on Main as it is today**: whether X cancels anywhere is the open call on tab 7 | Opus high, second opinion | Deck measurement M-BAR |
+| X1, first half | 7, pick A (Update) | A on Update AI & models opens a box first that names the size; the ring starts on Cancel. The box's words on the board are drafts: write them in the plugin's own style and show them in the report. Security read | Sonnet high | M3 landed (same files) |
+| X1, second half | 7, what X does | **No pick yet.** The maintainer's note: "I don't want x to stop anything", drawn as choice C (X stops nothing; only A on Cancel stops; the X sign goes). Files: `runningJobs.ts:188-193`, `TabBodyFocusRoot.tsx:78-80`, `JobBar.tsx:69,97,131-135` | Sonnet high; security read | the pick |
+| M2 | 5, "AI models" in one press | **No pick yet** (redrawn). `OllamaTab.tsx:371-417`, `ollamaTabFolds.ts`, `useOllamaTabFocus.ts` | Opus medium, second opinion | the pick |
+| L1 | 8, the "Ask anyway" button's look | **No pick yet** (Look A: full width, the frosted settings button at its normal size; Look B: full width, Steam's flat grey). Both add a small turning ring beside "Asking…". The same button draws "Open the Ollama tab" (`ChatTranscriptHintRows.tsx:109-119`) | Haiku high | the pick, and A1 landed (same file) |
+| N1 | 9, the box before the first downloads | **No pick yet** (reworded). The explaining paragraph first: `downloadNotice.tsx:313-317`, `TwoButtonConfirmModal.tsx:18,122`, `localOllamaStarterSet.tsx:58,98` | Sonnet medium | the pick |
+
+Not built, by the maintainer's pick: telling the AI when a game has no notes (tab 9, "leave it"); clearing the
+question box after Cancel at ten chats (tab 8, "the question stays"). With no pick: the honest answer's unused
+Speed-mode option stays in the code, switched off.

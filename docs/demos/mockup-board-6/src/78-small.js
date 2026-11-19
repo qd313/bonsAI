@@ -9,8 +9,13 @@
      becomes the chip (MainTabPresetRow.tsx).
        2today  the line ends the answer and is on the chip
        2A      the chip only
-   For the eye: the low-memory warning's Ask anyway button (ChatTranscriptHintRows.tsx), today and
-     reading "Asking…" from the press. Being built this session.
+   Call three (was "for the eye"): the low-memory warning's Ask anyway button (ChatTranscriptHintRows.tsx:109-119).
+     Today it is the plugin's frosted settings button (src/styles/settingsGlassButton.ts:63-81) made small: 11 px
+     words, 4 px by 10 px padding, 34 px tall, as wide as its words. Reading "Asking…" from the press is being
+     built this session. On 2026-11-19 the maintainer liked that and wrote that the button "looks cheap" and
+     should look more like the other buttons in SteamOS and bonsAI, so two looks are drawn beside it:
+       lookA  full width, the same frosted look at its normal size (36 px, 12 px words), a turning ring while asking
+       lookB  full width, Steam's flat grey button as the kit draws it (.k-btn), a turning ring while asking
    Every name here starts with b6t8 so it cannot clash with another tab's file.
    ============================================================ */
 const B6T8_Q = "how do I beat the Mantis Lords";
@@ -138,10 +143,10 @@ function b6t8PyroPanel(tipInAnswer, walk) {
 }
 
 /* ---------- For the eye: Ask anyway ---------- */
-function b6t8AnywayPanel(busyAtPress, walk) {
+function b6t8AnywayPanel(busyAtPress, walk, look) {
   const warn = "Not enough free memory to start the AI. The Deck has about 5,200 MB free and the AI needs about 4,100 MB, so loading it would leave only about 1,100 MB (bonsAI keeps at least 2,000 MB back). To make room, close the game, pick a smaller model on the Ollama tab, or use the AI on a PC. Asking anyway may freeze the Deck.";
   const turn = h("div", { class: "k2-turn" }, qBubble2(SAMPLE.q, { stop: false }), aBubble2([warn], { stopEach: false }));
-  const btn = h("button", { class: "b6t8-glass b6t8-any", "data-stop": "", "data-start": "" }, "Ask anyway");
+  const btn = h("button", { class: "b6t8-any" + (look ? " b6t8-any-" + look : ""), "data-stop": "", "data-start": "" }, "Ask anyway");
   const row = h("div", { class: "b6t8-anyrow" }, btn);
   const body = mainTab2({ transcript: [turn, row], chatName: "Hollow Knight help", dockEl: dock2({}) });
   const root = deckFrame({ body, header: false });
@@ -150,7 +155,7 @@ function b6t8AnywayPanel(busyAtPress, walk) {
   btn.addEventListener("click", () => {
     if (pressed) return;
     pressed = true;
-    if (busyAtPress) { btn.textContent = "Asking…"; btn.classList.add("b6t8-busy"); }
+    if (busyAtPress) { btn.replaceChildren(look ? h("span", { class: "b6t8-spin" }) : "", "Asking…"); btn.classList.add("b6t8-busy"); }
     walk.replaceChildren(busyAtPress ? "Pressed: the button says Asking… at once." : "Pressed: nothing on the screen changes yet.");
     setTimeout(() => {
       row.replaceWith(h("div", { class: "b6t8-wait" }, "(the question goes again; the answer would start here)"));
@@ -170,9 +175,9 @@ TABS.push({
   deciding: [
     "Ten chats: after Cancel or B, does your question stay in the box (1A, as built now, but not yet your word) or is the box cleared (1B)?",
     "Pyro: keep the line in the answer and on the chip (Today), or show it on the chip only (2A)?",
-    "Not a choice: the last two panels show a change being built this session, the low-memory warning's Ask anyway button.",
+    "The Ask anyway button's look: you liked that it reads “Asking…” from the press, and wrote that the button looks cheap. Two better looks are drawn at the end (Look A, Look B). Pick one, or keep the small one.",
   ],
-  howto: "Click a panel, then use the arrow keys, Enter as A and Esc as B. In the ten-chats panels the ring starts on Ask: press Enter, then try Cancel, Esc, or pick a chat and Delete. In the Pyro panels the ring starts on the Agent suggestion chip; the words that repeat have a faint yellow mark (not part of the design). Start again resets a panel. The ten chat names and the Pyro answer are made up for the drawing; every button and box word is the plugin's own.",
+  howto: "Click a panel, then use the arrow keys, Enter as A and Esc as B. In the ten-chats panels the ring starts on Ask: press Enter, then try Cancel, Esc, or pick a chat and Delete. In the Pyro panels the ring starts on the Agent suggestion chip; the words that repeat have a faint yellow mark (not part of the design). In the Ask anyway panels the ring starts on the button: press Enter or A, or tap it. Start again resets a panel. No keyboard? Tap a panel and use the pad at the bottom of the page. The ten chat names and the Pyro answer are made up for the drawing; every button and box word is the plugin's own.",
   options: [
     { id: "1A", group: "c1", groupTitle: "Call one: ten chats saved and none open", label: "1A", title: "Cancel or B: the question stays in the box",
       desc: "What is built now. After Cancel or B, in the list or in the Delete chat? box, nothing is sent and your question is still typed, so one press of Ask tries again.",
@@ -186,11 +191,17 @@ TABS.push({
     { id: "2A", group: "c2", label: "2A", title: "The chip only",
       desc: "The AI is no longer told to end with the line. The answer is just the answer; the suggestion shows only on the chip. One fewer line in the answer.",
       build: () => b6t8Resettable((w) => b6t8PyroPanel(false, w), "Press Enter on the chip, or Up to read the answer.") },
-    { id: "eyeToday", group: "eye", groupTitle: "For the eye only, not a choice: Ask anyway (being built this session)", label: "Today", today: true, title: "Ask anyway does not change when pressed",
+    { id: "eyeToday", group: "eye", groupTitle: "Call three: how the Ask anyway button looks (from your note that it looks cheap)", label: "Today", today: true, title: "Today: a small button, and nothing changes when pressed",
       desc: "Under the low-memory warning, pressing Ask anyway shows nothing until the question goes again, so it is not clear the press was taken. A second press does nothing. The memory numbers are an example.",
       build: () => b6t8Resettable((w) => b6t8AnywayPanel(false, w), "Press Enter on Ask anyway.") },
-    { id: "eyeNew", group: "eye", label: "Built", title: "Being built this session: it reads \"Asking…\" from the press",
-      desc: "The same button changes to Asking… the moment it is pressed, until the question goes again.",
+    { id: "eyeNew", group: "eye", label: "Built", title: "Being built this session: the same small button reads \"Asking…\" from the press",
+      desc: "The button changes to Asking… the moment it is pressed, until the question goes again. You liked this, and wrote that the button looks cheap. It is the plugin's frosted button made small: as wide as its two words, 34 pixels tall.",
       build: () => [h("span", { class: "b6t8-built" }, "Being built this session"), ...b6t8Resettable((w) => b6t8AnywayPanel(true, w), "Press Enter on Ask anyway.")] },
+    { id: "lookA", group: "eye", label: "Look A", title: "Wide and frosted, like bonsAI's own buttons",
+      desc: "The same frosted look and white ring as Test connection or Install voice engine, at their normal size: the full width of the panel, 36 pixels tall, words in the middle. From the press it reads Asking… beside a small turning ring, like the one on the download bar. No D-pad move changes. The Open the Ollama tab button under the “AI is not set up” answer is the same button, so it changes with it.",
+      build: () => b6t8Resettable((w) => b6t8AnywayPanel(true, w, "wide"), "Press Enter on Ask anyway.") },
+    { id: "lookB", group: "eye", label: "Look B", title: "Wide and flat grey, like Steam's own buttons",
+      desc: "The plain grey button Steam uses on its own quick-menu pages, at the full width of the panel. Same Asking… and turning ring. It would be the one Steam-grey button on the main screen: the Ask button and the chips there are frosted. The Open the Ollama tab button changes with it.",
+      build: () => b6t8Resettable((w) => b6t8AnywayPanel(true, w, "steam"), "Press Enter on Ask anyway.") },
   ],
 });

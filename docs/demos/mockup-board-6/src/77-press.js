@@ -18,11 +18,12 @@ function b6t7XPanel(variant) {
     tab: 2, height: 400, start: "g2",
     state: { run: true, stopping: false, open: false, ended: false, res: false, box: false },
     build: (s, api) => {
-      const card = s.run ? b6t2Card(Object.assign({ title: s.stopping ? "Stopping the install" : "Voice engine install", stopping: s.stopping, sites: B6T2_SITES.voice, onCancel: () => b6t7Stop(s, api, say, "A on Cancel") }, B6T7_FACE)) : null;
+      const noX = variant === "C"; // choice C: X stops nothing, so the X sign beside Cancel goes
+      const card = s.run ? b6t2Card(Object.assign({ title: s.stopping ? "Stopping the install" : "Voice engine install", stopping: s.stopping, noX, sites: B6T2_SITES.voice, onCancel: () => b6t7Stop(s, api, say, "A on Cancel") }, B6T7_FACE)) : null;
       const under = s.ended ? [h("div", { class: "b6t2-z1" }, "Install cancelled. Press Install voice engine to start again.")] : [];
       const voice = b6t2VoiceBody({ ready: false, card, button: b6t2Btn("Install voice engine", "install", "glass", () => b6t7Again(s, api, say)), under });
       let bar = null;
-      if (s.run && !s.open) bar = b6t2Bar({ title: s.stopping ? "Stopping the install" : "Voice engine install", line: B6T7_FACE.l1, frac: null, stopping: s.stopping, onCancel: () => b6t7Stop(s, api, say, "A on the bar's Cancel") });
+      if (s.run && !s.open) bar = b6t2Bar({ title: s.stopping ? "Stopping the install" : "Voice engine install", line: B6T7_FACE.l1, frac: null, stopping: s.stopping, noX, onCancel: () => b6t7Stop(s, api, say, "A on the bar's Cancel") });
       else if (s.res && !s.open) bar = b6t2Bar({ result: { tone: "quiet", title: "Voice install cancelled", sentence: "Install cancelled." } });
       const box = s.box ? b6t2Box({
         title: "Stop the voice engine install?",
@@ -42,6 +43,7 @@ function b6t7XPanel(variant) {
       e.preventDefault();
       const cur = Deck.current(api.root), on = cur && (cur.dataset.k === "cancel" || cur.dataset.k === "bar");
       const where = cur ? `the ring on “${(($(".k-ft, .k-l", cur) || cur).textContent).replace(/X$/, "").trim().slice(0, 32)}”` : "no ring";
+      if (variant === "C") { say([h("b", {}, "X did nothing"), ` (${where}). X never stops a job here: move the ring to Cancel and press A.`]); return; }
       if (variant === "A" && !on) { say([h("b", {}, "X did nothing"), ` (${where}). Move the ring to Cancel first.`]); return; }
       if (variant === "B") { s.from = cur && cur.dataset.k; s.box = true; api.render("box-safe"); say([h("b", {}, "X asked first"), ` (${where}).`]); return; }
       b6t7Stop(s, api, say, `X with ${where}`);
@@ -92,20 +94,21 @@ TABS.push({
   id: "t7", n: 7, name: "Big presses", stars: 1,
   title: "Presses that start or stop something big",
   today: [
-    "On every tab but Main, X pressed anywhere stops the running download at once, wherever the ring is. That includes the voice engine build, which can take about 15 minutes.",
-    "The download card and the bar show an X beside Cancel to say so.",
-    "On the Ollama tab, Update AI & models starts at one press. The question box was taken away on purpose on 10 October; since 17 November, Cancel stops an update while it downloads.",
+    "On every tab except the main one, pressing X stops a running download at once, wherever the white ring is. That includes the voice engine build, which can take about 15 minutes.",
+    "The download card and the bar show a small X beside Cancel to say so.",
+    "On the Ollama tab, Update AI & models starts at one press. A box used to ask first; it was taken away on purpose on 10 October. Since 17 November, Cancel stops an update while it downloads.",
     "Your rule from today: a Cancel is a kill switch and reacts at the press.",
   ],
   deciding: [
-    "Call one: should X stop a job from anywhere (today), only while the ring is on the card or the bar (A), or ask first, for long jobs only (B)?",
-    "Call two: should Update start at one press (today), or ask first (A)?",
+    "Call one, the X button: should X stop a job from anywhere (Today), only while the ring is on Cancel (A), only after asking (B), or never (C, drawn from your note)?",
+    "Call two, Update: should it start at one press (Today), or ask first (A)? You picked A.",
   ],
-  howto: "Click a panel, then use the arrow keys; Enter is A, Esc is B, X is X. In call one the install is already running and the ring starts on a section line far from it: press X there, then try moving to the bar's Cancel (Down to the bottom) and pressing X or A. A on Voice input opens it, and the card takes the bar's place. The line under each panel says what your press did. In call two, press A on Update AI & models; Cancel works after half a second. The words in both new boxes are drafts.",
+  howto: "Tap a panel, then use the pad at the bottom of the page (or a keyboard: arrow keys, Enter for A, Esc for B, X for X). In call one the install is already running and the ring starts on a line far from it. Press X there and read the line under the panel: it says what your press did. Then move Down to the bar's Cancel and press X or A. A on Voice input opens it, and the card takes the bar's place. In call two, press A on Update AI & models; Cancel works after half a second. The words in the new boxes are drafts.",
   options: [
     { id: "today", label: "Today", today: true, group: "x", groupTitle: "Call one: X while a long job runs", title: "Today: X stops it from anywhere", desc: "One X anywhere on the tab, even with the ring on a section far away, stops the install at once. Fast, and it matches the kill-switch rule; an X pressed by habit or by mistake stops the build, and the install has to be started again.", build: () => b6t7XPanel("today") },
     { id: "A", label: "A", group: "x", title: "X stops it only from the card or the bar", desc: "X does nothing until the ring is on the card's Cancel or the bar's Cancel; from there X or A stops it at once. A stray X costs nothing; stopping from far away takes a few D-pad presses first.", build: () => b6t7XPanel("A") },
     { id: "B", label: "B", group: "x", title: "X anywhere asks first, for long jobs only", desc: "X opens a small box (draft words) with the ring on Keep going, so a stray X changes nothing; Left and A stop it. A on Cancel itself still stops at once. Short downloads such as the library would stop at once, as today. This puts a question in front of X, against the rule that Cancel reacts at the press; only X would ask.", build: () => b6t7XPanel("B") },
+    { id: "C", label: "C", group: "x", title: "X stops nothing; only A on Cancel stops", desc: "Drawn from your note, “I don't want x to stop anything”. X does nothing on any tab, wherever the ring is. To stop a job you move the ring to Cancel, on the card or on the bar, and press A. The small X beside Cancel goes away. A stray X can never stop a download; stopping always takes a move to Cancel first. The same would hold for the bar on the main screen (tab 6).", build: () => b6t7XPanel("C") },
     { id: "uToday", label: "Today", today: true, group: "u", groupTitle: "Call two: Update AI & models", title: "Today: one press starts it, Cancel undoes it", desc: "A on Update swaps the buttons for the card at once, with the ring on its Cancel. One press to start; a press by mistake is undone with one more A (after half a second).", build: () => b6t7UpdatePanel("today") },
     { id: "uA", label: "A", group: "u", title: "Ask first: “Update Ollama?”", desc: "A box asks first and says the size, about 1.5 GB for Ollama (draft words). The ring starts on Cancel, so starting takes three presses: A, Left, A. This brings back the box that was taken away on 10 October.", build: () => b6t7UpdatePanel("A") },
   ],

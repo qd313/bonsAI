@@ -1,0 +1,23 @@
+<style>
+/* ============================================================
+   Board 6: an on-screen D-pad, fixed at the foot of the page, so every panel can be driven by a tap or a
+   mouse click, with no keyboard (added 2026-11-19 after the maintainer could not drive a tab).
+   Every rule starts with .b6pad.
+   ============================================================ */
+.b6pad { position: fixed; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 14px; background: rgba(19,26,34,.96); border: 1px solid var(--card-line); box-shadow: 0 6px 24px rgba(0,0,0,.6);
+  max-width: calc(100vw - 12px); box-sizing: border-box; font-family: var(--font-body); }
+.b6pad-say { font-size: 12px; line-height: 1.25; color: var(--ink-2); white-space: nowrap; margin-right: 4px; }
+.b6pad-say b { color: var(--ink); font-weight: 600; }
+.b6pad button { flex: none; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--card-line); background: var(--board-2); color: var(--ink);
+  font: 700 15px/1 var(--font-body); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.b6pad button:hover { border-color: var(--ink-3); }
+.b6pad button:active { background: var(--leaf); color: var(--leaf-ink); border-color: var(--leaf); }
+.b6pad .b6pad-gap { flex: none; width: 6px; }
+body { padding-bottom: 78px; }
+@media (max-width: 900px) { .b6pad-say { display: none; } }
+@media (max-width: 420px) {
+  .b6pad { gap: 4px; padding: 5px 6px; }
+  .b6pad button { width: 38px; height: 38px; }
+}
+</style>

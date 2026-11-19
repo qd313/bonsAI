@@ -27,16 +27,27 @@ export function isLowMemoryAnswer(text: string | null | undefined): boolean {
 
 type Reask = (question?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
 
+/* True from the press until the question has gone out again: a second press in that gap would arm and ask twice. */
+let askAnywayInFlight = false;
+
 /*
  * In: the Ask function the screen already has, and the question the warning answered.
- * Out: arms the one-shot, then asks the same question again. If arming fails (the call timed out) the
- * question still goes again: it either gets through, or the warning comes back, which is the honest answer.
+ * Out: arms the one-shot, then asks the same question again. A press while an earlier one is still on its
+ * way does nothing. If arming fails (the call timed out) the question still goes again: it either gets
+ * through, or the warning comes back, which is the honest answer. The guard is always released, so the
+ * warning coming back can be pressed again.
  */
 export async function askAnyway(reask: Reask, question: string, display: string = question): Promise<void> {
+  if (askAnywayInFlight) return;
+  askAnywayInFlight = true;
   try {
-    await callDeckyWithTimeout<[], unknown>("arm_ollama_ask_anyway", []);
-  } catch {
-    /* the second ask below says what happened */
+    try {
+      await callDeckyWithTimeout<[], unknown>("arm_ollama_ask_anyway", []);
+    } catch {
+      /* the second ask below says what happened */
+    }
+    await reask(question, { threadQuestionDisplay: display });
+  } finally {
+    askAnywayInFlight = false;
   }
-  await reask(question, { threadQuestionDisplay: display });
 }

@@ -87,6 +87,27 @@ describe("the Ask anyway row under the low-memory warning", () => {
     await vi.waitFor(() => expect(onAskOllama).toHaveBeenCalledTimes(1));
   });
 
+  it("a second press before the arm call answers does nothing: one arm, one ask; a failed arm frees the press", async () => {
+    resetFakeDeckyRpc();
+    let finishArm: (v: unknown) => void = () => {};
+    setRpcHandler("arm_ollama_ask_anyway", () => new Promise((r) => (finishArm = r)));
+    const onAskOllama = vi.fn(async () => {});
+    draw({ onAskOllama });
+    askAnywayButton()!.click();
+    askAnywayButton()!.click();
+    await vi.waitFor(() => expect(getRpcCallLog().filter((c) => c.method === "arm_ollama_ask_anyway")).toHaveLength(1));
+    expect(onAskOllama).not.toHaveBeenCalled(); // arm first, then ask
+    finishArm({ armed: true });
+    await vi.waitFor(() => expect(onAskOllama).toHaveBeenCalledTimes(1));
+    expect(getRpcCallLog().filter((c) => c.method === "arm_ollama_ask_anyway")).toHaveLength(1);
+    // The press is free again afterwards, also when arming fails.
+    setRpcHandler("arm_ollama_ask_anyway", () => {
+      throw new Error("down");
+    });
+    askAnywayButton()!.click();
+    await vi.waitFor(() => expect(onAskOllama).toHaveBeenCalledTimes(2));
+  });
+
   it("is not drawn under an ordinary answer, without a way to ask, or while asking", () => {
     draw({ ollamaResponse: "Use the nail first.", lastExchange: { question: QUESTION, answer: "Use the nail first." } });
     expect(askAnywayButton()).toBeNull();

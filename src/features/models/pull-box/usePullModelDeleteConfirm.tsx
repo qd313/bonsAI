@@ -41,6 +41,8 @@ export type UsePullModelDeleteConfirmArgs = {
   refreshInstalledAndMeta: () => Promise<void>;
   setSelectedTags: Dispatch<SetStateAction<Set<string>>>;
   setDeleteBusyTag: Dispatch<SetStateAction<string | null>>;
+  /** Takes the removed model out of the installed list at the answer, ahead of the slower look that confirms it. */
+  setInstalledTags?: Dispatch<SetStateAction<Set<string>>>;
   /** Puts the ring on a row's Remove control (the screen's own row move). Without it the ring is not handed back. */
   focusRemoveControl?: (el: HTMLElement) => void;
   /** Brings the ring back into the list first when it strayed outside (Steam's transfer). */
@@ -60,6 +62,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
     refreshInstalledAndMeta,
     setSelectedTags,
     setDeleteBusyTag,
+    setInstalledTags,
     focusRemoveControl,
     enterList,
   } = a;
@@ -117,7 +120,17 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
                     next.delete(tag);
                     return next;
                   });
-                  await refreshInstalledAndMeta();
+                  // The row leaves the list now. The look at what is installed (a connection test, then a
+                  // size fetch) runs behind it as the confirmation: it sets the list again, so a model that
+                  // is in fact still there comes back.
+                  setInstalledTags?.((prev) => {
+                    const next = new Set(prev);
+                    next.delete(tag);
+                    next.delete(`${tag}:latest`);
+                    return next;
+                  });
+                  setDeleteBusyTag(null);
+                  void refreshInstalledAndMeta();
                 } else if (res.error === "in_use") {
                   toaster.toast({
                     title: "Model in use",

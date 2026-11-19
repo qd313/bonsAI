@@ -465,7 +465,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onBeforeNestedDeckyModal,
     completeNestedModalClose,
     refreshInstalledAndMeta,
-    setSelectedTags,
+    setSelectedTags, setInstalledTags,
     setDeleteBusyTag,
   });
 

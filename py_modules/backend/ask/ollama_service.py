@@ -135,6 +135,7 @@ from backend.ask.ollama_stop_service import (
     _ollama_http_base_from_pc_ip_field,
     best_effort_abort_ollama_inference,
     close_ollama_chat_response,
+    close_stopped_chat_connection,
     request_ollama_stop_model_via_api,
     spawn_ollama_stop_thread,
     try_ollama_cli_stop_model,

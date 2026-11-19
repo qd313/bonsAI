@@ -9,6 +9,9 @@ Used for: `spawn_ollama_stop_thread()` is what the Stop-button RPC calls; it run
 `best_effort_abort_ollama_inference()` on a background thread so Stop returns to the screen
 right away. `close_ollama_chat_response()` is called separately, from the Stop RPC and from the
 thread that is actually blocked reading the stream, to unblock it and end the connection.
+`close_stopped_chat_connection()` is what the Stop RPC uses: it closes an open connection at once,
+and for one still being opened it closes it on a small thread, never by waiting on the back end's
+one event loop.
 
 Solves: Until 2026-09-26 every Stop also unloaded the model (network unload, then `ollama stop`,
 then ending the AI worker processes), because a network unload could report success while work
@@ -71,6 +74,49 @@ def close_ollama_chat_response(response: Any, logger: Any) -> bool:
     except Exception as exc:
         logger.warning("close active HTTP response failed: %s", exc)
         return False
+
+
+# How long after Stop a connection that was still being opened is waited for, so it can be closed.
+LATE_CONNECTION_WAIT_SECONDS = 1.5
+
+
+def close_stopped_chat_connection(
+    plugin: Any,
+    stopped_evt: Any,
+    logger: Any,
+    *,
+    wait_seconds: float = LATE_CONNECTION_WAIT_SECONDS,
+) -> Optional[threading.Thread]:
+    """Close the stopped question's connection to the AI, without ever waiting on the caller's thread.
+
+    Stop runs on the back end's one event loop, so it must not sit and wait. If the connection
+    is open, it is closed here. If it is not open yet (the model is still loading, or reading the
+    question), a small thread waits up to ``wait_seconds`` for it and closes it the moment it
+    opens. ``stopped_evt`` is the ready-event of the model call being stopped; every model call
+    makes a fresh one, so a thread that wakes to find a different event on the plugin knows a newer
+    question has started and leaves that question's connection alone. Returns the thread when one
+    was started (tests join it), else None.
+    """
+    resp = getattr(plugin, "_active_ollama_chat_http_response", None)
+    if resp is not None:
+        close_ollama_chat_response(resp, logger)
+        return None
+    if not isinstance(stopped_evt, threading.Event):
+        return None
+
+    def _close_when_it_opens() -> None:
+        try:
+            if not stopped_evt.wait(timeout=wait_seconds):
+                return
+            if getattr(plugin, "_chat_resp_ready_evt", None) is not stopped_evt:
+                return
+            close_ollama_chat_response(getattr(plugin, "_active_ollama_chat_http_response", None), logger)
+        except Exception:
+            logger.exception("closing the stopped question's late connection failed")
+
+    thread = threading.Thread(target=_close_when_it_opens, name="bonsai-ollama-late-close", daemon=True)
+    thread.start()
+    return thread
 
 
 def spawn_ollama_stop_thread(

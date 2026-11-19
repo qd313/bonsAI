@@ -106,7 +106,7 @@ if PLUGIN_ROOT not in sys.path:
 from backend.ask.ollama_service import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
-    close_ollama_chat_response,
+    close_stopped_chat_connection,
     preload_ask_model_sync,
     spawn_ollama_stop_thread,
 )
@@ -1923,18 +1923,12 @@ class Plugin:
                 "abort_background_game_ai: stop requested — closing HTTP read; watching the AI worker (model stays loaded)"
             )
 
-        wre = getattr(self, "_active_ollama_chat_http_response", None)
-        if wre is None:
-            ev = getattr(self, "_chat_resp_ready_evt", None)
-            if isinstance(ev, threading.Event):
-                ev.wait(timeout=1.5)
-                wre = getattr(self, "_active_ollama_chat_http_response", None)
-        close_ollama_chat_response(wre, logger)
-
-        # Closing the connection is the stop; the model stays loaded (2026-09-26). The watch only
-        # unloads a local worker still busy long after Stop, and must not mistake a newer
-        # question's work for it: every model call starts with a fresh ready-event.
+        # Closing the connection is the stop; the model stays loaded (2026-09-26). One still being
+        # opened is closed on a small thread, never by waiting here (this is the event loop). The
+        # watch only unloads a local worker still busy long after Stop, and must not mistake a
+        # newer question's work for it: every model call starts with a fresh ready-event.
         stopped_evt = getattr(self, "_chat_resp_ready_evt", None)
+        close_stopped_chat_connection(self, stopped_evt, logger)
         spawn_ollama_stop_thread(
             str(getattr(self, "_active_ollama_chat_pc_ip", None) or "").strip(),
             getattr(self, "_active_ollama_chat_model", None),

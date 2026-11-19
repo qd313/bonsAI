@@ -62,6 +62,7 @@ from backend.knowledge.knowledge_base_schema import (
     write_manifest,
 )
 from backend.knowledge.knowledge_base_service import close_connection
+from backend.core.call_unless_cancelled import call_unless_cancelled
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 MAX_LOG_TAIL_LINES = 80
@@ -446,10 +447,11 @@ async def run_rag_corpus_download(
         if cancelled():
             raise RuntimeError("Cancelled.")
 
-        manifest = await asyncio.to_thread(
-            fetch_remote_manifest,
-            hf_url=manifest_url_hf,
-            github_url=manifest_url_github,
+        # The lookup writes nothing, so a Cancel stops waiting for it at once instead of after its
+        # two sites' 60-second limits; the thread finishes alone and its answer is thrown away.
+        manifest = await call_unless_cancelled(
+            lambda: fetch_remote_manifest(hf_url=manifest_url_hf, github_url=manifest_url_github),
+            cancel_event,
         )
         state["manifest_version"] = str(manifest.get("version") or "")
         state["stage"] = "download"

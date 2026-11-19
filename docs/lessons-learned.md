@@ -557,6 +557,12 @@ Cancelling the voice engine build removed its build container the ordinary way, 
 **A network read or a request that is waiting cannot be woken by a flag; shut its socket from another thread.**
 A Cancel flag is only looked at between steps, so a stalled read or a request waiting for its first byte kept a Cancel waiting for up to two minutes. Shutting the socket from another thread wakes the read at once (0.000 s on the Deck, measured over SSH 2026-11-18). Ollama also drops a model load when its client goes away: a request dropped 3 s into a cold load made it log "client connection closed before llama-server finished loading, aborting load" and no AI worker was left a second later. So Stop should shut the connection, not only stop reading.
 
+**A folder whose name starts with a dot is hidden from a plain `ls`.** The Ollama update's spare folder (`.bonsai-ollama-update-*`) needs `ls -a`. A runbook line that used `ls ~/.local | grep bonsai-ollama` read "empty" while the download was running, and the driver concluded nothing had downloaded (2026-11-19; the plugin log settled it, `workshop:test-evidence/cancel1118-UPDATE-CARD-owner-note.json`).
+
+**The update card counts no megabytes while the engine downloads, only for models.** A check that waits for megabytes on the update card waits for ever; the card reads "Installing the newest Ollama" for the whole 31 to 34 s. A Cancel during that line is the engine-download case.
+
+**When a driver's verdict and the session owner's differ, the owner writes a short note file beside the driver's (the same row name plus `-owner-note`) with the proof, and the documents cite the note.** The driver's own file stays as it was, so a reader can see both (2026-11-19, `cancel1118-UPDATE-CARD-owner-note.json`).
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without

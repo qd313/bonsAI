@@ -54,6 +54,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16)
 - [Plan 105 notes moved from the roadmap (2026-11-17)](#plan-105-notes-moved-from-the-roadmap-2026-11-17)
 - [Cancel and slow controls sweep notes moved from the roadmap (2026-11-19)](#cancel-and-slow-controls-sweep-notes-moved-from-the-roadmap-2026-11-19)
+- [Cancel and slow controls Deck block notes moved from the roadmap (2026-11-19)](#cancel-and-slow-controls-deck-block-notes-moved-from-the-roadmap-2026-11-19)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -871,3 +872,15 @@ Moved word for word by the docs sweep after the cancel and slow controls round, 
 *Verify entry: Steam's on-screen keyboard for Rename chat (the 2026-10-22 Deck note, as it stood)*
 
   **Deck 2026-10-22 (plan 97 block D8, build `15565346`): row P97-L10-RENAME-KEYBOARD passed with the rig.** The ring was on the name field when the box opened, one A on the field showed Steam's keyboard, a typed letter landed, Save renamed the chat and renaming back worked (`workshop:test-evidence/plan97-P97-L10-RENAME-KEYBOARD.json`). It shows only that nothing broke. **Still owed:** the maintainer's own controller, **P97-L10-RENAME-KEYBOARD-HAND** in [testing-manual.md](testing-manual.md). Older notes: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+## Cancel and slow controls Deck block notes moved from the roadmap (2026-11-19)
+
+Two dated Deck notes moved word for word out of Verify entries to keep the roadmap under its size limit; each entry links here.
+
+**From the Verify entry "The voice engine's build fetches its compiler without a check, and the download sites named are not complete" (heading line):**
+
+**Deck 2026-11-17 (block W1e, build `127fadad9`, the maintainer's yes to a real install): a real voice engine build passed: Cancel left no spare folder and no container; the second install finished with the engine record written (g++ 11.4.0, GNU Make 4.3, binutils 2.38, Ubuntu 22.04.5; 11 package source lines, all archive.ubuntu.com or security.ubuntu.com) and no spare folder left (`workshop:test-evidence/plan106-P106-W1E-V2.json`, `plan106-P106-W1E-V4.json`). Still owed: the starter set with the voice engine from a wipe (stand-in row P105-STARTER-VOICE-01).**
+
+**From the Verify entry "A question asked while a heavy game runs can use all the Deck's memory and freeze it" (the maintainer's answer paragraph):**
+
+**Deck 2026-11-15 (block D1):** **P104-MEMORY-01** (God of War): the warning showed with the right opening, the AI stayed unloaded, free memory fell about 86 MB (limit 300); the ring part is UNCLEAR, one Down went to the question box and "Ask anyway" took two Ups (a new Bugs entry). **P104-MEMORY-02 PASS** (Deep Rock Galactic: Survivor, limit raised to 12,000 MB): no warning at the normal limit; the warning with the raised limit; one A on "Ask anyway" gave an ordinary answer; the limit read 2,000 again once the file was deleted. The runbook's step expecting a second warning right after was wrong: a loaded AI is not checked again, by design (the evidence calls whether that is intended UNCLEAR).

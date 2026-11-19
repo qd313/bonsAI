@@ -21,10 +21,10 @@ owed-checks sweep) was written the same day by another chat and landed while the
 |---|---|---|---|---|---|
 | [108a](108a-smoother-dpad-scrolling.md) | On the long tabs the page slides to its new place and no longer jumps | ★★★ | On the Deck: does Steam leave a drawn slide alone, and what it costs in frames | 4 | 1 tab |
 | [108b](108b-keep-alive-and-smart-unload.md) | A starting game gets the AI's memory back; the Ollama tab says what happens | ★★★ | On the Deck, about an hour, no new code: a cold start timed against a warm one beside a game | 7 | 1 tab |
-| [108c](108c-spoiler-chance-for-the-chat-summary.md) | The summary card says how likely it is to hold a spoiler | ★★★★ | On this PC's AI: twelve hand-written chats, summed up three times each | 8 | 1 tab |
+| [108c](108c-spoiler-chance-for-the-chat-summary.md) | The summary card says how likely it is to hold a spoiler | ★★★ | On this PC's AI: twelve hand-written chats, summed up three times each | 8 | 1 tab |
 | [108d](108d-steam-input-layout-parse.md) | Answers name your own buttons, read from the layout Steam saved for the game | ★★★★ | Eleven real layout files copied off the Deck and read by a throwaway script | 8 | 2 tabs |
 | [108e](108e-finish-the-controller-test-rig.md) | A night report of every tab walked; films of checks; perhaps a Deck that can be woken | ★★★★ | On the Deck: what a recording costs, reading the ring from a picture, ways to wake | 8 | none |
-| [108f](108f-steamos-share-path.md) | A screenshot you just took is offered by the question box; one press attaches it | ★★★★ | On the Deck: how fast the newest screenshot is found, and the real Share menu | 4 | 1 tab |
+| [108f](108f-steamos-share-path.md) | A screenshot you just took is offered by the question box; one press attaches it | ★★★ | On the Deck: how fast the newest screenshot is found, and the real Share menu | 4 | 1 tab |
 | [108g](108g-wake-word-listening.md) | Say the wake word and your question with your hands on the controls | ★★★★★ | A session of Deck tests, three of them with your own voice and hands | 9 | 3 tabs |
 
 Each plan has a briefs file beside it for the helpers who build it, in [assets](assets/): `108a-lane-briefs.md` to
@@ -88,9 +88,9 @@ helper runs. The largest is 108g, fourteen to eighteen over two sessions.
 
 ## 6. Things for you to weigh that this plan did not change
 
-- **Stars.** Three of the plans say their entry is one star too high: 108c (no extra trip to the AI, no setting), 108f
-  (no new permission or setting) and 108d if it uses the switch you already have. The roadmap keeps its stars until
-  you say.
+- **Stars.** 108c and 108f were moved from four stars to three on 2026-11-19, on the maintainer's word: neither
+  needs an extra trip to the AI, a new permission or a new setting. 108d stays at four until its switch is picked:
+  three if it uses the switch you already have, four if it gets a new one.
 - **Two stale lines found on the way, not fixed here.** The roadmap's stand-in Decks entry says "nothing built", but
   this PC has been a working stand-in since October. And the Voice row in the testing page still reads as if voice
   typing had never passed on the Deck. Both are for the next bookkeeping sweep; the roadmap was within 34 characters

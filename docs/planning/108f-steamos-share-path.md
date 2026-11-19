@@ -60,7 +60,8 @@ Presses, counted from the open panel with the ring on the question box:
 - **The May note that parked this** said "user-owned, no design here"
   ([old backlog plan](../../../bonsAI-workshop/archive/plans/backlog-implementation-plan.md), 2026-05-19). The entry
   was filed again as open after that, and you asked for this plan on 2026-11-19, so the note no longer applies.
-- **Four stars looks like one too many** for what can honestly be built. See § 9.
+- **Four stars looked like one too many** for what can honestly be built. The maintainer moved the entry to three on
+  2026-11-19. See § 9.
 
 **Never written down; found in this read**
 
@@ -237,9 +238,10 @@ somewhere else on Windows):
 - **The bookkeeper is handed:** this plan's share of D145, the rows of § 6, the roadmap entry's moves (Features,
   then Verify with lanes A and C, then Done), one line for the troubleshooting page, and the rig finding. Both the
   roadmap and the testing page are at their size limits today, so it makes room first.
-- **Stars.** The roadmap says four. This build has no Steam integration, no new permission, no new setting and no
-  new back-end call. It reads as **three stars**, set by the D-pad work in lane C. Four would fit only if the notice
-  with its switch were built as well.
+- **Stars.** The roadmap said four when this was written. This build has no Steam integration, no new permission, no
+  new setting and no new back-end call. It reads as **three stars**, set by the D-pad work in lane C, and the
+  maintainer moved the entry to three on 2026-11-19. Four would fit only if the notice with its switch were built
+  as well.
 - **Sister plans.** 108a changes how the page moves when the ring moves. If both run in one session, run this
   plan's walk on Main after 108a has landed.
 - **At the end,** the two write-ups the maintainer asked for: the code-work summary (files changed, what surprised,

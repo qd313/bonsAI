@@ -267,5 +267,5 @@ Step C is a Main-tab change, so it also owes the free-play sweep (**QA-FREE-PLAY
   when B lands and moved to Verify, naming its rows, when C lands; a changelog line with C.
 - **At the end, the two write-ups the maintainer asked for:** the code-work summary (files changed, what was
   unexpected, what would have made it easier), and a plain "how it was built" guide to the rating.
-- **Stars.** The roadmap says four. With no extra trip to the AI, no setting and no new stop for the D-pad, three is
-  closer. The entry is left as it is; say so in the report.
+- **Stars.** The roadmap said four when this was written. With no extra trip to the AI, no setting and no new stop
+  for the D-pad, three is closer, and the maintainer moved the entry to three stars on 2026-11-19.

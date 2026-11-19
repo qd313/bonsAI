@@ -10,13 +10,14 @@
  * Solves: Nothing else here — this hook only opens the popup and wires up
  * its Cancel and Confirm buttons.
  *
- * Does not: Update the chat list on screen after a rename — the caller is
- * expected to refresh it once `onRename` finishes.
+ * Does not: Keep the box open when the rename fails: it closes and a toast says so. Update the chat list
+ * on screen after a rename — the caller is expected to refresh it once `onRename` finishes.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
 
 import { ChatSlotRenameModal } from "./ChatSlotRenameModal";
+import { toastChatChangeFailed } from "./chatSlotFailureToast";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
@@ -62,8 +63,15 @@ export function useChatSlotRenameModal({
             onCompleteNestedDeckyModalClose?.(() => handle.Close());
           }}
           onConfirm={async (label) => {
-            if (label) await onRename(slotId, label);
-            onCompleteNestedDeckyModalClose?.(() => handle.Close());
+            // The box closes in every case: a rename that threw used to leave it open for ever, and one the
+            // back end refused (false) closed it with nothing said, the chat still under its old name.
+            try {
+              if (label && !(await onRename(slotId, label))) toastChatChangeFailed("rename");
+            } catch {
+              toastChatChangeFailed("rename");
+            } finally {
+              onCompleteNestedDeckyModalClose?.(() => handle.Close());
+            }
           }}
         />,
       );

@@ -1,0 +1,7 @@
+<style>
+/* ---------- board 6, tab 3: Reinstall on a voice engine that is already there, and the library's done line ----------
+   The card, the box and the buttons are tab 2's (.b6t2-); only .b6t3- names are new. */
+.b6t3-new { font-size: 11px; line-height: 1.35; color: #86efac; }
+.b6t3-new.plain { color: #9fb7d5; }
+.b6t3-note { font-size: 12px; color: var(--muted, #8b929a); margin: 0; }
+</style>

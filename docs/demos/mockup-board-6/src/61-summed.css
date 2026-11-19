@@ -1,0 +1,23 @@
+<style>
+/* ============================================================
+   Board 6, tab 1: where the "summed itself up" row sits. Every rule starts with .b6t1.
+   The row is the plugin's own (styles/sections/section-6.ts, .bonsai-chat-summary-note):
+   11 px words, #9fb7d5, a 13 px squeeze icon in #9ce7ff at 80%, 6 px gap, 92% wide,
+   and a 2 px white outline 2 px out when the ring is on it.
+   ============================================================ */
+.b6t1 .qam { position: relative; }
+.b6t1-note { display: flex; align-items: flex-start; gap: 6px; width: 92%; box-sizing: border-box; margin: 0 5px;
+  padding: 1px 2px; border-radius: 4px; font-size: 11px; line-height: 1.35; color: #9fb7d5; cursor: pointer; }
+.b6t1-note.b6t1-old { cursor: default; opacity: 1; }
+.b6t1-ico { flex: 0 0 auto; width: 13px; height: 13px; margin-top: 1px; color: #9ce7ff; opacity: .8; }
+.b6t1-ico svg { width: 13px; height: 13px; display: block; }
+.qam .b6t1-note[data-stop].ring { outline: 2px solid rgba(255,255,255,.9); outline-offset: 2px; box-shadow: none; color: #dce8f4; }
+.b6t1-turn { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.b6t1-turn .rate, .b6t1-turn .helpful, .b6t1-turn .detailsline { margin-left: 6px; margin-right: 6px; width: auto; }
+.qam .b6t1 .k2-answer > p[data-stop].ring, .qam .k2-answer > p[data-stop].ring { outline-offset: 3px; border-radius: 4px; }
+/* the new words in B, marked so the eye finds them (not drawn on the Deck) */
+.b6t1-new { background: rgba(156,231,255,.10); border-radius: 3px; }
+.b6t1-hint { font-size: 12px; color: #9aa7b4; margin: 6px 4px 0; line-height: 1.45; }
+.b6t1-walk { font-size: 12px; color: #c7d1db; margin: 8px 4px 0; line-height: 1.45; }
+.b6t1-walk b { color: #fff; }
+</style>

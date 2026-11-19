@@ -42,9 +42,11 @@ a test row — not in a reply.
 Write-ups of measurements are where this slips most: say what changed for a person, then give the
 number.
 
-They have asked for this five times. On Claude Code a hook repeats the rule on every prompt, because
-a line in a document was not enough for a long session to remember. A tool without that hook has to
-follow the rule by reading this paragraph.
+They have asked for this five times. On Claude Code a hook repeats it on every prompt; other tools
+read it here.
+
+**A call that changes what a person sees or presses is drawn before it is asked**: a
+mock-up of each choice at true size, in the code's real words. Opus draws; Fable on request.
 
 Note from maintainer: we are going to trial the following things. At the end of a session or implementation wave I want a summary with the actual code work (I'm expecting file paths for changed code, technical explanation, unexpected things that popped up and how you addressed it, anything that the maintainer could've done differently to make implementation or the session easier). At the end of a plan implementation, I want a report in simple terms, basically a high-level developer guide showing how the plan was implemented in the codebase.
 
@@ -242,8 +244,8 @@ folder and plugin name.
 
 ### Long sessions: keep this PC awake
 
-The maintainer's PC sleeps after a few idle hours, which freezes a session (a Deck check stopped
-for four hours on 2026-09-27). Only the Claude Code desktop app prevents that; from anywhere else,
+The maintainer's PC sleeps after an idle hour, which freezes a session. Only the Claude Code
+desktop app prevents that; from anywhere else,
 start `python scripts/keep_awake.py --hours 8` in the background at the start of a long session.
 
 ## Testing on the Deck

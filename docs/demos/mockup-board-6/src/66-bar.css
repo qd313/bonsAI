@@ -1,0 +1,39 @@
+<style>
+/* ---------- board 6, tab 6: reaching the download bar's Cancel on the main screen ----------
+   The bar's sizes and colours are the plugin's own (jobLook.ts: 56 px, a 26 px row, a 13 px line, a 3 px progress
+   line). The question box and its strip are the kit's; here the strip's stops are real buttons. Only .b6t6- is new. */
+.b6t6 .k2-strip button { font-family: inherit; cursor: pointer; }
+.b6t6 button.k2-mode { border: 0; line-height: inherit; }
+.b6t6 .k2-strip .k2-ic { width: 17px; height: 17px; padding: 2px; border-radius: 3px; }
+.b6t6-stopb { flex: none; width: 17px; height: 17px; padding: 0; border: 0; border-radius: 3px; background: none; display: inline-grid; place-items: center; }
+.b6t6-stopb i { width: 9px; height: 9px; border-radius: 2px; background: #f87171; display: block; }
+.b6t6-rest { opacity: .32; }
+.qam .b6t6-held { animation: b6t6-bump 160ms ease; }
+@keyframes b6t6-bump { 50% { transform: translateY(2px); } }
+
+.b6t6-bar { flex: 0 0 56px; height: 56px; position: relative; display: flex; flex-direction: column; gap: 1px; padding: 6px 10px 9px; background: #18232f; border-top: 1px solid rgba(56,189,248,.5); }
+.b6t6-bar[hidden] { display: none; }
+.b6t6-r1 { display: flex; align-items: center; gap: 8px; height: 26px; min-width: 0; }
+.b6t6-spin { flex: none; width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(224,242,254,.3); border-top-color: #e0f2fe; animation: b6t6-spin .8s linear infinite; }
+@keyframes b6t6-spin { to { transform: rotate(360deg); } }
+.b6t6-mark { flex: none; width: 12px; font-size: 11px; color: #9fb7d5; }
+.b6t6-tt { flex: 1 1 auto; min-width: 0; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t6-r2 { height: 13px; line-height: 13px; padding-left: 20px; font-size: 10px; color: #8fa0b4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t6-r2.where { color: #e0f2fe; font-weight: 600; }
+.b6t6-pg { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+.b6t6-pg span { position: absolute; left: 0; top: 0; bottom: 0; width: 43%; background: linear-gradient(90deg, rgba(56,189,248,.42), rgba(56,189,248,.68)); }
+.b6t6-cx { flex: none; height: 26px; padding: 0 9px; border-radius: 4px; border: 1px solid rgba(248,113,113,.5); background: rgba(48,24,26,.6); color: #fecaca; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+.b6t6-cx.stopping { background: rgba(248,113,113,.28); }
+.qam .b6t6-cx[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+.b6t6-key { display: inline-grid; place-items: center; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 3px; background: #c9d1da; color: #1a1d21; font-size: 9px; font-weight: 800; font-style: normal; }
+@media (prefers-reduced-motion: reduce) { .b6t6-spin, .qam .b6t6-held { animation: none; } }
+
+/* the page's own words around a panel (not part of the plugin) */
+.b6t6-count { margin: 0 0 8px; font-size: 13.5px; line-height: 1.45; }
+.b6t6-count b { color: var(--leaf); }
+.b6t6-read { margin: 8px 0 0; font-size: 13px; line-height: 1.4; min-height: 2.8em; }
+.b6t6-read i { font-style: normal; color: var(--bark); }
+.b6t6-again, .b6t6-sw button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); background: transparent; color: var(--ink); cursor: pointer; }
+.b6t6-sw { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 0; font-size: 13.5px; }
+.b6t6-sw button[aria-pressed="true"] { border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+</style>

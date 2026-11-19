@@ -790,7 +790,12 @@ single chip when the drawing clearly showed three side by side.
 
 **They want to see it, not read about it.** When there is a choice between screen layouts, draw the
 options at true size from the real code and show them side by side. A written list of options is not
-what was asked for, and has been sent back.
+what was asked for, and has been sent back. **Since 2026-11-19 this is a project rule for every open
+call, not only layouts** (AGENTS.md, "Writing to the maintainer"; the prompt hook repeats it): if the
+choice changes what a person sees or presses, each choice is drawn first, on a board under
+`docs/demos`, and the link comes with the question. Opus 5.5 at medium or high draws; Fable draws the
+complex or important ones, or any the maintainer asks it to. Words alone are for calls nothing on
+screen shows (keep or delete a backup, publish or wait).
 
 **Check that two effects survive each other.** Two visual effects applied to the same edge can
 cancel out. Render the pair and look at it before recommending it.

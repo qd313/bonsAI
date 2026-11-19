@@ -1,0 +1,45 @@
+<style>
+/* ============================================================
+   Board 6, tab 8: three small ones on Main. Every rule starts with .b6t8.
+   The "You have 10 chats" box (ChatSlotPickerModal.tsx): 16 px bold white title, 12 px words in
+   #cdd9e6, rows 6 px apart in the plugin's glass button look, Cancel last. The Delete chat? box
+   (TwoButtonConfirmModal.tsx): Delete on the left, Cancel on the right, the ring starting on Cancel.
+   The Agent suggestion chip (MainTabPresetRow.tsx): its own row under the chips, full width,
+   26 px tall at least, 11 px words in #c4d3e2.
+   The Ask anyway button (ChatTranscriptHintRows.tsx): glass, 11 px, 4 px 10 px padding, 34 px tall.
+   ============================================================ */
+.b6t8 .qam { position: relative; }
+.b6t8-dim { position: absolute; inset: 0; z-index: 20; background: rgba(0,0,0,.62); display: flex; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box; }
+.b6t8-box { width: 100%; max-height: 100%; display: flex; flex-direction: column; box-sizing: border-box; padding: 14px 14px 12px; border-radius: 6px;
+  background: #1f2934; box-shadow: 0 10px 30px rgba(0,0,0,.6); font-size: 12px; line-height: 1.45; color: #cdd9e6; text-align: left; }
+.b6t8-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+.b6t8-words { margin-bottom: 10px; }
+.b6t8-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 0; flex: 1 1 auto; padding: 3px; margin: -3px; scrollbar-width: none; }
+.b6t8-glass { display: flex; justify-content: space-between; gap: 12px; width: 100%; min-height: 30px; box-sizing: border-box; padding: 6px 10px; border-radius: 3px;
+  border: 1px solid rgba(255,255,255,.10); background: linear-gradient(180deg, rgba(70,84,98,.55), rgba(30,38,48,.6)); color: #dce6f0; font-size: 12px; text-align: left; flex: none; }
+.b6t8-glass .b6t8-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.b6t8-glass .b6t8-when { opacity: .7; flex-shrink: 0; }
+.b6t8-cancelrow { margin-top: 8px; }
+.b6t8-two { display: flex; gap: 8px; margin-top: 4px; }
+.b6t8-two .b6t8-glass { justify-content: center; }
+.qam .b6t8-glass[data-stop].ring { outline: 2px solid #fff; outline-offset: 1px; background: linear-gradient(180deg, rgba(110,128,146,.7), rgba(60,72,86,.7)); color: #fff; }
+
+/* the Agent suggestion chip, on its own row under the two chips */
+.b6t8-inject { width: 100%; min-height: 26px; box-sizing: border-box; padding: 4px 8px; border-radius: 4px; font-size: 11px; line-height: 1.25; color: #c4d3e2; text-align: center;
+  border: 1px solid rgba(255,255,255,.10); background: linear-gradient(180deg, rgba(56,70,84,.5), rgba(16,22,30,.55)); box-shadow: inset 0 1px 0 rgba(255,255,255,.10); flex: none; }
+.qam .b6t8-inject[data-stop].ring { outline: none; background: linear-gradient(rgba(56,189,248,.20), rgba(56,189,248,.20)), linear-gradient(180deg, rgba(56,70,84,.5), rgba(16,22,30,.55)); color: #eef7fd; box-shadow: 0 0 0 2px rgba(255,255,255,.85); }
+.b6t8-same { background: rgba(255,214,102,.16); border-radius: 3px; }
+
+/* the Ask anyway row under the low-memory warning */
+.b6t8-anyrow { display: flex; gap: 8px; padding: 0 6px; margin: 2px 0 8px; }
+.b6t8-any { min-height: 34px; padding: 4px 10px; font-size: 11px; width: auto; justify-content: center; }
+.b6t8-any.b6t8-busy { opacity: .75; }
+.b6t8-wait { font-size: 11px; color: #9fb7d5; padding: 0 8px 8px; font-style: italic; }
+
+/* under each panel */
+.b6t8-walk { font-size: 12px; color: #c7d1db; margin: 8px 4px 0; line-height: 1.45; min-height: 3em; }
+.b6t8-walk b { color: #fff; }
+.b6t8-reset { margin: 6px 4px 0; font-size: 12px; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,.2); background: transparent; color: #c7d1db; cursor: pointer; }
+.b6t8-reset:hover { color: #fff; border-color: rgba(255,255,255,.45); }
+.b6t8-built { display: inline-block; margin: 0 4px 6px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; background: #2b4a2e; color: #bfe8c2; }
+</style>

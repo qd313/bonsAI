@@ -1,7 +1,7 @@
 """
 Title: model-routing-check
-Purpose: Prompt-time hook. On every prompt it hands the session the maintainer's plain-language rule,
-         and when the prompt reads like the start of a bug fix, feature, refactor or lane session it
+Purpose: Prompt-time hook. On every prompt it hands the session the maintainer's plain-language rule
+         and the rule that an open call is drawn as a mock-up before it is asked, and when the prompt reads like the start of a bug fix, feature, refactor or lane session it
          also reports the model and effort in use with the short routing table, asking for a gentle
          one-line heads-up when they do not match. On SubagentStart it hands the lane the same
          plain-language rule so reports come back readable.
@@ -24,6 +24,15 @@ PLAIN = (
     "(say 'the one running the session', not orchestrator; 'its own copy of the repo', not isolation; 'a test "
     "to find out', not a spike). Measurements are the highest-risk turn: say what changed for a person, then "
     "the number. Code-level detail belongs in commit messages, audit docs and test rows, not in replies."
+)
+
+# The maintainer's rule of 2026-11-19 (plan 107), for the main session only: helpers do not ask calls.
+MOCKUPS = (
+    " Mock-up rule (hook; the maintainer's rule of 2026-11-19): an open call for the maintainer that changes "
+    "what a person sees or presses is never asked in words alone. Draw each choice first as a mock-up at the "
+    "Deck's true size with the code's real words (a board under docs/demos, drawn by Opus 5.5 medium or high; "
+    "Fable when the call is complex or important, or when the maintainer asks), give the link, then ask. "
+    "Words alone are fine only for a call nothing on screen shows."
 )
 
 KICKOFF = re.compile(
@@ -101,7 +110,7 @@ def main():
     prompt = (payload.get("prompt") or "").strip()
     if not prompt or prompt.startswith("<"):
         return
-    text = PLAIN
+    text = PLAIN + MOCKUPS
     if KICKOFF.search(prompt):
         model, effort = last_turn(payload.get("transcript_path") or "")
         source = "this session's last turn"

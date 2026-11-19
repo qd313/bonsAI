@@ -25,7 +25,9 @@ moves up one tier with the measurement in hand.
 ## Before the helpers start
 
 1. Read the roadmap's Bugs list and sort it against the release line or the plan's own rule. Take the
-   maintainer's calls first; write them into the plan.
+   maintainer's calls first; write them into the plan. **A call that changes what a person sees or presses
+   is drawn before it is asked** (AGENTS.md, "Writing to the maintainer"): one tab per call on a mock-up
+   board, each choice at true size; a lane that waits on a pick is not built until the pick is in.
 2. `git status` and the tail of the decisions file, before picking a plan or decision number. Other sessions add
    both.
 3. Note the tip hash. Make each helper a copy: `python scripts/worktree.py create <name> --base experimental`
@@ -53,7 +55,11 @@ moves up one tier with the measurement in hand.
    - **never `git stash`**: the stash list is one list shared by every copy, and two helpers stashing at the
      same moment swapped each other's uncommitted work (plan 78). A helper that wants to see its test fail
      without the fix saves the change as a patch file and reverses it;
-   - the report: commits, tests, what a person would notice, the exact Deck check it expects to pass.
+   - the report: commits, tests, what a person would notice, the exact Deck check it expects to pass;
+   - **for a Haiku helper, exact files and line ranges and nothing else to read.** Haiku 5.5 costs five times
+     more on a request over 100,000 tokens, and each request carries everything read so far. The helper stops
+     and reports when the job grows; the session reads its size from its log and stops it at 80,000, then
+     passes the job to Sonnet medium with its notes (plan 107, helper rule 4).
 5. Check each brief against its own rules and against the data before sending it. A brief that names an example
    the data does not hold wastes a helper.
 6. Start the timed check that wakes the session every 20 minutes. A message from the maintainer also wakes it.

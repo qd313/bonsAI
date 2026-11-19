@@ -1,0 +1,85 @@
+<style>
+/* ---------- board 6, tab 2 (and the pieces tabs 3 and 7 reuse): the download card and the download bar ----------
+   Sizes and colours are the plugin's own (the job card and bar stylesheet: card 110 px, bar 56 px). Only .b6t2- names are new. */
+.b6t2-deck .qam { position: relative; }
+.b6t2-sc { padding-bottom: 16px; }
+.b6t2-dock { flex: none; }
+.b6t2-body { display: flex; flex-direction: column; gap: 8px; padding: 8px 12px; }
+.b6t2-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.03em; color: #b8c6d6; }
+.b6t2-lbl span { font-weight: 400; color: #9fb7d5; margin-left: 8px; }
+.b6t2-info { font-size: 12px; line-height: 1.45; color: #9fb7d5; }
+.b6t2-info.sm { font-size: 11px; line-height: 1.4; }
+.b6t2-zone2 { display: flex; flex-direction: column; gap: 2px; }
+.b6t2-z1 { font-size: 11px; line-height: 1.35; color: #9fb7d5; }
+.b6t2-z1.ok { color: #86efac; } .b6t2-z1.bad { color: tomato; }
+.b6t2-z2 { font-size: 10px; line-height: 1.35; color: #8fa0b4; }
+.b6t2-z3 { font-size: 10px; line-height: 1.35; color: #6b7c90; }
+
+/* the buttons a job stands in for */
+.b6t2-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; min-height: 36px; padding: 6px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; border: 1px solid rgba(56,189,248,.55); background: linear-gradient(180deg, rgba(56,189,248,.22) 0%, rgba(14,116,144,.35) 100%); color: #e0f2fe; text-align: center; }
+.b6t2-btn.alt { justify-content: space-between; border-color: rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 100%); color: #e8eef5; }
+.b6t2-btn.glass { min-height: 38px; font-size: 12px; border-color: rgba(255,255,255,.18); background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%); color: #e8eef5; }
+.b6t2-btn.red { border-color: rgba(248,113,113,.5); background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); color: #fecaca; }
+.b6t2-btn[disabled] { opacity: .45; cursor: default; }
+.b6t2-pair { display: flex; gap: 8px; } .b6t2-pair .b6t2-btn { min-height: 44px; }
+.b6t2-pair .big { flex: 1.6 1 0; min-width: 0; } .b6t2-pair .small { flex: .9 1 0; min-width: 72px; }
+.b6t2-chs { display: flex; gap: 6px; }
+.b6t2-ch { flex: 1; min-width: 0; min-height: 30px; font-size: 12px; padding: 3px 4px; border-radius: 4px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: #e8eef5; }
+.b6t2-ch.on { border-color: rgba(156,231,255,.55); background: rgba(56,189,248,.12); }
+.qam .b6t2-btn[data-stop].ring, .qam .b6t2-ch[data-stop].ring, .qam .b6t2-cancel[data-stop].ring, .qam .b6t2-bact[data-stop].ring, .qam .b6t2-bsafe[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+
+/* the job card: 110 px in every state (1 + 8 + 28 + 6 + 6 + 6 + 15 + 2 + 13 + 2 + 13 + 9 + 1) */
+.b6t2-card { box-sizing: border-box; height: 110px; display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 9px; border: 1px solid rgba(56,189,248,.4); border-radius: 6px; background: rgba(10,24,36,.75); width: 100%; min-width: 0; }
+.b6t2-card.two { height: 123px; }
+.b6t2-head { display: flex; align-items: center; gap: 8px; height: 28px; flex: none; }
+.b6t2-title { flex: 1 1 auto; min-width: 0; font-size: 12px; font-weight: 700; color: #e8eef5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t2-cancel { flex: none; height: 28px; padding: 0 10px; border-radius: 4px; border: 1px solid rgba(248,113,113,.5); background: rgba(48,24,26,.6); color: #fecaca; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.b6t2-cancel[data-stopping="true"] { background: rgba(248,113,113,.28); }
+.b6t2-key { display: inline-grid; place-items: center; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 3px; background: #c9d1da; color: #1a1d21; font-size: 9px; font-weight: 800; font-style: normal; }
+.b6t2-prog { position: relative; flex: none; height: 6px; border-radius: 3px; overflow: hidden; background: rgba(255,255,255,.12); }
+.b6t2-fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, rgba(56,189,248,.42), rgba(56,189,248,.68)); transition: width 160ms linear; }
+.b6t2-fill[data-moving="true"] { width: 100%; background: repeating-linear-gradient(-45deg, rgba(56,189,248,.34) 0 10px, rgba(56,189,248,.12) 10px 20px); background-size: 28px 28px; animation: b6t2-stripes .9s linear infinite; }
+@keyframes b6t2-stripes { to { background-position: 28px 0; } }
+.b6t2-zone { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.b6t2-l { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t2-now { height: 15px; line-height: 15px; font-size: 11px; color: #9ce7ff; }
+.b6t2-far { height: 13px; line-height: 13px; font-size: 10px; color: #8fa0b4; }
+.b6t2-card.two .b6t2-far { height: 26px; white-space: normal; }
+.b6t2-sites { height: 13px; line-height: 13px; font-size: 10px; color: #6b7c90; }
+
+/* the bar: 56 px, the panel's last child, under the scrolling list */
+.b6t2-bar { position: relative; display: flex; flex-direction: column; gap: 1px; box-sizing: border-box; height: 56px; overflow: hidden; padding: 6px 10px 9px; background: #18232f; border-top: 1px solid rgba(56,189,248,.5); }
+.b6t2-bar[data-tone="bad"] { border-top-color: rgba(248,113,113,.6); }
+.b6t2-brw { display: flex; align-items: center; gap: 8px; height: 26px; min-width: 0; }
+.b6t2-spin { flex: none; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(224,242,254,.3); border-top-color: #e0f2fe; animation: b6t2-spin .8s linear infinite; }
+@keyframes b6t2-spin { to { transform: rotate(360deg); } }
+.b6t2-mark { flex: none; width: 12px; font-size: 11px; color: #9fb7d5; }
+.b6t2-bar[data-tone="ok"] .b6t2-mark { color: #86efac; }
+.b6t2-btt { flex: 1 1 auto; min-width: 0; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t2-bar .b6t2-cancel { height: 26px; padding: 0 9px; }
+.b6t2-bline { height: 13px; line-height: 13px; padding-left: 20px; font-size: 10px; color: #8fa0b4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t2-bar .b6t2-prog { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 0; background: rgba(255,255,255,.1); }
+@media (prefers-reduced-motion: reduce) { .b6t2-fill[data-moving="true"], .b6t2-spin { animation: none; } }
+
+/* a two-button box, drawn over the panel (on the Deck it opens in the middle of the screen) */
+.b6t2-layer:empty { display: none; }
+.b6t2-scrim { position: absolute; inset: 0; z-index: 20; background: rgba(0,0,0,.62); display: flex; align-items: center; justify-content: center; padding: 10px; }
+.b6t2-box { width: 100%; background: #23262e; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,.6); padding: 16px 14px 14px; display: flex; flex-direction: column; gap: 10px; }
+.b6t2-bt { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.25; }
+.b6t2-bb { font-size: 12px; line-height: 1.45; color: #9fb7d5; display: flex; flex-direction: column; gap: 8px; }
+.b6t2-bb .last { color: #c5d4e3; }
+.b6t2-brow { display: flex; gap: 8px; }
+.b6t2-bact, .b6t2-bsafe { flex: 1; min-height: 36px; border-radius: 2px; font-size: 13px; padding: 4px 8px; }
+.b6t2-bact { border: 0; background: #3d4450; color: #dcdedf; }
+.qam .b6t2-bact.ring { background: #1a9fff; color: #fff; }
+.b6t2-bsafe { border: 1px solid rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06)); color: #e8eef5; }
+.b6t2-toast { position: absolute; left: 8px; right: 8px; top: 30px; z-index: 22; background: #22303f; border-left: 3px solid #9ce7ff; padding: 7px 9px; font-size: 11px; line-height: 1.35; border-radius: 4px; box-shadow: 0 6px 18px rgba(0,0,0,.5); color: #e8eef5; }
+.b6t2-toast b { display: block; }
+
+/* the page around a panel: controls and the measured line */
+.b6t2-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: var(--muted, #8b929a); }
+.b6t2-ctl button { font: inherit; font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--card-line, #3d4450); background: transparent; color: inherit; cursor: pointer; }
+.b6t2-meas { font-size: 12px; color: var(--muted, #8b929a); margin: 0; }
+.b6t2-meas b { color: var(--ink, #e8eef5); }
+.b6t2-cap { font-size: 12px; font-weight: 700; color: var(--muted, #8b929a); margin: 4px 0 -6px; text-transform: uppercase; letter-spacing: .06em; }
+</style>

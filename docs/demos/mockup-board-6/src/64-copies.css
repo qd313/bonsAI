@@ -1,0 +1,44 @@
+<style>
+/* ---------- board 6, tab 4: community copies of models under the licence setting ----------
+   A slice of the AI models box at its real width (658, the box's own side padding of 42), with the list's columns,
+   row colours and licence tag as board 5's tab 3 drew them from the plugin's stylesheet. Only .b6t4- is new. */
+.b6t4-wide .qam { width: 658px; }
+.b6t4-box { flex: 1 1 auto; display: flex; flex-direction: column; padding: 10px 42px 8px; font-size: 11px; min-height: 0; }
+.b6t4-title { font-size: 14px; font-weight: 700; color: #eef1f4; margin-bottom: 6px; }
+.b6t4-type { display: flex; align-items: center; gap: 6px; }
+.b6t4-field { flex: 1 1 auto; min-width: 0; height: 28px; line-height: 26px; padding: 0 8px; border-radius: 3px; border: 1px solid rgba(255,255,255,.18); background: #0b1016; color: #eef1f4; font-size: 12px; white-space: nowrap; overflow: hidden; }
+.b6t4-field::after { content: ""; display: inline-block; width: 1px; height: 13px; margin-left: 1px; vertical-align: -2px; background: #9ce7ff; }
+.b6t4-chip { flex: none; min-height: 24px; padding: 2px 9px; font-size: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #dce8f4; }
+.b6t4-chip.off { opacity: .4; }
+.qam .b6t4-chip[data-stop].ring, .qam .b6t4-star[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: none; }
+.b6t4-line { min-height: 15px; margin: 3px 0 5px; font-size: 10px; line-height: 15px; color: #8fa8c4; }
+.b6t4-line.new { color: #fde68a; }
+.b6t4-head, .b6t4-row { display: grid; grid-template-columns: 26px minmax(112px, 2fr) minmax(36px, .5fr) minmax(44px, .85fr) minmax(40px, .5fr) 24px; gap: 4px; align-items: center; padding: 5px 4px; }
+.b6t4-head { background: rgba(8,14,22,.96); border-bottom: 1px solid rgba(72,98,124,.45); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #8fa8c4; }
+.b6t4-grp { padding: 5px 4px 3px; font-size: 9.5px; font-weight: 700; color: #8fa8c4; }
+.b6t4-row { min-height: 30px; background: rgba(12,20,30,.6); border-bottom: 1px solid rgba(72,98,124,.22); border-left: 2px solid rgba(156,231,255,.45); font-size: 10px; color: #dce8f4; }
+.b6t4-row > div { min-width: 0; }
+.b6t4-row .c-m { display: flex; align-items: center; gap: 6px; }
+.b6t4-row .c-n { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.b6t4-row .c-q { color: #9fb7d5; font-size: 9px; }
+.b6t4-row .c-d { text-align: right; color: #f87171; font-weight: 700; }
+.b6t4-row.dim .c-n, .b6t4-row.dim .c-q { opacity: .5; }
+.b6t4-star { width: 22px; height: 22px; padding: 0; border-radius: 4px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.05); color: #fcd34d; font-size: 12px; line-height: 1; }
+.b6t4-new { flex: none; padding: 1px 4px; border-radius: 3px; background: rgba(56,189,248,.22); color: #e0f2fe; font-size: 8px; font-weight: 700; }
+.b6t4-pill { flex: none; max-width: 48px; font-size: 8px; line-height: 1.1; padding: 2px 3px; border-radius: 4px; border: 1px solid rgba(74,222,128,.45); color: #bbf7d0; background: rgba(255,255,255,.06); text-align: center; }
+.b6t4-pill.o { border-color: rgba(251,191,36,.55); color: #fde68a; }
+.b6t4-wait { margin: 2px 0; padding: 7px 8px; border: 1px dashed rgba(255,255,255,.22); border-radius: 4px; font-size: 10px; color: #8fa8c4; }
+.b6t4-legend { margin-top: auto; padding-top: 4px; font-size: 9.5px; line-height: 1.3; color: #8fa8c4; }
+.b6t4-legend i { font-style: normal; color: #fbbf24; }
+.b6t4-main .k2-answer { margin-top: 6px; }
+.b6t4-main .k2-answer.err { border-color: rgba(248,113,113,.5); background: #2c1c1e; }
+
+/* the page's own words around the panels (not part of the plugin) */
+.b6t4-step { margin: 12px 0 4px; font-size: 13px; font-weight: 700; }
+.b6t4-note { margin: 8px 0 0; font-size: 13.5px; line-height: 1.45; }
+.b6t4-note b { color: var(--leaf); }
+.b6t4-note.bad b { color: var(--bark); }
+.b6t4-sw { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 0; font-size: 13.5px; }
+.b6t4-sw button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); background: transparent; color: var(--ink); cursor: pointer; }
+.b6t4-sw button[aria-pressed="true"] { border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+</style>

@@ -1,0 +1,48 @@
+<style>
+/* ============================================================
+   Tab 9 (notes): three calls about words, not layout.
+   Everything here starts with .b6t9 so it cannot touch another tab.
+   ============================================================ */
+
+/* Call one: a real answer in the plugin's column, and the empty side */
+.b6t9-chat { flex: 1 1 auto; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; scrollbar-width: none; padding: 8px 0 12px; }
+.b6t9-chat::-webkit-scrollbar { display: none; }
+.b6t9-foot { margin: 6px 14px 0; font-size: 11px; line-height: 1.4; font-style: italic; color: #8b929a; }
+.b6t9-spoil { background: #3d4450; color: transparent; border-radius: 2px; padding: 0 2px; }
+.b6t9-src { margin: 8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+.b6t9-none { border: 1px dashed var(--card-line); border-radius: 10px; padding: 14px; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.b6t9-none b { color: var(--ink); }
+
+/* Call two: the small table of numbers */
+.b6t9-tbl { border-collapse: collapse; font-size: 13.5px; margin: 6px 0 4px; }
+.b6t9-tbl th, .b6t9-tbl td { text-align: left; padding: 5px 12px 5px 0; border-bottom: 1px solid var(--card-line); vertical-align: top; }
+.b6t9-tbl th { font-weight: 600; color: var(--ink-2); }
+.b6t9-tbl td.n { font-family: var(--font-mono); color: var(--leaf); white-space: nowrap; }
+.b6t9-calls { margin-top: 10px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.b6t9-calls h4 { margin: 10px 0 2px; font-size: 14px; color: var(--ink); }
+
+/* Call three: the download box, at the Deck's size, over a dimmed screen */
+.b6t9-screen { width: 854px; height: 454px; position: relative; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; font-family: var(--q-font); text-align: left; }
+.b6t9-box { width: 658px; background: rgb(14,20,27); border: 1px solid #2a323c; padding: 26px; font-size: 12px; line-height: 1.45; color: #cdd9e6; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+.b6t9-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.b6t9-words { overflow-y: auto; overflow-x: hidden; scrollbar-width: none; max-height: 240px; margin-bottom: 10px; color: #9fb7d5; }
+.b6t9-words::-webkit-scrollbar { display: none; }
+.b6t9-words.scrolls { max-height: 222px; margin-bottom: 0; }
+.b6t9-pinned { position: sticky; top: 0; z-index: 1; background: rgb(14,20,27); padding-bottom: 8px; }
+.b6t9-pinned > div + div { margin-top: 8px; }
+.b6t9-p { margin-bottom: 8px; }
+.b6t9-p.hi { color: #c5d4e3; }
+.b6t9-p.last { margin-bottom: 0; }
+.b6t9-p.mark { box-shadow: -8px 0 0 -5px #fbbf24; }
+.b6t9-tag { color: #9ce7ff; }
+.b6t9-more { height: 18px; line-height: 18px; margin-bottom: 10px; font-size: 11px; color: #8fa8c4; text-align: center; white-space: nowrap; overflow: hidden; }
+.b6t9-more[hidden] { display: none; }
+.b6t9-btns { display: flex; gap: 8px; }
+.b6t9-btn { flex: 1 1 0; min-width: 0; height: 32px; padding: 0 10px; border-radius: 2px; border: 0; font-family: var(--q-font); font-size: 13px; font-weight: 600; color: #e8eef5; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t9-btn.act { background: #3d4450; color: #fff; }
+.b6t9-btn.safe { background: linear-gradient(180deg, #232d3a, #19212c); border: 1px solid rgba(255,255,255,.1); }
+.b6t9-screen .b6t9-btn[data-stop].ring { outline: 2px solid #fff; outline-offset: 0; }
+.b6t9-screen .b6t9-btn.act[data-stop].ring { background: #1a9fff; }
+.b6t9-count { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.b6t9-count b { font-family: var(--font-mono); font-size: 13px; color: var(--leaf); font-weight: 500; }
+</style>

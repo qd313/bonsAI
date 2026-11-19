@@ -117,7 +117,8 @@ describe("the first-time setup's card", () => {
     await nextPoll();
     expect(card()).toContain("Stopped");
     expect(card()).toContain("Stopped. Kept: Ollama and the answer model. Not installed: the note-search model.");
-    expect(card()).toContain("Start again carries on: what finished is not downloaded twice.");
+    expect(card()).toContain("Nothing half-downloaded is kept. Start again skips what already finished.");
+    expect(card()).not.toContain("carries on");
     status = running();
     fireEvent.click(screen.getByLabelText("Start the setup again"));
     await waitFor(() => expect(calls("start_local_ollama_setup")).toHaveLength(2));

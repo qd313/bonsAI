@@ -56,7 +56,7 @@ function viewOf(status: LocalOllamaSetupStatus | null, refused: string, leaveOut
       line: stoppedLine(status),
       tone: "warn",
       bar: null,
-      note: "Nothing half-installed is used. Start again carries on: what finished is not downloaded twice.",
+      note: "Nothing half-downloaded is kept. Start again skips what already finished.",
       button: "again",
     };
   }

@@ -95,6 +95,6 @@ helper runs. The largest is 108g, fourteen to eighteen over two sessions.
   roadmap's stand-in Decks entry said "nothing built", but this PC has been a working stand-in since October. The
   Voice row in the testing page read as if voice typing had never passed on the Deck. And the long notes said a
   saved walk names the screen it starts from, which it does not.
-- **Room on the roadmap.** After the seven links went in it was within 34 characters of its size limit. Four
-  finished-work blocks then moved to the archive, and it now sits near 87.5 KB of 100. The testing page is the next
-  one at its limit.
+- **Room in the documents.** After the seven links went in, the roadmap was within 34 characters of its size limit.
+  Finished work then moved to the archives, word for word, the same day: the roadmap now sits at 81.5 KB of 100, the
+  long notes at 74.5 KB of 100, and the testing page at 160.0 KB of 165. No open entry or open check was touched.

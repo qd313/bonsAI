@@ -68,8 +68,10 @@ word.
 **Stale**
 
 - **"Voice typing has never been seen working on the Deck."** It has, many times since October, with recorded
-  sentences played into a pretend microphone (plan 88's rows; row P86-VOICE-01 on 2026-10-16). What is still owed is
-  your own voice: the early stop after 3 or 4 seconds was only ever seen with a real voice.
+  sentences played into a pretend microphone (plan 88's rows; row P86-VOICE-01 on 2026-10-16). And with your own
+  voice: on 2026-10-18 you spoke three questions into the real microphone and passed it (row P89-MIC-TINY), which
+  closed the entry about the mic stopping after 3 or 4 seconds. What step 0 still needs from your voice is the wake
+  word itself. (Corrected 2026-11-19: this plan first said your own voice was still owed.)
 - **The engine pick's cost.** The study guessed a short listen with the small speech model would take a fifth to a
   half of one processor core. Measured on the Deck since (2026-10-10): one read with the small model takes about 2
   seconds with a game running, however short the clip, and reading back to back took a game from 60 frames a second
@@ -106,9 +108,9 @@ word.
 - **The test Deck** has 8 processor threads and 16 GB of memory, runs SteamOS 3.9.5, and gives plugins Python 3.14.
 
 **The verdict today.** "Conditional go" stands, with new conditions: (1) an engine that passes the lines in § 5 on
-this Deck; (2) your own voice heard; (3) the open-source reviewer's yes on the engine's licence trail; (4) the safety
-rules in call g8. The old condition "prove voice typing first" is met except for your own voice, which step 0 now
-includes.
+this Deck; (2) your own voice heard saying the wake word (test Z5); (3) the open-source reviewer's yes on the
+engine's licence trail; (4) the safety rules in call g8. The old condition "prove voice typing first" is met, with
+recorded sentences and with your own voice.
 
 ## 3. How it works today
 
@@ -279,8 +281,8 @@ before each lands. The open-source reviewer reads lane A.
   aloud; Spoilers by voice needs both. They stay as filed until you call on Read aloud.
 - A wake word you choose yourself, other languages, and cancelling the game's own sound beyond test Z8.
 - Speaking the answer. Opening the panel by voice. Any spoken command other than a question.
-- The early stop with a real voice on the small speech model. It is an open voice entry of its own, and plan 107's
-  sweep may take it. Z5 will show whether it touches this feature.
+- The early stop with a real voice on the small speech model. That entry closed on 2026-10-18 after your hand check
+  with the real microphone. If test Z5 shows it again, it is written up as a new finding, not fixed here.
 
 ## 9. For the one running the session
 

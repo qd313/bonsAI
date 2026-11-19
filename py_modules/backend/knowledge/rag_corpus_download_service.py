@@ -62,6 +62,7 @@ from backend.knowledge.knowledge_base_schema import (
     write_manifest,
 )
 from backend.knowledge.knowledge_base_service import close_connection
+from backend.core.abort_blocked_read import LiveResponse, read_some
 from backend.core.call_unless_cancelled import call_unless_cancelled
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
@@ -144,28 +145,50 @@ def _download_file(
     *,
     cancel_event: threading.Event,
     on_progress: Optional[Callable[[int, int], None]] = None,
+    connection: Optional[LiveResponse] = None,
 ) -> None:
-    import shutil as _shutil
-
     req = urllib.request.Request(url, headers={"User-Agent": "bonsAI/1.0"})
     with urlopen_with_ca_fallback(req, timeout=120) as resp:
-        total = int(resp.headers.get("Content-Length") or 0)
-        done = 0
-        os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
-        tmp = f"{dest}.part"
-        with open(tmp, "wb") as out:
-            while True:
+        if connection is not None:
+            connection.register(resp)  # so a Cancel can wake a read that is waiting for data
+        try:
+            _copy_response(resp, dest, cancel_event, on_progress)
+        finally:
+            if connection is not None:
+                connection.clear()
+
+
+def _copy_response(
+    resp: Any,
+    dest: str,
+    cancel_event: threading.Event,
+    on_progress: Optional[Callable[[int, int], None]],
+) -> None:
+    total = int(resp.headers.get("Content-Length") or 0)
+    done = 0
+    os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
+    tmp = f"{dest}.part"
+    with open(tmp, "wb") as out:
+        while True:
+            if cancel_event.is_set():
+                raise RuntimeError("Cancelled.")
+            try:
+                chunk = read_some(resp, 1024 * 256)
+            except Exception:
+                # A Cancel shuts the socket under a blocked read, which then ends in an error.
                 if cancel_event.is_set():
                     raise RuntimeError("Cancelled.")
-                chunk = resp.read(1024 * 256)
-                if not chunk:
-                    break
-                out.write(chunk)
-                done += len(chunk)
-                if on_progress:
-                    on_progress(done, total)
-        os.replace(tmp, dest)
-    _ = _shutil
+                raise
+            # A read cut short by the Cancel comes back empty: never take that for a whole file.
+            if cancel_event.is_set():
+                raise RuntimeError("Cancelled.")
+            if not chunk:
+                break
+            out.write(chunk)
+            done += len(chunk)
+            if on_progress:
+                on_progress(done, total)
+    os.replace(tmp, dest)
 
 
 def _free_bytes(path: str) -> int:
@@ -234,6 +257,7 @@ def install_corpus_from_manifest(
     cancel_event: threading.Event,
     log: Callable[[str], None],
     on_progress: Optional[Callable[[int, int], None]] = None,
+    connection: Optional[LiveResponse] = None,
 ) -> str:
     """Download compressed chunk(s), decompress to corpus.db, verify checksums."""
     _refuse_future_schema(manifest)
@@ -293,7 +317,9 @@ def install_corpus_from_manifest(
                     if on_progress and total > 0:
                         on_progress(done, total)
 
-                _download_file(url, dest, cancel_event=cancel_event, on_progress=_prog)
+                _download_file(
+                    url, dest, cancel_event=cancel_event, on_progress=_prog, connection=connection
+                )
                 if expected_sha and _sha256_file(dest) != expected_sha:
                     raise RuntimeError(f"Checksum mismatch for {fname}")
                 part_paths.append(dest)
@@ -429,11 +455,13 @@ async def run_rag_corpus_download(
         return cancel_event.is_set()
 
     thread_cancel = threading.Event()
+    connection = LiveResponse()
 
     async def _watch_cancel() -> None:
         while not cancel_event.is_set():
             await asyncio.sleep(0.25)
         thread_cancel.set()
+        connection.abort()  # wakes a read that is blocked with no data coming
 
     watcher = asyncio.create_task(_watch_cancel())
 
@@ -469,6 +497,7 @@ async def run_rag_corpus_download(
                 cancel_event=thread_cancel,
                 log=log,
                 on_progress=on_progress,
+                connection=connection,
             )
         )
         state["progress_pct"] = 100

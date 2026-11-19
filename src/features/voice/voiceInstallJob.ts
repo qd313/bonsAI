@@ -131,9 +131,15 @@ export function noteVoiceInstallStatus(st: VoiceJobStatus | null | undefined): v
   job.note(st);
 }
 
-/** The section says it is on screen and reads the status itself, for as long as it is mounted and polling (`reading`). */
-export function useVoiceInstallJobReader(reading: boolean): void {
-  job.useReader(reading);
+/** How often the section reads the install when nothing is stopping. */
+const VOICE_INSTALL_ROUTINE_MS = 1200;
+
+/**
+ * The section says it is on screen and reads the status itself, for as long as it is mounted and polling (`reading`).
+ * Out: the milliseconds its poll waits between reads now (fast after a Cancel).
+ */
+export function useVoiceInstallJobReader(reading: boolean): number {
+  return job.useReader(reading, VOICE_INSTALL_ROUTINE_MS);
 }
 
 /** Test-only reset. */

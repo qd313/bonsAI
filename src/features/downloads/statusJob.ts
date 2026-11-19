@@ -21,13 +21,12 @@
  */
 import { useEffect } from "react";
 
-import { endJob, publishJob, runningJob, type JobFace, type JobResult } from "./runningJobs";
+import { endJob, publishJob, runningJob, useRunningJob, type JobFace, type JobResult } from "./runningJobs";
+import { createPacedFollower, ROUTINE_READ_MS, useReadPaceMs } from "./stoppingPace";
 
 /** What every status job says to the person while it waits for its first words. */
 export const KEEP_AWAKE_LINE = "Keep the Deck awake and online until this finishes.";
 
-/** How often the status is read while no screen of the job's own reads it. */
-const FOLLOW_MS = 1500;
 /** An unanswered start holds back "nothing running" answers for at most this long (the start's own deadline). */
 const START_HOLD_MS = 15_000;
 
@@ -64,8 +63,11 @@ export interface StatusJob<S> {
   /**
    * A screen of the job's own is on screen and reads the status itself, for as long as it is mounted and `reading` (a
    * screen whose own reading has stopped, a poll that ended on a failed read, hands the reading back to the job).
+   * Out: how many milliseconds the screen's poll waits between two reads now: `routineMs`, and 300 from a Cancel until
+   * the job ends (stoppingPace.ts), so the screen's copy of the status is as fresh as the follower's. Put it in the
+   * poll effect's dependencies.
    */
-  useReader: (reading?: boolean) => void;
+  useReader: (reading?: boolean, routineMs?: number) => number;
   /** The last status seen while it was a running one: where a screen rebuilt mid-run starts. */
   lastRunning: () => S | null;
   /** Test-only reset. */
@@ -79,18 +81,12 @@ export interface StatusJob<S> {
 export function createStatusJob<S>(spec: StatusJobSpec<S>): StatusJob<S> {
   let last: S | null = null;
   let owners = 0;
-  let timer: number | null = null;
   /** Until when "nothing running" answers are held back: set by `begin`, cleared by `accepted` or a running status. */
   let holdUntil = 0;
 
-  function follow(): void {
-    const want = owners === 0 && runningJob(spec.id) !== null;
-    if (want && timer === null) timer = window.setInterval(readOnce, FOLLOW_MS);
-    if (!want && timer !== null) {
-      window.clearInterval(timer);
-      timer = null;
-    }
-  }
+  /* While no screen of the job's own reads the status, read it here: every 1.5 seconds, several times a second after a Cancel. */
+  const follower = createPacedFollower({ job: () => runningJob(spec.id), screenReads: () => owners > 0, read: readOnce });
+  const follow = follower.follow;
 
   function note(st: S | null | undefined): void {
     if (st && spec.isRunning(st)) {
@@ -138,7 +134,8 @@ export function createStatusJob<S>(spec: StatusJobSpec<S>): StatusJob<S> {
       follow();
     },
     note,
-    useReader(reading = true) {
+    useReader(reading = true, routineMs = ROUTINE_READ_MS) {
+      const readMs = useReadPaceMs(useRunningJob(spec.id)?.stoppingAt, routineMs);
       useEffect(() => {
         if (!reading) return;
         owners += 1;
@@ -148,15 +145,16 @@ export function createStatusJob<S>(spec: StatusJobSpec<S>): StatusJob<S> {
           follow();
         };
       }, [reading]);
+      return readMs;
     },
     lastRunning: () => last,
     reset() {
       last = null;
       owners = 0;
       holdUntil = 0;
-      if (timer !== null) window.clearInterval(timer);
-      timer = null;
       endJob(spec.id);
+      follower.stop();
+      follow();
     },
   };
 }

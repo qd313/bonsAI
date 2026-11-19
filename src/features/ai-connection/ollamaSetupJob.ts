@@ -5,8 +5,8 @@
  * card's words (runningJobs.ts): the title ("Updating AI & models", "Installing Ollama", "Setting up the AI"), what
  * it is doing now in plain words, how far and how fast, the sites, and how much of the whole run is done. While a
  * run goes and no Ollama tab is on screen to read its status (its section folded shut, another tab, a Decky box
- * rebuilding the tab), it reads the status itself every 1.5 seconds, so the job ends when the run ends wherever the
- * person is.
+ * rebuilding the tab), it reads the status itself every 1.5 seconds (several times a second after a Cancel), so the job ends when the run
+ * ends wherever the person is.
  *
  * Used for: OllamaWhereAiRunsSection.tsx: every status it reads goes through `noteOllamaSetupStatus`, and a tab
  * rebuilt mid-run starts from `lastRunningOllamaSetupStatus` (the card at once, not a flash of the buttons).
@@ -21,6 +21,7 @@ import { useEffect } from "react";
 
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { endJob, publishJob, runningJob, type JobFace, type JobResult } from "../downloads/runningJobs";
+import { createPacedFollower } from "../downloads/stoppingPace";
 import { VOICE_BUILD_PACKAGE_SITES } from "../downloads/downloadSites";
 import { sitesLine } from "../downloads/siteLine";
 import { setupProgressPercent } from "../main-tab/firstRunSetupProgress";
@@ -31,8 +32,6 @@ import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
 /** The job's id in runningJobs.ts. */
 export const OLLAMA_SETUP_JOB = "ollama-setup";
 
-/** How often the run's status is read while no Ollama tab reads it (the tab reads at the same pace). */
-const FOLLOW_MS = 1500;
 const AWAKE = "Keep the Deck awake and online until this finishes.";
 
 type RunKind = "update" | "install" | "setup";
@@ -119,7 +118,6 @@ function cancelOllamaSetup(): Promise<unknown> {
 let lastStatus: LocalOllamaSetupStatus | null = null;
 let kind: RunKind = "update";
 let owners = 0;
-let followTimer: number | null = null;
 
 /**
  * Every status the Ollama tab (or the follower below) reads comes through here. A running one publishes the card;
@@ -150,15 +148,9 @@ function readStatusOnce(): void {
     .catch(() => {});
 }
 
-/** Read the status every 1.5 seconds while a run goes and no Ollama tab is reading it. */
-function followWhileAway(): void {
-  const want = owners === 0 && runningJob(OLLAMA_SETUP_JOB) !== null;
-  if (want && followTimer === null) followTimer = window.setInterval(readStatusOnce, FOLLOW_MS);
-  if (!want && followTimer !== null) {
-    window.clearInterval(followTimer);
-    followTimer = null;
-  }
-}
+/** Reads the status every 1.5 seconds while a run goes and no Ollama tab reads it, several times a second after a Cancel. */
+const follower = createPacedFollower({ job: () => runningJob(OLLAMA_SETUP_JOB), screenReads: () => owners > 0, read: readStatusOnce });
+const followWhileAway = follower.follow;
 
 /**
  * The Ollama tab says it is on screen and reading the run's status itself, for as long as it is mounted and `reading`
@@ -181,7 +173,7 @@ export function resetOllamaSetupJobForTests(): void {
   lastStatus = null;
   kind = "update";
   owners = 0;
-  if (followTimer !== null) window.clearInterval(followTimer);
-  followTimer = null;
   endJob(OLLAMA_SETUP_JOB);
+  follower.stop();
+  followWhileAway();
 }

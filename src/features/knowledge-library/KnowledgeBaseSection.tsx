@@ -311,7 +311,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
   /* The running download as the job card shows it (knowledgeLibraryJob.ts); it outlives this copy of the section. */
   const job = useRunningJob(KB_LIBRARY_JOB);
-  useKbLibraryJobReader(downloadBusy);
+  const readMs = useKbLibraryJobReader(downloadBusy);
   /* A copy built while a download it did not start goes on (a box closing rebuilt the tab) shows the card at once. */
   useLayoutEffect(() => {
     if (kbDownloadLikelyInFlight() && !runningJob(KB_LIBRARY_JOB)) resumeKbLibraryJob(Boolean(ragCorpusVersion));
@@ -518,9 +518,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         })
         // A read that fails is not the download ending: the card stays and the next read tries again.
         .catch(() => {});
-    }, 1500);
+    }, readMs);
     return () => window.clearInterval(id);
-  }, [downloadBusy, refreshStatus, ollamaIp]);
+  }, [downloadBusy, refreshStatus, ollamaIp, readMs]);
 
   /** The download ending clears an Update's "downloading" note (a later fresh download must not reuse it). */
   useEffect(() => {

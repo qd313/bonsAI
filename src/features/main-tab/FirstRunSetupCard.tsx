@@ -40,10 +40,8 @@ import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsS
 import { setupProgressPercent, setupSitesLine, stoppedLine } from "./firstRunSetupProgress";
 import { startFirstRunSetupAgain, stopFirstRunSetup, useFirstRunSetup } from "./firstRunSetupStore";
 import { COULD_NOT_STOP, noteJobCardSeen } from "../downloads/runningJobs";
+import { useReadPaceMs } from "../downloads/stoppingPace";
 import { OLLAMA_SETUP_JOB } from "../ai-connection/ollamaSetupJob";
-
-/** How often the card reads the run's status while it shows (the Ollama tab reads at the same pace). */
-const POLL_MS = 1500;
 
 type View = { title: string; line: string; tone: "run" | "ok" | "warn"; bar: number | null; note: string; button: "stop" | "again" | null };
 
@@ -102,6 +100,11 @@ export function FirstRunSetupCard(): React.ReactElement | null {
     takeNavFocus("unified-input");
   });
 
+  /* The status as the card shows it: after a Stop is read several times a second until the run is over (stoppingPace.ts). */
+  const shown = setup.accepted ? (polled ?? setup.status) : setup.status;
+  const stillRunning = (shown?.phase ?? "running") === "running";
+  const pollMs = useReadPaceMs(stillRunning ? setup.stoppingAt : null);
+
   // A new start reads afresh: nothing from the run before it is shown as this one's.
   useEffect(() => setPolled(null), [setup.runId]);
   useEffect(() => {
@@ -112,12 +115,12 @@ export function FirstRunSetupCard(): React.ReactElement | null {
         .then((st) => alive && st && setPolled(st))
         .catch(() => {});
     read();
-    const id = window.setInterval(read, POLL_MS);
+    const id = window.setInterval(read, pollMs);
     return () => {
       alive = false;
       window.clearInterval(id);
     };
-  }, [setup.active, setup.accepted, setup.refused, setup.runId]);
+  }, [setup.active, setup.accepted, setup.refused, setup.runId, pollMs]);
 
   useEffect(() => {
     registerNavFocus("first-run-setup-card", navRef);
@@ -131,8 +134,7 @@ export function FirstRunSetupCard(): React.ReactElement | null {
   }, [setup.active]);
 
   if (!setup.active) return null;
-  const status = setup.accepted ? (polled ?? setup.status) : setup.status;
-  const view = viewOf(status, setup.refused, setup.leaveOut);
+  const view = viewOf(shown, setup.refused, setup.leaveOut);
   const press = () => (view.button === "stop" ? void stopFirstRunSetup() : view.button === "again" ? startFirstRunSetupAgain() : undefined);
 
   return (

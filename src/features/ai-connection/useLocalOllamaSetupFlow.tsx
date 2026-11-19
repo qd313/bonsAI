@@ -6,7 +6,7 @@
  * models", which runs in place on the tab with no box (only on a Deck with no
  * models, one box asks the real question, whether to also install the starter
  * models; and while Internet downloads are off, the failed line plus the "Turn
- * on internet downloads?" box), the poll that reads setup progress every 1.5 seconds, and the effect
+ * on internet downloads?" box), the poll that reads setup progress every 1.5 seconds (faster after a Cancel), and the effect
  * that runs a connection test automatically once a setup finishes cleanly (and, quietly, when a run ends
  * cancelled or failed, since the program may already have been swapped).
  *
@@ -52,6 +52,9 @@ import {
   internetDownloadsAreOn,
 } from "../downloads/downloadNotice";
 import { UPDATE_AI_NOTICES } from "../downloads/downloadSites";
+import { useRunningJob } from "../downloads/runningJobs";
+import { useReadPaceMs } from "../downloads/stoppingPace";
+import { OLLAMA_SETUP_JOB } from "./ollamaSetupJob";
 
 /**
  * The "check the Internet downloads permission" failed line outlives the tab: the box it opens
@@ -93,6 +96,8 @@ export function useLocalOllamaSetupFlow({
    * so the reason is kept here and shown as a failed line until a run starts; the poll would
    * otherwise wipe it 1.5 seconds later.
    */
+  /* The poll below reads several times a second from a Cancel until the run ends (stoppingPace.ts). */
+  const readMs = useReadPaceMs(useRunningJob(OLLAMA_SETUP_JOB)?.stoppingAt);
   const refusalRef = useRef(heldDownloadsOffLine ? DOWNLOADS_OFF_FAILED_LINE : "");
   const setRefusal = (reason: string) => {
     refusalRef.current = reason;
@@ -190,9 +195,9 @@ export function useLocalOllamaSetupFlow({
         .catch(() => {});
     };
     poll();
-    id = window.setInterval(poll, 1500);
+    id = window.setInterval(poll, readMs);
     return () => window.clearInterval(id);
-  }, [ollamaLocalOnDeck]);
+  }, [ollamaLocalOnDeck, readMs]);
 
   /*
    * A run this tab saw going. When it ends any way but a clean finish (cancelled, or failed part way) the

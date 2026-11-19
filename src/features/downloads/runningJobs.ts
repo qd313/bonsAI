@@ -61,6 +61,8 @@ export interface RunningJob {
   stopping: boolean;
   /** True when the last Cancel request failed or timed out: Cancel is back, and the card says so. */
   stopFailed: boolean;
+  /** When the Cancel was sent (null when none is on its way): every reader of the job's status reads fast for a while after it (stoppingPace.ts). */
+  stoppingAt: number | null;
 }
 
 /** The title a card or the bar shows for `job`: the failure words, the stopping title, or the running title. */
@@ -121,7 +123,7 @@ function changed(): void {
 /** Start job `id`, or change what its card says. `cancel` asks the job's owner to stop it; `now` is for tests. */
 export function publishJob(id: string, face: JobFace, cancel: CancelFn, now: number = Date.now()): void {
   const was = jobs.get(id);
-  jobs.set(id, { id, face, startedAt: was?.startedAt ?? now, stopping: was?.stopping ?? false, stopFailed: was?.stopFailed ?? false });
+  jobs.set(id, { id, face, startedAt: was?.startedAt ?? now, stopping: was?.stopping ?? false, stopFailed: was?.stopFailed ?? false, stoppingAt: was?.stoppingAt ?? null });
   cancels.set(id, cancel);
   changed();
 }
@@ -194,7 +196,7 @@ export function cancelJobFromX(now: number = Date.now()): boolean {
 function cancelDidNotLand(id: string, seq: number): void {
   const job = jobs.get(id);
   if (!job || !job.stopping || cancelSeq.get(id) !== seq) return;
-  jobs.set(id, { ...job, stopping: false, stopFailed: true });
+  jobs.set(id, { ...job, stopping: false, stopFailed: true, stoppingAt: null });
   changed();
 }
 
@@ -221,7 +223,7 @@ export function cancelJob(id: string, now: number = Date.now()): boolean {
   if (!job || job.stopping || now - job.startedAt < DOUBLE_PRESS_GUARD_MS) return false;
   const seq = ++pressCount;
   cancelSeq.set(id, seq);
-  jobs.set(id, { ...job, stopping: true, stopFailed: false });
+  jobs.set(id, { ...job, stopping: true, stopFailed: false, stoppingAt: Date.now() });
   changed();
   let sent: void | Promise<unknown>;
   try {
@@ -252,6 +254,9 @@ function subscribe(fn: () => void): () => void {
   listeners.add(fn);
   return () => listeners.delete(fn);
 }
+
+/** Call `fn` whenever any job changes (outside React: the followers that read a status themselves speed up on a Cancel). Out: how to stop listening. */
+export const onRunningJobsChange = subscribe;
 
 /** Job `id` while it runs, else null, redrawing the caller when it changes. */
 export function useRunningJob(id: string): RunningJob | null {

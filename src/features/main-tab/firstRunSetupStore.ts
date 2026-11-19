@@ -38,9 +38,11 @@ export type FirstRunSetupState = {
   runId: number;
   /** True when the last Stop request failed or did not answer in time: the card says so, and Stop sends again. */
   stopFailed: boolean;
+  /** When the last Stop was pressed, or null: the card reads the run's status several times a second for a while after it (downloads/stoppingPace.ts). */
+  stoppingAt: number | null;
 };
 
-const IDLE: FirstRunSetupState = { active: false, leaveOut: [], refused: "", accepted: false, status: null, runId: 0, stopFailed: false };
+const IDLE: FirstRunSetupState = { active: false, leaveOut: [], refused: "", accepted: false, status: null, runId: 0, stopFailed: false, stoppingAt: null };
 let state: FirstRunSetupState = IDLE;
 const listeners = new Set<() => void>();
 
@@ -52,7 +54,7 @@ function update(next: Partial<FirstRunSetupState>): void {
 /** Starts the starter set with what was left unticked, and shows the card on the Main tab. */
 export function beginFirstRunSetup(leaveOut: readonly StarterLeftOut[]): void {
   const runId = state.runId + 1;
-  update({ active: true, leaveOut: [...leaveOut], refused: "", accepted: false, status: null, runId, stopFailed: false });
+  update({ active: true, leaveOut: [...leaveOut], refused: "", accepted: false, status: null, runId, stopFailed: false, stoppingAt: null });
   startLocalOllamaSetup(
     LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
     (status) => {
@@ -85,7 +87,7 @@ const STOP_TIMEOUT_MS = 8000;
 export function stopFirstRunSetup(): Promise<void> {
   const runId = state.runId;
   const press = ++stopPresses;
-  if (state.stopFailed) update({ stopFailed: false });
+  update({ stopFailed: false, stoppingAt: Date.now() });
   return callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], STOP_TIMEOUT_MS).then(
     () => {
       // A Stop the back end took clears the words, whichever press it was.
@@ -93,7 +95,7 @@ export function stopFirstRunSetup(): Promise<void> {
     },
     () => {
       // Only the newest press may say it failed: an old press answering late must not.
-      if (state.runId === runId && press === stopPresses) update({ stopFailed: true });
+      if (state.runId === runId && press === stopPresses) update({ stopFailed: true, stoppingAt: null });
     },
   );
 }

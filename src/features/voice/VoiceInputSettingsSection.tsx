@@ -145,7 +145,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
   const [installBusy, setInstallBusy] = useState(() => voiceInstallMarkerActive());
   /* The running install as the job card shows it (voiceInstallJob.ts); it outlives this copy of the section. */
   const job = useRunningJob(VOICE_INSTALL_JOB);
-  useVoiceInstallJobReader(installBusy);
+  const readMs = useVoiceInstallJobReader(installBusy);
   /* A copy built while an install it did not start goes on (a box closing rebuilt the tab) shows the card at once. */
   useLayoutEffect(() => {
     if (voiceInstallMarkerActive() && !runningJob(VOICE_INSTALL_JOB)) resumeVoiceInstallJob();
@@ -253,12 +253,12 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
           setInstallBusy(false);
           void refreshStatus(false);
         });
-    }, 1200);
+    }, readMs);
     return () => {
       ended = true;
       window.clearInterval(id);
     };
-  }, [installBusy, refreshStatus]);
+  }, [installBusy, refreshStatus, readMs]);
 
   const onDownloadModel = async () => {
     if (!microphoneAccessEnabled) {

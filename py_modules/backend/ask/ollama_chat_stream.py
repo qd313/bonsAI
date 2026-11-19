@@ -22,7 +22,8 @@ and returns.
 How it works: `_stream_ollama_chat_once()` runs in this order.
   1. It works out how much room the model has (the window), shortens the visible half of the
      reply budget if the prompt would not fit, and builds the request body.
-  2. It opens the connection and reads the reply in small chunks, cutting each chunk into
+  2. It opens the connection (handing the socket to the caller the moment it connects, so a Stop
+     before the first word can end it) and reads the reply in small chunks, cutting each chunk into
      complete lines. Each line is one small JSON piece of the answer or of the model's thinking.
   3. Every piece is added to a running buffer. At most every tenth of a second the answer so
      far is handed to the live-typing hook, and the seconds spent thinking are frozen at the
@@ -43,6 +44,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, Optional
 
+from backend.core.early_socket_connection import open_reporting_socket
 from backend.ollama.ollama_reply_limits import (
     MAX_STREAM_ANSWER_CHARS,
     MAX_STREAM_LINE_BYTES,
@@ -132,6 +134,7 @@ def _stream_ollama_chat_once(
     reasoning_prefix: str = "",
     reasoning_first_ts: Optional[float] = None,
     reasoning_frozen_seconds: Optional[float] = None,
+    on_connection_opened: Optional[Callable[[Any], None]] = None,
 ) -> dict:
     """One streamed ``/api/chat`` POST. Returns raw/visible text; does not format the final reply.
 
@@ -146,6 +149,12 @@ def _stream_ollama_chat_once(
     exchange arrives. ``reasoning_frozen_seconds`` is ``None`` until the first answer chunk of the
     whole exchange arrives, at which point it is set once and never changed again — a thinking
     chunk that shows up after that does not move it.
+
+    ``on_connection_opened(sock)`` is called with the connection's socket as soon as it is connected,
+    before the question is sent: Ollama sends its reply headers only when the first word is ready, so
+    until then there is no response to close, and a Stop needs the socket to end a model that is still
+    loading. It is called again with ``None`` when this request is over, however it ends, so the caller
+    never keeps a dead socket. Without it the call opens exactly as before.
     """
 
     def _should_cancel() -> bool:
@@ -237,7 +246,11 @@ def _stream_ollama_chat_once(
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=request_timeout_seconds) as resp:
+        if on_connection_opened is None:
+            opened = urllib.request.urlopen(req, timeout=request_timeout_seconds)
+        else:
+            opened = open_reporting_socket(req, request_timeout_seconds, on_connection_opened)
+        with opened as resp:
             if on_http_response_opened:
                 try:
                     on_http_response_opened(resp)
@@ -498,8 +511,15 @@ def _stream_ollama_chat_once(
         )
         return http_error_reply(e.code, body, model_name, _is_thinking_unsupported_error(e.code, body))
     except urllib.error.URLError as e:
+        if _should_cancel():
+            # A Stop before the first word shuts the socket under the blocked call, which urllib
+            # reports as a dropped connection. That is the Stop working, not a failure.
+            logger.info("ask_ollama: connection ended by cancel model=%s (%s)", model_name, e)
+            return cancelled_reply()
         return url_error_reply(e.reason, model_name, request_timeout_seconds)
     except (TimeoutError, socket.timeout):
+        if _should_cancel():
+            return cancelled_reply()
         return timed_out_reply(model_name, request_timeout_seconds)
     except Exception as e:
         if cancel_requested and cancel_requested():
@@ -507,3 +527,9 @@ def _stream_ollama_chat_once(
             return cancelled_reply()
         logger.exception("ask_ollama: unexpected error model=%s", model_name)
         return request_failed_reply(model_name)
+    finally:
+        if on_connection_opened is not None:
+            try:
+                on_connection_opened(None)
+            except Exception:
+                logger.exception("ask_ollama: on_connection_opened clear failed model=%s", model_name)

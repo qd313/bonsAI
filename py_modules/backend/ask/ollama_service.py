@@ -224,6 +224,7 @@ def post_ollama_chat(
     think_effort: str = "off",
     choose_window: bool = False,
     terse_branch_menu: bool = False,
+    on_connection_opened: Optional[Callable[[Any], None]] = None,
 ) -> dict:
     """Execute an Ollama chat attempt with soft continue on ``done_reason=length``.
 
@@ -333,6 +334,7 @@ def post_ollama_chat(
             reasoning_prefix=reasoning_buffer_raw,
             reasoning_first_ts=reasoning_first_ts,
             reasoning_frozen_seconds=reasoning_frozen_seconds,
+            on_connection_opened=on_connection_opened,
         )
 
         if not result.get("success"):

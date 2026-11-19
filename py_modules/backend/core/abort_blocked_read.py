@@ -5,12 +5,14 @@ on a connection that went quiet does not return, so Cancel waited for the read's
 download's live response so that, from another thread, the connection's socket can be shut down; that makes
 the blocked read return at once, and the loop's next look at the flag ends the download. Also reads with a
 call that returns as soon as any data has arrived, so a slow trickle still lets the loop look at the flag.
-Used for: the knowledge library download, and the voice model's own download (through abort_when_cancelled,
-which runs the wake-up from a thread for a flag that is a plain Event).
+Used for: the knowledge library download; the voice model's own download (through abort_when_cancelled,
+which runs the wake-up from a thread for a flag that is a plain Event); and the question to Ollama, which
+shuts a bare socket (`shut_socket`) when Stop comes before the first reply exists.
 Solves: a Cancel that sat on "Stopping the download" for up to two minutes on a stalled connection.
 Does not: end the download itself (the reader does, when it sees the flag), close the response (closing from
-another thread can wait on the reader's own lock), or help while a connection is still being opened (before
-any response exists). Every step is best effort: if the socket cannot be reached nothing happens, never a crash.
+another thread can wait on the reader's own lock), or reach a connection whose socket is not known yet
+(see early_socket_connection.py for getting it early). Every step is best effort: if the socket cannot be
+reached nothing happens, never a crash.
 """
 
 from __future__ import annotations
@@ -34,6 +36,14 @@ def shut_response_socket(resp: Any) -> bool:
         sock = resp.fp.raw._sock  # urllib's response -> buffered reader -> socket stream -> socket
     except Exception:
         return False
+    return shut_socket(sock)
+
+
+def shut_socket(sock: Any) -> bool:
+    """Shut a socket down for reading and writing, waking any read blocked on it. True when it was shut.
+
+    Works on a socket that has no response yet (a request still waiting for the server's first reply).
+    """
     if sock is None:
         return False
     shut = False

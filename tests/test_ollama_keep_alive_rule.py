@@ -29,6 +29,8 @@ _REPLY = '{"message":{"role":"assistant","content":"ok"},"done":true}'
 _DECK = "127.0.0.1:11434"
 _PC = "192.168.1.20:11434"
 _URLOPEN = "backend.ask.ollama_chat_stream.urllib.request.urlopen"
+# The answer's own call opens through this (it hands its socket over so Stop can end a model still loading).
+_OPEN_WITH_SOCKET = "backend.ask.ollama_chat_stream.open_reporting_socket"
 
 
 class _Captured:
@@ -37,7 +39,7 @@ class _Captured:
     def __init__(self) -> None:
         self.bodies: list[dict[str, Any]] = []
 
-    def __call__(self, req: Any, timeout: Any = None) -> Any:
+    def __call__(self, req: Any, timeout: Any = None, on_socket_open: Any = None) -> Any:
         self.bodies.append(json.loads(req.data.decode("utf-8")))
         return ndjson_response([_REPLY])
 
@@ -108,7 +110,7 @@ class AskRequestBodyTests(unittest.IsolatedAsyncioTestCase):
             patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
             patch("backend.ask.ollama_service.choose_window_tokens", return_value=0),
             patch("backend.chats.chat_memory_step.choose_window_tokens", return_value=0),
-            patch(_URLOPEN, side_effect=seen),
+            patch(_OPEN_WITH_SOCKET, side_effect=seen),
         ):
             out = await run_ask_ollama(plugin, "hello", address, "730" if game else "", "", request_timeout_seconds=30)
         self.assertTrue(out.get("success"), out)

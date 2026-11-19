@@ -30,8 +30,10 @@
  * - The saved order is one list for whichever computer answers. A move keeps the saved names this
  *   machine does not show (models only the other machine has), after the visible ones, so changing a
  *   place on a PC does not wipe the Deck's places and the other way round.
- * - A save that fails changes nothing on screen and shows a notice; the places are only updated once
- *   the order is on disk.
+ * - A press changes the places on screen at once, as a best guess from the order the screen shows. What is
+ *   saved is still worked out inside the queued job from a fresh read, and when the last queued job ends
+ *   the screen shows what is really saved. A save that fails shows a notice, and the places go back to
+ *   what is saved.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toaster } from "@decky/api";
@@ -142,6 +144,32 @@ async function saveOrder(kind: TryOrderKind, rawOrder: string[]): Promise<void> 
   );
 }
 
+/**
+ * The list to save after moving `tag` one place, worked out from `savedList` (the order as it is known
+ * now), or null when the model has no place or is already at that end. The names this machine does not
+ * show (the other machine's models) stay after the visible ones.
+ */
+function orderAfterMove(
+  kind: TryOrderKind,
+  installed: string[],
+  savedList: string[],
+  tag: string,
+  delta: -1 | 1,
+): string[] | null {
+  const current = buildPickerOrder(kind, installed, savedList);
+  const name = resolveOrderTag(tag, current);
+  if (!name) return null;
+  const from = current.indexOf(name);
+  const to = from + delta;
+  if (to < 0 || to >= current.length) return null;
+  const next = [...current];
+  [next[from], next[to]] = [next[to], next[from]];
+  // The saved list is shared by the Deck and a PC: names this machine does not show (a model only
+  // the other machine has) keep their relative order after the visible ones instead of being wiped.
+  const unseen = savedList.filter((t) => t.trim() && !current.includes(t) && !next.includes(t));
+  return [...next, ...unseen];
+}
+
 type PcList = { state: "loading" } | { state: "ready"; models: string[]; sizesGb: Record<string, number> } | { state: "refused"; message: string };
 
 /**
@@ -170,6 +198,12 @@ export function useTryOrderPlaces(a: {
   });
   const savedRef = useRef(saved);
   savedRef.current = saved;
+  // What a press just did on screen, kept until the last queued save has ended (see `move`). It is a guess
+  // from what the screen knew; the saved lists above are what is really on disk.
+  const [guess, setGuess] = useState<Partial<Record<TryOrderKind, string[]>>>({});
+  const guessRef = useRef(guess);
+  const pressesOutRef = useRef(0);
+  const shown = { ...saved, ...guess };
   const [pc, setPc] = useState<PcList>({ state: "loading" });
 
   // Read both saved orders as the box opens, and again whenever the star moved a model.
@@ -233,7 +267,7 @@ export function useTryOrderPlaces(a: {
   const installedRef = useRef(installed);
   installedRef.current = installed;
 
-  const order = useMemo(() => buildPickerOrder(kind, installed, saved[kind]), [kind, installed, saved]);
+  const order = useMemo(() => buildPickerOrder(kind, installed, shown[kind]), [kind, installed, saved, guess]);
 
   let status: TryOrderStatus = "ready";
   let refusal: string | null = null;
@@ -265,24 +299,32 @@ export function useTryOrderPlaces(a: {
   }, []);
 
   const move = useCallback(
-    (tag: string, delta: -1 | 1) =>
-      enqueue(async () => {
-        const fresh = (await readSavedOrderFresh(kind)) ?? savedRef.current[kind];
-        const current = buildPickerOrder(kind, installedRef.current, fresh);
-        const name = resolveOrderTag(tag, current);
-        if (!name) return;
-        const from = current.indexOf(name);
-        const to = from + delta;
-        if (to < 0 || to >= current.length) return;
-        const next = [...current];
-        [next[from], next[to]] = [next[to], next[from]];
-        // The saved list is shared by the Deck and a PC: names this machine does not show (a model only
-        // the other machine has) keep their relative order after the visible ones instead of being wiped.
-        const unseen = fresh.filter((t) => t.trim() && !current.includes(t) && !next.includes(t));
-        const toSave = [...next, ...unseen];
-        await saveOrder(kind, toSave);
-        setSaved((prev) => ({ ...prev, [kind]: toSave }));
-      }),
+    (tag: string, delta: -1 | 1) => {
+      // At the press: show the move from the order the screen shows (earlier presses included).
+      const shownNow = guessRef.current[kind] ?? savedRef.current[kind];
+      const quick = orderAfterMove(kind, installedRef.current, shownNow, tag, delta);
+      pressesOutRef.current += 1;
+      if (quick) {
+        guessRef.current = { ...guessRef.current, [kind]: quick };
+        setGuess(guessRef.current);
+      }
+      return enqueue(async () => {
+        try {
+          const fresh = (await readSavedOrderFresh(kind)) ?? savedRef.current[kind];
+          const toSave = orderAfterMove(kind, installedRef.current, fresh, tag, delta);
+          if (!toSave) return;
+          await saveOrder(kind, toSave);
+          setSaved((prev) => ({ ...prev, [kind]: toSave }));
+        } finally {
+          // The last press out lets the screen show what is really saved (also after a failed save).
+          pressesOutRef.current -= 1;
+          if (pressesOutRef.current === 0) {
+            guessRef.current = {};
+            setGuess({});
+          }
+        }
+      });
+    },
     [enqueue, kind],
   );
 
@@ -307,7 +349,7 @@ export function useTryOrderPlaces(a: {
     order,
     placeOf,
     move,
-    isAutomatic: saved[kind].length === 0,
+    isAutomatic: shown[kind].length === 0,
     reset,
     onPc,
     pcSizeGbByTag,

@@ -2,8 +2,8 @@
  * Title: The lines under the library's Download / Update and Remove buttons
  *
  * Purpose: What the Knowledge base section says under its two buttons when no download is running (board 5, tab 2,
- * round 2 "Elsewhere": `b5t2Zone2`): the last result (done, cancelled, or the reason it failed) and, always, the
- * sites the download comes from. While a download runs it is not drawn: the job card shows the run.
+ * round 2 "Elsewhere": `b5t2Zone2`): "Removing the library…" while a Remove is out (kbRemoval.ts), the last result
+ * (done, cancelled, or the reason it failed) and, always, the sites the download comes from. While a download runs it is not drawn: the job card shows the run.
  *
  * Used for: KnowledgeBaseSection.tsx, in its own row under the buttons.
  *
@@ -18,6 +18,7 @@ import React, { useRef } from "react";
 
 import { useJobFaceInSight } from "../downloads/JobCard";
 import { textPx } from "../../styles/textPx";
+import { useKbRemoving } from "./kbRemoval";
 import { KB_LIBRARY_JOB, KB_LIBRARY_SITES } from "./knowledgeLibraryJob";
 
 export type KbLibraryResultLinesProps = {
@@ -32,8 +33,14 @@ export type KbLibraryResultLinesProps = {
 export function KbLibraryResultLines({ cancelled, doneSentence, errorText }: KbLibraryResultLinesProps): React.ReactElement {
   const ref = useRef<HTMLDivElement | null>(null);
   useJobFaceInSight(KB_LIBRARY_JOB, ref);
+  const removing = useKbRemoving();
   return (
     <div ref={ref} className="bonsai-prose bonsai-settings-bleed" style={{ display: "flex", flexDirection: "column", gap: 2, userSelect: "none" }}>
+      {removing ? (
+        <div style={{ fontSize: textPx(11), lineHeight: 1.35, color: "#9fb7d5" }} aria-live="polite">
+          Removing the library…
+        </div>
+      ) : null}
       {doneSentence ? (
         <div style={{ fontSize: textPx(11), lineHeight: 1.35, color: "#86efac" }} aria-live="polite">
           <span aria-hidden="true">✓ </span>

@@ -111,11 +111,11 @@ import {
 } from "./kbDownloadMarker";
 import {
   addKbLibraryListener,
-  announceKbLibraryChange,
   expectKbInstall,
   noteKbStatusRead,
   resetKbLibrarySignalForTests,
 } from "./kbLibrarySignal";
+import { kbRemovalInFlight, removeKbLibrary } from "./kbRemoval";
 import { confirmDownload } from "../downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
@@ -783,6 +783,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   };
 
   const confirmRemove = () => {
+    if (kbRemovalInFlight()) return;
     rememberModalReturnFocus("kb-remove");
     onBeforeDeckyModal();
     const handle = showModal(
@@ -806,15 +807,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           // The Remove button is about to go; the ring goes to the button that stays in its row.
           rememberModalReturnFocus("kb-download");
           onCompleteDeckyModalClose(() => handle.Close());
-          void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
-            .then(() => {
-              // This copy may be gone (the box closing rebuilt the tab): tell whichever copy is on screen.
-              announceKbLibraryChange({ installed: false });
-              toaster.toast({ title: "Knowledge base removed", body: "Corpus deleted from disk.", duration: 3000 });
-            })
-            .catch((e) =>
-              toaster.toast({ title: "Remove failed", body: formatDeckyRpcError(e), duration: 5000 }),
-            );
+          removeKbLibrary();
         }}
       />,
     );

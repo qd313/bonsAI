@@ -19,7 +19,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Deck health snapshot, Local reply TTS, On-Deck model benchmark](#deck-health-snapshot-local-reply-tts-on-deck-model-benchmark)
 - [First-run ghost New chat label](#first-run-ghost-new-chat-label)
 - [Replace the bonsAI tab icon](#replace-the-bonsai-tab-icon)
-- [Adjustable text size in Settings](#adjustable-text-size-in-settings)
 - [Focus / Deck UI items with short entries, as filed](#focus--deck-ui-items-with-short-entries-as-filed)
 - [Permissions / safety items, as filed](#permissions--safety-items-as-filed)
 - [Platform / upstream items, as filed](#platform--upstream-items-as-filed)
@@ -37,20 +36,12 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Flow L10 findings](#flow-l10-findings)
 - [What bonsAI costs a running game](#what-bonsai-costs-a-running-game)
 - [A faded ghost of the tab bar is left drawn over the chip row after touching the screen](#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen)
-- [The chat summary reads oddly in places](#the-chat-summary-reads-oddly-in-places)
 - [A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind](#a-press-that-never-opens-its-box-parental-lock-on-can-leave-a-stale-return-the-ring-here-note-behind)
-- [The walk check calls a stop hidden when a corner icon merely overlaps its box](#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box)
 - [With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud](#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud)
 - [Roadmap clean-up task: trim this file (done 2026-09-15)](#roadmap-clean-up-task-trim-this-file-done-2026-09-15)
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
-- [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
-- [The mic stops after about 3 or 4 seconds of speech](#the-mic-stops-after-about-3-or-4-seconds-of-speech)
-- [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
-- [Plan 94 notes moved from the roadmap (2026-10-17)](#plan-94-notes-moved-from-the-roadmap-2026-10-17)
 - [Plan 96 notes moved from the roadmap (2026-10-18)](#plan-96-notes-moved-from-the-roadmap-2026-10-18)
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
-- [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
-- [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16)
 - [Plan 105 notes moved from the roadmap (2026-11-17)](#plan-105-notes-moved-from-the-roadmap-2026-11-17)
 - [Cancel and slow controls sweep notes moved from the roadmap (2026-11-19)](#cancel-and-slow-controls-sweep-notes-moved-from-the-roadmap-2026-11-19)
@@ -185,6 +176,8 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
 
 ## Small and cosmetic, as filed
 
+*Moved 2026-11-19: the blocks of entries that have since closed are in [the archive](archive/roadmap-details-closed.md#blocks-of-closed-entries-from-small-and-cosmetic-as-filed-moved-2026-11-19).*
+
 - ★ **The active chip in Show details is hard to spot** — no focus ring, and the "Chip 1 of 6" counter is easy to miss. Filed by the maintainer.
 
 - ★ **The question overlay is a few pixels out of line** with the native text field underneath it, most visible on a three-line question and on
@@ -193,8 +186,6 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
 - ★ **Focus ring gets clipped on grid layouts** — **OPEN, found 2026-08-27.** Tiles sit flush against the edge of their grid, so the
   highlight around a focused tile is cut off instead of drawn in full. Most visible on the AI character picker; check any other
   screen that lays tiles out in a grid. Needs each grid to leave a margin outside its own edge for the ring to fit.
-- ★★ **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a blanket rule was
-  tried and reverted in favour of Steam's native outline.
 
 ## Ask / reply items with short entries, as filed
 
@@ -274,15 +265,6 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
     ([icons.tsx:61](../src/shared/icons/icons.tsx#L61)) draws inline so the glyph inherits `currentColor`
     and the active-tab fill treatment; `assets/logo.png` cannot do either. Budget for a trace, not a
     file swap. Geometry is pinned by `icons.bonsaiGeometry.test.tsx`, so update that in the same change.
-
-## Adjustable text size in Settings
-
-- ★★★ **Adjustable text size in Settings**
-  - **Goal:** A setting that scales the plugin's text so a reply can be made larger for reading at a
-    distance, or smaller to fit more on screen — the second of which serves the vertical-space goal
-    above.
-- **Built so far:** a UI scale section exists (Handheld or Couch size, with an Apply button). It is hidden for 0.6.0 and returns when the Developer tab is on (commit `12227980`).
-  Still open: whether two steps are enough for reading at a distance, deciding what must not scale (icons and the 300px column; design-language Rules 1 and 6), and whether to show it again.
 
 ## Focus / Deck UI items with short entries, as filed
 
@@ -575,31 +557,11 @@ Moved here from the roadmap entry on 2026-10-18 (plan 96 docs sweep, to keep the
 
   **2026-10-03 (plan 81):** one pretend touch showed no ghost ([note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-81-note-one-pretend-touch-showed-no-ghost)). **2026-10-09 (plan 84):** the drop-down strip is gone from the code ([note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-84-note-the-drop-down-strip-is-gone)).
 
-## The chat summary reads oddly in places
-
-Older dated note moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the entry at five lines. Nothing was removed.
-
-  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `workshop:test-evidence/plan78-P78-SUMUP-WORDING.json`.
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
-
-  Measured on this PC's copy of the Deck's model, 45 summaries: a non-game on the Game line in 24 before, 0 after; lines that say nothing, 25 lines before, 10 after (the rest carry a clause and are kept on purpose); real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py` (23), one in `tests/test_chat_summary_service.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
-
 ## A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
   **2026-09-29 (plan 77 block 2, row P77-OLLAMA-NOBOX-NOTE):** the box half PASSED: the Update, Tier 1 and Tier 2 boxes open on "Not now" and B returns the ring. The parental-lock half **still owed**: it needs Steam Family View with a PIN, so it is on the maintainer's checks page; the no-box half rests on unit tests. Evidence `workshop:test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
-
-## The walk check calls a stop hidden when a corner icon merely overlaps its box
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
-
-  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `workshop:test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.
-
-  **2026-10-03 (plan 81):** fixed in the Deck tools project (commit `cde1c0e`, not pushed): the walk check now judges a control with words by where its words are. It takes effect after the tool server restarts. Entry moved to Verify; row **P81-WALK-READS-WORDS**.
-
-  **2026-10-07 (plan 82, Deck block 2, build `60b8c57f`), passed on the Deck:** the question row and the answer sections read 100% visible; the old false alarm did not appear. Entry moved to Done and the archive. Evidence `workshop:test-evidence/plan82-P81-WALK-READS-WORDS.json`.
 
 ## With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud
 
@@ -619,54 +581,11 @@ In block 3d a reload during a game's start was also followed by the game's windo
 
 **2026-10-03 (plan 81, Deck block 6, build `7e963807`):** a developer reload with a game running did not freeze Steam in either try, so the 2026-10-01 freeze was not reproduced. With plenty of memory the Decky tab was missing for about 1 min 40 s until Quick Access was closed and reopened; with the AI loaded and 2.4 to 3.4 GB free the plugin was back in about 45 s. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `workshop:test-evidence/plan81-P81-RELOAD-LOOK.json`.
 
-## While reading an answer, the Show details line takes the suggestion chip's place above the question box
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
-
-**Deck 2026-10-02 (build `c98f749e`):** the slot's wording, the chip's return, B closing details with the ring staying, and Up from the slot or a chip pass. **Still owed:** reaching the slot's line from the question box and pressing A on it (needs a right-stick scroll, the maintainer's hand check, checks page, Friday check 4), and the closed line landing 8 px inside the top.
-
-Row **P79-SHOW-DETAILS-SLOT**. Evidence `workshop:test-evidence/plan79-P79-DETAILS-SLOT.json`.
-
-## The mic stops after about 3 or 4 seconds of speech
-
-Older notes moved here from the roadmap entry on 2026-10-11 (plan 89 docs sweep pass 2), when the entry moved to Verify. Nothing was removed. The heading the entry carried before: **OPEN again 2026-10-10 (reopened from Done): with a real voice on tiny.en it still stops after 3 or 4 seconds. First found by the maintainer 2026-10-09 on the Deck.**
-
-The loudness-gate fix (`d73f9f5a`) made a recorded ten-second sentence come through whole on tiny.en, but only through a pretend microphone (row P87-VOICE-QUIET-SENTENCE, passed on the Deck 2026-10-10; evidence `workshop:test-evidence/plan87-P87-VOICE-QUIET-SENTENCE.json`). A real voice still stops early on tiny.en. On base.en the maintainer did not see the early stop.
-
-Cause of the stop that remains: not known. Related: the repeat bug and the entry about making base.en the default speech model (both Done 2026-10-11, plan 88). Earlier record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
-
-**2026-10-10 evening (Deck, build `532761e2`, a recorded voice, no game):** not reproduced on either model: recorded 15- and 21-second questions grew to the end on tiny.en and on base.en (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`, `workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`). Stays OPEN: it was seen with a real voice only, so a real voice is the check.
-
-**2026-10-11 (plan 88, build `68317980`):** not seen with a recorded voice on the new build: 15- and 21-second questions grew to the end and the live text never went empty (`workshop:test-evidence/p88-VOICE-WHOLE-NOGAME.json`). A guess from reading the code, not tested: the screen writes "what the mic wrote" before the box's text, and if Steam does not batch those two updates, the rule "the box was emptied, so dictation is over" can fire on the first words. Plan 88 does not touch this. Owed: the maintainer's real voice.
-
-## The ring can vanish on the Search tab after closing a game note when a new word arrives
-
-Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
-
-- ★ `[tabs]` **The ring can vanish on the Search tab after closing a game note when a new word arrives** — **OPEN, seen once on the Deck 2026-10-12 (plan 92, block 3); a sighting, not yet checked.**
-  One press of Up brought the ring back. Lane N3c names a likely cause: a move onto a stop that is drawn in the same moment falls back to a plain focus that Steam's ring does not follow (`src/features/search-tab/SearchTab.tsx` about line 189, and `hop` in `useSearchNav.ts`). Needs a Deck reading first. The Search tab evidence files (`workshop:test-evidence/plan92-P90-SEARCH-TAB-WALK.json`, `-KB.json`) do not hold the sighting.
-
-## Plan 94 notes moved from the roadmap (2026-10-17)
-
-**Tab sections: the D-pad ring goes wrong after sections are opened (older note, word for word):**
-
-  **2026-10-13 (plan 93):** (b) not reproduced: with every section open, the Ollama tab walks 19 stops down and the same 19 up, Terse mode a stop both ways; Settings walks 23 stops each way, clean. (b) waits for the maintainer's exact steps. Evidence `workshop:test-evidence/plan93-P93-M1-FOLDED-RING-OLLAMA.json`, `-SETTINGS.json`.
-
 ## Plan 96 notes moved from the roadmap (2026-10-18)
 
 Older dated notes moved here, word for word, to keep the roadmap under its size limit.
 
-**qwen2.5vl should not be the model downloaded first (older note):**
-
-  **Deck 2026-10-14 (plan 93 Deck block D3, build `8ff99a0a`):** the starter-set box and run passed (row P93-B3-STARTER-DECK: gemma and nomic skipped as already there, tiny.en and base.en downloaded, `workshop:test-evidence/plan93-P93-B3-STARTER-DECK-D3.json`), and under "Open source only" neither qwen2.5vl:3b nor qwen2.5:3b is offered while gemma4:e2b-it-qat is (row P93-B3-POLICY, `plan93-P93-B3-POLICY-D3.json`; the screen has no word "Automatic" for the try orders, UNCLEAR). The run re-ran the Ollama installer although Ollama was in ~/.local/bin (`511a61fb`) and the button stayed on the open screen after the run (`08f67393`); **both fixes owe a re-check on the Deck** (row P93-B3-STARTER-DECK). **Stand-in 2026-10-14 (plan 93 block S1, this PC, build `7888115e`, Steam offline), passed on the stand-in (this PC), the plan's machine for a wipe:** row P93-B3-FIRST-RUN: after Clear all plugin data the first-run notice was 36 words with one button, the Local runtime (beta) notice came once at 39 words naming no model and did not return after close and reopen, and the starter-set box (reached from the AI models screen) named gemma4:e2b-it-qat, nomic-embed-text, tiny.en and base.en, about 4.5 GiB, never qwen2.5vl, Cancel first (`workshop:test-evidence/plan93-P93-B3-FIRST-RUN-standin.json`). Row P93-B3-POLICY on the stand-in: neither qwen2.5vl:3b nor qwen2.5:3b listed, gemma4:e2b-it-qat first under Deck essentials (`plan93-P93-B3-POLICY-standin.json`; a stand-in pass, not a Deck pass). **Stays in Verify only for the Deck re-check of the installer and button fixes (`511a61fb`, `08f67393`).**
-
-**While reading an answer, the Show details line takes the suggestion chip's place above the question box (older note):**
-
-  **2026-10-06, the maintainer by hand:** both lines were on screen at once (the slot's copy and the answer's own line under the rating buttons), and the maintainer's rule is that the answer's own line goes away while the slot holds it, with a smooth change on scroll. Filed as its own ★★ bug ("Both Show details lines show at once", now in Verify → Bugs): **2026-10-07 (plan 82, `8bfe1802`) fixed**, the answer's own line now fades out while the slot holds the copy; row **P82-ONE-DETAILS-LINE** passed on the Deck 2026-10-07 (block 3b, build `e34b0d57`; the bug is now in Done). The right-stick hand check (steps 3 and 4) is still owed.
-
-**After pressing Stop on the mic, the next mic press does not work (older note):**
-
-  **2026-10-10 evening (build `532761e2`, a recorded voice, no game):** not reproduced. On base.en, Stop then the mic about 18 s later started a new recording and added words (`workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`); on tiny.en, about 3 s later, the same (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`).
+*Moved 2026-11-19: the blocks of entries that have since closed are in [the archive](archive/roadmap-details-closed.md#blocks-of-closed-entries-from-plan-96-notes-moved-from-the-roadmap-2026-10-18-moved-2026-11-19).*
 
 **Maintainer's ask: sweep every tab for buttons that are lopsided, pressed against an edge or too small for their words (older note):**
 
@@ -675,6 +594,8 @@ Older dated notes moved here, word for word, to keep the roadmap under its size 
 ## Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)
 
 Older entries and sentences moved here word for word by the plan 103 bookkeeper sweep K2, each headed by where it stood.
+
+*Moved 2026-11-19: the blocks of entries that have since closed are in [the archive](archive/roadmap-details-closed.md#blocks-of-closed-entries-from-plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10-moved-2026-11-19).*
 
 **Bugs: Show details strip entry, as it stood:**
 
@@ -687,57 +608,21 @@ Older entries and sentences moved here word for word by the plan 103 bookkeeper 
 
 The reading row P103-M-SUMUP was not taken (the Deck was stuck).
 
-**Bugs: tab sections entry, the older-note pointer line, as it stood:**
-
-  **Older note (2026-10-13, plan 93):** moved to [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
-
-## Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)
-
-Moved word for word when the mic entry passed on the Deck and moved to Done.
-
-- ★ `[voice]` **With the mic off, the log shows "voice: stop pressed, no recording was running" lines (six in one clean-install run)** — **VERIFY, fixed 2026-11-09 (plan 103 lane B1, `f38156b2`). Was OPEN, found 2026-10-23 (plan 99 clean install).**
-  The microphone was never started and its permission was off, yet the log carried six of these lines in one run, near the deck-driver's A presses. Harmless noise. Evidence `workshop:test-evidence/plan99-P99-TIER4-LOG.json`. For 0.6.1.
-  **Fixed 2026-11-09:** the cause was the screen's clean-up when it goes away, which asked the back end to stop, not the two callers the plan named; it no longer asks when no recording ran. Owes **P103-MIC-LOG-01**: with the mic off, open and close the panel six times and look for none of the lines (six A presses would not exercise it).
-
-## Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)
-
-Moved word for word when the quick-start box passed on the Deck and moved to Done.
-
-- ★ `[docs]` `[first-run]` **The quick-start box ("Using bonsAI") leads with the home-PC story and never mentions the Install Ollama button** — **VERIFY, fixed 2026-11-09 (plan 103 lane B1, `777bf0dc`). Was OPEN, found 2026-10-23 (plan 99 clean install).**
-  A new player who opens the box on a fresh Deck reads about entering a PC's LAN address and "every ask will fail" first, and is never pointed at the Install Ollama button on this Deck. Evidence `workshop:test-evidence/plan99-P99-TIER4-NO-DEV.json` (its seen field quotes the box).
-  Not a release blocker under plan 71's line; for 0.6.1.
-  **Fixed 2026-11-09:** the box now leads with running the AI on the Deck. Owes **P103-QUICKSTART-01**: a screenshot for the maintainer's eye on the checks page.
-  **Deck 2026-11-10 (plan 103 block D1, build `3eabdfa27ab3`): P103-QUICKSTART-01 FAILED.** The box is on the Main tab and names this Deck first, but its title and first lines were above the top of the screen (`workshop:test-evidence/plan103-P103-QUICKSTART-01.json`). Cause: it used Steam's own popup, which has no height limit; it had been too tall since October and the new opening paragraph added to it. **Fixed 2026-11-10 (`4f1cff37`):** it now uses the plugin's shared two-button box (fixed height, the text scrolls, Down and Up read it, the ring opens on "Got it"), so it also looks like the other confirm boxes; the look is yours to judge from a picture. Owes **P103-QUICKSTART-02**: Deck check running in block D2's third part (no evidence file yet).
-
-
 ## Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)
 
 Moved word for word by sweep K2 of plan 104. Each block names the entry it stood in; the entry keeps its place, moved to Verify or Done, or is a call on the knowledge-base roadmap.
+
+*Moved 2026-11-19: the blocks of entries that have since closed are in [the archive](archive/roadmap-details-closed.md#blocks-of-closed-entries-from-plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16-moved-2026-11-19).*
 
 **Bugs entry: a long chat was not summed up and nothing said why (as it stood)**
 
 - ★ `[chat]` **A long chat was not summed up and nothing said why; the "summed itself up before this answer" row sits under its answer** — **OPEN, found 2026-11-10 (plan 103 Deck block D1, row P103-SUMUP-01, UNCLEAR).**
   The long test chat was not summed up, and neither the screen nor the log gave a reason (the test chat did sum up, with a log line and a row on screen). First word 11.8 s, done 19.8 s. Evidence `workshop:test-evidence/plan103-P103-SUMUP-01.json` and `-try2.json`. **2026-11-14:** the plan 105 chat's lookup found no fault (no summary was due; that path writes nothing); plan 104 lane B2 confirms it and adds a log line saying why.
 
-**Bugs entry: on Main, the second suggestion chip's words are cut (as it stood)**
-
-- ★ `[ui]` **On Main, the second suggestion chip's words are cut and reach the screen's right edge** — **OPEN, found 2026-11-10 (plan 103 Deck block D1, row QA-LOOK-01-p103, UNCLEAR).**
-  The look check found About clean; on Main the chip's words are cut. Evidence `workshop:test-evidence/plan103-QA-LOOK-01-p103.json`. **2026-11-14:** probably a long label caught mid-scroll, not a cut label; block D0 confirms, plan 104 lane T3 fixes the look check, and the chip's new look is plan 105's (your call there: keep the sliding, fade the cut ends).
-
 **Bugs entry: the Ollama tab's Update button starts an update with no confirm box (as K1 wrote it; now a call, see the knowledge-base roadmap)**
 
 - ★★ `[ollama]` **The Ollama tab's Update button starts a real Ollama update at once, with no confirm box** — **OPEN, found 2026-11-15 (plan 104 Deck block D0a, row P104-KB-THREADS-01).**
   A driver pressed A on it expecting a box (the row said one opens). The Deck's Ollama went from 0.40.9 to 0.40.16 at once, and Cancel 50 seconds later did not undo it. The first answer after it timed out at 180 s and the second took 100 s (usually about 20). Evidence `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`.
-
-**Bugs entry: the Settings screen still read the old Ollama version (as it stood)**
-
-- ★ `[ollama]` `[ui]` **The Settings screen still read "Ollama v0.40.9" after the Ollama update had made it 0.40.16** — **OPEN, found 2026-11-15 (plan 104 Deck block D0a).**
-  It still read 0.40.9 when the driver last looked; whether it ever refreshes by itself was not checked. Evidence `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`.
-
-**Bugs entry: first start, Install Ollama asked to turn on Internet downloads (as it stood)**
-
-- ★★ `[ollama]` `[perms]` **First start: Install Ollama failed and asked to turn on Internet downloads, though every permission was already on** — **OPEN, reported 2026-11-11 by the maintainer.**
-  On the first-start run the maintainer switched on all permissions, pressed Install Ollama, and it failed with a message to turn on Internet downloads. Check the whole first-start run: whether the popup reads the permission it just set, or an old copy of it. May be the same crash as the ★★★ entry on the install timing out (fixed 2026-11-11 and passed on the Deck 2026-11-15; it now sits in [Done after v0.6.0](#done-after-v060)): a permission saved after that crash never reached the back end. Plan 104 lane B1.
 
 **Bugs entry: a question asked while a heavy game runs can freeze the Deck (as it stood)**
 
@@ -745,36 +630,11 @@ Moved word for word by sweep K2 of plan 104. Each block names the entry it stood
   A picture question with God of War running: the lowest reading in the evidence was 970 MB of memory available (about 900 MB at the end), SSH stopped answering, and the maintainer restarted the Deck by hand. Both picture tries that night timed out, at 181.1 and 181.2 s (`workshop:test-evidence/plan103-P102-PICTURE-01-try2.json`). The plugin should check free memory before loading the AI and say so instead of loading. Evidence `workshop:planning/assets/103-handover-D0a.md`. **Readings 2026-11-15 (block D0a, nothing asked over a game):** available memory 11,962 MB idle, 5,649 with the AI loaded, 8,682 with Deep Rock Galactic: Survivor, 4,885 with God of War and 2,172 MB of swap in use (`workshop:test-evidence/plan104-P104-M-MEMORY-try2.json`).
   **Plan 104 lane G1; your call of 2026-11-14 (D141 call 9): warn, then let me ask anyway.** bonsAI loads nothing, shows a warning and offers a way to send the question regardless; the limit comes from block D0's readings. (Your 2026-11-10 wish to talk about it in a separate chat is answered.)
 
-**Verify entry: a long chat's summing-up gave up after 68 seconds (as it stood)**
-
-- ★ `[chat]` **A long chat's summing-up gave up after 68 seconds ("Couldn't sum up the chat this time")** — **VERIFY, hardened 2026-11-09 (plan 103 lane B2, `4de0db3e`, `c72e3db2`, `a7256a2b`); cause not proven. Was OPEN, found 2026-10-25 by the Deck driver (plan 98 block KS).**
-  In the test chat (over 40 questions), a Strategy question about Hollow Knight showed "Couldn't sum up the chat this time, so this answer only knows the newest turns" before the answer; the summing-up ran about 68 seconds first. Cause unknown; a model still loading is one guess, unchecked. The answer itself was fine. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` (side_effect) and its `-answer.png`.
-  **Hardened 2026-11-09:** a summary the AI wrapped in a plain code fence is kept, not thrown away; the log now says why a summary call did not finish ("chat_summary: failed in X s (reason: ...)", "ask_ollama: chat summary failed"), and the line a player reads says why too. The Deck keeps no log from that night, so the cause is not proven. Owes **P103-SUMUP-01**: if it fails again the line says why; one question in the long test chat sums up or says why. **Deck 2026-11-09 (plan 103 block D0b, old build, row P103-M-SUMUP):** in the long test chat the "Couldn't sum up the chat this time" line did not show, and the old build wrote no summary lines to the log (the saved summary dated from 2026-11-04). The live time to the first word was **not measured**: the log's own guess was about 8 s and the whole turn took 28.4 s (`workshop:test-evidence/plan103-P103-M-SUMUP.json`). The row partly could not run.
-  **Deck 2026-11-10 (plan 103 block D1, build `3eabdfa27ab3`, row P103-SUMUP-01): UNCLEAR, not a pass.** The long chat was not summed up and nothing said why; the test chat did sum up. See the new Bugs entry (`workshop:test-evidence/plan103-P103-SUMUP-01.json`, `-try2.json`). The row stays owed.
-
-**Verify entry: first start, Install Ollama asked to turn on Internet downloads (as K2 wrote it, before block D1c)**
-
-- ★★ `[ollama]` `[perms]` **First start: Install Ollama failed and asked to turn on Internet downloads, though every permission was already on** — **VERIFY, fixed 2026-11-15 (plan 104 lane B1, `081785a01` to `59fe02415`); unit-tested; owes row P104-FIRST-RUN-01, not yet recorded on the Deck. Was OPEN, reported 2026-11-11 by the maintainer.**
-  The first-start box no longer says "turn on Internet downloads" while the switch reads on. A settings save that fails is reported and sent again, and Install Ollama retries once after a "downloads off" refusal. Owes the row on a staged first start (settings file and Ollama program moved aside, everything put back after). The original report: [Detail](roadmap-details.md#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16).
-
 ## Plan 105 notes moved from the roadmap (2026-11-17)
 
 Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each block names the entry it stood in; the entry keeps its place and a link here.
 
-**Bugs entry: two documents disagree about a Decky button (the two 2026-10-22 notes, as they stood)**
-
-  **2026-10-22 (plan 97 block A and L17, the monitor, build `73738058`):** Left from the Ask strip's Clear button landed on Voice input 3 of 3 times (`workshop:test-evidence/plan97-A-DECKY-BUTTON.json`). That is both where the button's own handler sends the ring and the control just left of Clear on screen, so the read cannot tell the two apart. The library's source cannot decide it either (the button is Steam's own, found at run time). Stays open.
-  **2026-10-22 (plan 97 block E, build `15565346`):** the decisive read was taken and is undecided again. While an answer streams, Left from Clear landed on Stop generation; idle, on Voice input; both are the 20 px box directly to its left, so the handler's target and Steam's own neighbour are the same control (`workshop:test-evidence/plan97-P97-E-DECKY-BUTTON.json`). Row **P97-E-DECKY-BUTTON** measured, not decided.
-
-**Bugs entry: tab sections (the 2026-10-17 and 2026-11-09 notes, as they stood)**
-
-  **2026-10-17 (plan 94 block 6) and 2026-10-22 (plan 97 L14, `6da3e2d7`):** the Settings case (Down from an open section line stopped moving after a Steam pop-up) is covered by the freeze fix, now Done; row **P97-L14-SECTIONS** passed on the Deck 2026-10-22: Down from an open section line moved the ring 3 of 3 with the page without focus, on the Ollama, Settings (Data) and Developer tabs (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try3.json`, control `-try2.json`). That row never owed parts (b) and (c), so they stay open and untouched. The 2026-10-17 note, word for word: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22). The 2026-10-13 note (plan 93): [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
-  **Deck 2026-11-09 (plan 103 block D0b, old build, row P103-M-TAB-SECTIONS):** a 20-press walk with three sections open: every stop was visible, no setting changed, and the last four Down presses did not move because the ring was already on the last button. Whether Terse mode takes the ring is **UNCLEAR, not a pass**: the control is not on the Settings tab, so the walk could not reach it (the runbook named a control that is not drawn there) (`workshop:test-evidence/plan103-P103-M-TAB-SECTIONS.json`). Parts (b) and (c) stay open.
-
-**Features entry: AI models screen (the 2026-10-13 and 2026-10-14 notes, as they stood)**
-
-  **2026-10-13 (plan 93):** the maintainer wants the "Deck essentials only" filter rethought as part of this. Side reading from the Deck: with "Deck essentials only" ticked, the licence pick changes nothing (4 rows either way). Evidence `workshop:test-evidence/plan93-P93-M13-GEMMA-FILTER.json`.
-  **2026-10-14 (plan 93):** the maintainer thinks the Gemma model was hidden by another filter, maybe "Deck essentials only", when the Bugs entry about it was closed as not reproduced (the model is offered under "Open source only" in the catalog and in the AI models screen). Evidence `workshop:test-evidence/plan93-M13b-GEMMA-PICKER.json`.
+*Moved 2026-11-19: the blocks of entries that have since closed are in [the archive](archive/roadmap-details-closed.md#blocks-of-closed-entries-from-plan-105-notes-moved-from-the-roadmap-2026-11-17-moved-2026-11-19).*
 
 **Features entry: What bonsAI costs a running game (the 2026-10-02 and 2026-10-10 note, as it stood)**
 
@@ -806,26 +666,6 @@ Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each bl
 *Bugs entry: Clear hid an answer (as it stood)*
 
   After a long question was refused, A on the X emptied the box, and the answer to the last question also vanished from the view (the question bubble stayed; the answer and its feedback buttons were gone). Whether the saved chat still holds the turn was not checked; seen once. Evidence `workshop:test-evidence/plan105-P105-M-PAPERCLIP-LEFT.json` (its side note) and the driver's handover `workshop:planning/assets/105-handover-D0.md`.
-
-*Bugs entry: the AI models box, an installed model can vanish (as it stood)*
-
-  The licence check runs before the rule that keeps installed models on screen, so with the default "open source only" setting an installed model outside it can drop out of the list while the count at the top still counts it. This may be the "hidden Gemma" the maintainer reported in October (see the AI models screen entry in Features). Same screen: it opens with 2 rows, not 3, because that setting hides one of the three "Deck essentials" models. Lane D5's area; row **P105-MODELS-BOX-01**.
-
-*Features entry: AI models screen (as it stood)*
-
-  Only a few models show up now. Grow the catalog a lot. The filters are confusing; cut them down to a few clear ones. Chosen for plan 105 (the maintainer, 2026-11-14, D142 call 4), look picked 2026-11-15: board 5, tab 3, C (word buttons and two switches); lane D5.
-
-*Features entry: Terse answers capped at about 40 words (as it stood)*
-
-  Today Terse asks for three lines, and three model lines wrap to nine or more screen lines on the Deck's panel. The cap becomes about 40 words. Related: the Done entry on the Terse slider stop (row P93-B13-TERSE-SLIDER).
-
-*Features entry: "N earlier" one game at a time (as it stood)*
-
-  An open day starts with a row of game buttons (All, each game asked about that day, No game). A on one shows only that game's questions, six at a time, and each row carries its game's name. Left or Right on the "N earlier" line flips the whole list: by day, as now, or one line per game across every day, each question stamped with its day. The maintainer: some players remember the day, some remember the game; this serves both. Each saved question already stores its game, so no new data is needed. Not chosen: a busy day that splits by game on its own, or questions sorted by game with labels.
-
-*Features entry: Decode as the default (as it stood)*
-
-  Decode becomes the default for both answers and chips, and the animation settings leave the Developer tab. Call 6: today's Decode values are the stock values; a short clip goes on the checks page for the maintainer's eye. Call 16 (default taken at go): the "fade" and "carousel" chip styles are deleted, "static" stays as the reduced-motion look (lane B2). Only the thumbs row ("Was this helpful?" and its two buttons) animates in under an answer (call 6; lane A4).
 
 *Features entry: Headline first (as it stood)*
 

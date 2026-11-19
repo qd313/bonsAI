@@ -146,7 +146,13 @@ export function useChatSlots({
    * can never show under a different chat than the one it belongs to.
    */
   const [chatMemory, setChatMemory] = useState<OpenChatMemory>(NO_CHAT_MEMORY);
+  /**
+   * The newest saved chat read onto the screen. A pick that cannot be read puts it back, so the person
+   * returns to the chat they left with its rows and its card, without a second read that may fail too.
+   */
+  const lastShownSlotRef = useRef<ChatSlot | null>(null);
   const applySlotMemory = useCallback((slot: ChatSlot) => {
+    lastShownSlotRef.current = slot;
     const summary = slot.summary ?? null;
     setChatMemory({
       slotId: slot.id,
@@ -273,6 +279,56 @@ export function useChatSlots({
   }, [applySlotMemory, applySlotTranscript, blankLiveAnswerWithNoChat, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
 
   /*
+   * A chat read from disk onto the screen: its rows, its card, and (for a finished newest answer) the
+   * last exchange, which a chat opened from disk does not have, so the reply row (Helpful / Not really /
+   * chips) is drawn. Not while the chat ends on a question still owed an answer, and not if the person
+   * moved on during the load (the same guard the ghost-reply fix in selectSlotChecked relies on). And only for a
+   * finished answer: a stopped partial answer or a saved error is not something to rate or retry (the
+   * back end marks those turns; see newestSavedAnswerIsFinished).
+   */
+  const presentSlot = useCallback(
+    (slot: ChatSlot, slotId: string) => {
+      const { collapsed, pendingQuestion } = applySlotTranscript(
+        slot.turns,
+        slot.origin_app_id ?? "",
+        slot.origin_app_name ?? "",
+      );
+      applySlotMemory(slot);
+      if (!pendingQuestion && activeSlotIdRef.current === slotId && newestSavedAnswerIsFinished(slot.turns)) {
+        const exchange = lastExchangeFromSavedTurn(collapsed[collapsed.length - 1]);
+        if (exchange) restoreLastExchange?.(exchange);
+      }
+    },
+    [activeSlotIdRef, applySlotMemory, applySlotTranscript, restoreLastExchange],
+  );
+
+  /*
+   * A chat that could not be read: the person goes back to the one they left, with its rows, and is
+   * told. The rows come from what was last drawn (nothing to fetch, so it cannot fail the same way); a
+   * quiet read follows to catch up with anything saved since. Going back to no chat needs no rows.
+   */
+  const goBackTo = useCallback(
+    async (leavingId: string | null) => {
+      setActiveSlot(leavingId);
+      const shown = lastShownSlotRef.current;
+      if (leavingId && shown?.id === leavingId) presentSlot(shown, leavingId);
+      toaster.toast({
+        title: "Could not open that chat",
+        body: leavingId ? "You are back in the chat you were in." : "Try again in a moment.",
+        duration: 4000,
+      });
+      if (leavingId) {
+        try {
+          await reloadActiveSlotTranscript();
+        } catch {
+          /* Same trouble as the read that failed; the rows drawn above stand. */
+        }
+      }
+    },
+    [presentSlot, reloadActiveSlotTranscript, setActiveSlot],
+  );
+
+  /*
    * Resolves `false` only when a chat was asked for and the back end had no such chat; every other
    * outcome (switched, or switched to no chat) is `true`. `selectSlot` and `restoreRememberedSlot`
    * below are the two doors onto it.
@@ -316,27 +372,20 @@ export function useChatSlots({
         setAskThreadDisplayQuestion("");
         setExpandedTurnKey("live");
       } else {
-        const slot = await getChatSlot(slotId);
+        let slot: ChatSlot | null = null;
+        try {
+          slot = await getChatSlot(slotId);
+        } catch (e) {
+          /* A restore keeps the old way: the error goes to its caller and the remembered chat stays. */
+          if (restoring) throw e;
+        }
         loaded = !!slot;
         if (slot) {
-          const { collapsed, pendingQuestion } = applySlotTranscript(
-            slot.turns,
-            slot.origin_app_id ?? "",
-            slot.origin_app_name ?? "",
-          );
-          applySlotMemory(slot);
-          /*
-           * The reply row (Helpful / Not really / chips) is drawn from the last exchange, which a
-           * chat opened from disk does not have: hand it the newest answered turn. Not while the
-           * chat ends on a question still owed an answer, and not if the person moved on during
-           * the load (the same guard the ghost-reply fix above relies on). And only for a finished
-           * answer: a stopped partial answer or a saved error is not something to rate or retry
-           * (the back end marks those turns; see newestSavedAnswerIsFinished).
-           */
-          if (!pendingQuestion && activeSlotIdRef.current === slotId && newestSavedAnswerIsFinished(slot.turns)) {
-            const exchange = lastExchangeFromSavedTurn(collapsed[collapsed.length - 1]);
-            if (exchange) restoreLastExchange?.(exchange);
-          }
+          presentSlot(slot, slotId);
+        } else if (!restoring && activeSlotIdRef.current === slotId) {
+          await goBackTo(leavingId);
+          /* No sweep: the chat gone back to is open again, not left. */
+          return false;
         }
       }
       if (leavingId && leavingId !== slotId) {
@@ -345,10 +394,9 @@ export function useChatSlots({
       return loaded;
     },
     [
-      applySlotMemory,
-      applySlotTranscript,
+      goBackTo,
+      presentSlot,
       resetLiveAskPresentation,
-      restoreLastExchange,
       setActiveSlot,
       setAskThreadCollapsed,
       setAskThreadDisplayQuestion,

@@ -201,7 +201,8 @@ export function ChatsMenu(props: ChatsMenuProps): React.ReactElement {
   const openChat = (id: string) => {
     leaveToName();
     props.setAtCreate(false);
-    if (id !== activeSlotId) void props.onSelectSlot?.(id);
+    /* A pick that fails says so itself (useChatSlots.ts); a throw must not become an unhandled rejection. */
+    if (id !== activeSlotId) props.onSelectSlot?.(id)?.catch(() => undefined);
   };
 
   /* 3. Moves. */

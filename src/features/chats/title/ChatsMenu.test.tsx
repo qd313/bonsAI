@@ -259,6 +259,24 @@ describe("every action does what the saved-chats row did", () => {
     expect(ringOn()).toBe(nameEl(title));
   });
 
+  it("A on a chat whose opening throws leaves no unhandled rejection behind", async () => {
+    const unhandled: unknown[] = [];
+    const seen = (reason: unknown) => unhandled.push(reason);
+    process.on("unhandledRejection", seen);
+    try {
+      const { title, main } = mount({ onChatSlotSelect: () => Promise.reject(new Error("RPC timeout after 15000ms")) });
+      await openMenu(title);
+      pressDir("Down");
+      pressDir("Down");
+      await pressA(ringOn()!);
+      await act(async () => new Promise((r) => setTimeout(r, 20)));
+      expect(menu(main)).toBeNull();
+      expect(unhandled).toEqual([]);
+    } finally {
+      process.off("unhandledRejection", seen);
+    }
+  });
+
   it("A on the open chat just closes the menu", async () => {
     const { title, main } = mount();
     await openMenu(title);

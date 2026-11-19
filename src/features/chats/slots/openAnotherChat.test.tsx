@@ -5,7 +5,9 @@
  *          read of one chat can be held back or made to fail:
  *          1. At the pick, before the new chat has been read, none of the old chat's words are on screen
  *             while the name already says the new chat; when the read answers, the new chat's words are.
- *          2. A plugin rebuilt after a box closes still comes back on the remembered chat with its words.
+ *          2. When the read fails (nothing came back, or the call threw), the old chat's name and words are
+ *             back and a toast says "Could not open that chat".
+ *          3. A plugin rebuilt after a box closes still comes back on the remembered chat with its words.
  * Used for: useChatSlots.ts, ChatsMenu.tsx.
  * Does not: Prove where Steam puts the ring after the pick (it goes where it went before this change; only
  *           the Deck shows that).
@@ -148,6 +150,26 @@ describe("picking another saved chat in the chats menu", () => {
     expect(w.threadShown()).toBe("Question in two");
     expect(screenText(w)).toContain("Answer in two");
     expect(screenText(w)).not.toContain("Question in one");
+  });
+
+  it("when the new chat cannot be read, puts the old chat's name and words back and says so", async () => {
+    for (const mode of ["null", "throw"] as const) {
+      const w = await openWorld(["one", "two", "three"], "one");
+      hoisted.gate.id = idOf("two");
+      hoisted.gate.mode = mode;
+      vi.mocked(toaster.toast).mockClear();
+      await pickFromMenu(w, "two");
+      await advance(100);
+
+      expect(w.nameShown()).toContain("one, chat 1 of 3");
+      expect(screenText(w)).toContain("Question in one");
+      expect(screenText(w)).toContain("Answer in one");
+      expect(screenText(w)).not.toContain("Question in two");
+      const toasts = vi.mocked(toaster.toast).mock.calls.map((c) => (c[0] as { title: string }).title);
+      expect(toasts).toContain("Could not open that chat");
+      world?.dispose();
+      world = null;
+    }
   });
 });
 

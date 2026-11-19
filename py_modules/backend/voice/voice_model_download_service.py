@@ -38,6 +38,7 @@ from typing import Any, Callable, Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.core.abort_blocked_read import LiveResponse, abort_when_cancelled, read_some
 from backend.voice.voice_stoppable_run import run_stoppable
 
 CANCELLED_LINE = "Download cancelled."
@@ -215,26 +216,59 @@ def _download_model_file(
 
     if cancel_event.is_set():
         raise RuntimeError(CANCELLED_LINE)
+    try:
+        _download_with_python(url, tmp_path, cancel_event, on_progress, max_bytes)
+    except RuntimeError:
+        if cancel_event.is_set():
+            _remove_quietly(tmp_path)
+        raise
+
+
+def _download_with_python(
+    url: str,
+    tmp_path: str,
+    cancel_event: threading.Event,
+    on_progress: Optional[Callable[[int], None]],
+    max_bytes: Optional[int],
+) -> None:
+    """Python's own download, for when curl is missing or failed.
+
+    On a quiet connection a read does not return, so a thread shuts the socket when the flag is set; the
+    blocked read then ends and the loop's look at the flag ends the download as cancelled.
+    """
     req = urllib.request.Request(url, headers={"User-Agent": "bonsAI/1.0"})
-    with urlopen_with_ca_fallback(req, timeout=120) as resp:
-        total = int(resp.headers.get("Content-Length") or 0)
-        if max_bytes and total > max_bytes:
-            raise RuntimeError("The speech model download is larger than expected and was refused.")
-        read = 0
-        chunk_size = 256 * 1024
-        with open(tmp_path, "wb") as out:
-            while True:
-                if cancel_event.is_set():
-                    raise RuntimeError(CANCELLED_LINE)
-                chunk = resp.read(chunk_size)
-                if not chunk:
-                    break
-                out.write(chunk)
-                read += len(chunk)
-                if max_bytes and read > max_bytes:
-                    raise RuntimeError("The speech model download is larger than expected and was stopped.")
-                if total > 0 and on_progress:
-                    on_progress(min(99, int(read * 100 / total)))
+    connection = LiveResponse()
+    with abort_when_cancelled(cancel_event, connection), urlopen_with_ca_fallback(req, timeout=120) as resp:
+        connection.register(resp)
+        try:
+            total = int(resp.headers.get("Content-Length") or 0)
+            if max_bytes and total > max_bytes:
+                raise RuntimeError("The speech model download is larger than expected and was refused.")
+            read = 0
+            with open(tmp_path, "wb") as out:
+                while True:
+                    if cancel_event.is_set():
+                        raise RuntimeError(CANCELLED_LINE)
+                    try:
+                        chunk = read_some(resp, 256 * 1024)
+                    except Exception:
+                        # A Cancel shuts the socket under a blocked read, which then ends in an error.
+                        if cancel_event.is_set():
+                            raise RuntimeError(CANCELLED_LINE) from None
+                        raise
+                    # A read cut short by the Cancel comes back empty: never take that for a whole file.
+                    if cancel_event.is_set():
+                        raise RuntimeError(CANCELLED_LINE)
+                    if not chunk:
+                        break
+                    out.write(chunk)
+                    read += len(chunk)
+                    if max_bytes and read > max_bytes:
+                        raise RuntimeError("The speech model download is larger than expected and was stopped.")
+                    if total > 0 and on_progress:
+                        on_progress(min(99, int(read * 100 / total)))
+        finally:
+            connection.clear()
 
 
 def _remove_quietly(path: str) -> None:

@@ -5,7 +5,8 @@ on a connection that went quiet does not return, so Cancel waited for the read's
 download's live response so that, from another thread, the connection's socket can be shut down; that makes
 the blocked read return at once, and the loop's next look at the flag ends the download. Also reads with a
 call that returns as soon as any data has arrived, so a slow trickle still lets the loop look at the flag.
-Used for: the knowledge library download; the voice download can use the same two helpers.
+Used for: the knowledge library download, and the voice model's own download (through abort_when_cancelled,
+which runs the wake-up from a thread for a flag that is a plain Event).
 Solves: a Cancel that sat on "Stopping the download" for up to two minutes on a stalled connection.
 Does not: end the download itself (the reader does, when it sees the flag), close the response (closing from
 another thread can wait on the reader's own lock), or help while a connection is still being opened (before
@@ -14,10 +15,11 @@ any response exists). Every step is best effort: if the socket cannot be reached
 
 from __future__ import annotations
 
+import contextlib
 import socket
 import sys
 import threading
-from typing import Any, Optional
+from typing import Any, Iterator, Optional
 
 
 def read_some(resp: Any, size: int) -> bytes:
@@ -76,3 +78,28 @@ class LiveResponse:
             self._aborted = True
             if self._resp is not None:
                 shut_response_socket(self._resp)
+
+
+@contextlib.contextmanager
+def abort_when_cancelled(cancel_event: Any, connection: LiveResponse) -> Iterator[None]:
+    """For the length of the block, a thread waits on a plain `threading.Event` and aborts `connection` on a Cancel.
+
+    For a download that has no event loop to run a watcher task (the voice install's flag is a plain Event).
+    The thread ends when the block does, Cancel or not.
+    """
+    finished = threading.Event()
+
+    def _watch() -> None:
+        while not finished.is_set():
+            if cancel_event.wait(0.1):
+                if not finished.is_set():
+                    connection.abort()  # wakes a read that is blocked with no data coming
+                return
+
+    watcher = threading.Thread(target=_watch, name="abort-when-cancelled", daemon=True)
+    watcher.start()
+    try:
+        yield
+    finally:
+        finished.set()
+        watcher.join(1)

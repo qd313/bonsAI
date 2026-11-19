@@ -8,6 +8,9 @@
  * size, the site, and that the box shows Cancel and the download button only, Cancel first). A decline starts nothing; the download
  * button starts the same setup run (profile tier1_essentials) the old Tier 1 button started.
  *
+ * The chip also shows it was pressed: from the moment the box is accepted until the start is answered it reads
+ * "Starting…" and a second press starts nothing; a refusal or an error puts the label back.
+ *
  * Does not: prove the ring on the device (jsdom has no Steam ring); that is the Deck row's job.
  */
 import React from "react";
@@ -323,4 +326,64 @@ describe("Browse models: a piece left out on the first-time setup", () => {
       expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials", leave_out: [] }]]);
     });
   }
+});
+
+describe("Browse models: the chip shows it was pressed", () => {
+  const chipEl = (container: HTMLElement) => container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-starter-set-chip");
+  let answer: (v: unknown) => void = () => {};
+
+  async function drawAndAccept() {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
+    setRpcHandler("start_local_ollama_setup", () => new Promise((resolve) => (answer = resolve)));
+    const { container } = renderModal();
+    await waitFor(() => expect(chipEl(container)).not.toBeNull());
+    fireEvent.click(chipEl(container)!);
+    (hoisted.modal!.props.onAction as () => void)();
+    await settle();
+    return container;
+  }
+
+  it("reads Starting… after the box is accepted and before the start call answers, and a second press starts nothing", async () => {
+    const container = await drawAndAccept();
+    expect(setupCalls()).toHaveLength(1);
+    expect(chipEl(container)!.textContent).toBe("Starting…");
+    hoisted.modal = null;
+    fireEvent.click(chipEl(container)!);
+    (latest("Starting…")!.onOKButton as (e: { stopPropagation: () => void }) => void)({ stopPropagation: () => {} });
+    await settle();
+    expect(hoisted.modal).toBeNull(); // no second box
+    expect(setupCalls()).toHaveLength(1);
+  });
+
+  it("puts the label back once the start is answered", async () => {
+    const container = await drawAndAccept();
+    await act(async () => answer({ accepted: true }));
+    await waitFor(() => expect(chipEl(container)!.textContent).toBe(LABEL));
+  });
+
+  it("puts the label back when the start is refused, and when it errors", async () => {
+    const refused = await drawAndAccept();
+    await act(async () => answer({ accepted: false, reason: "busy" }));
+    await waitFor(() => expect(chipEl(refused)!.textContent).toBe(LABEL));
+    refused.remove();
+
+    setRpcHandler("start_local_ollama_setup", () => Promise.reject(new Error("no answer")));
+    const { container } = renderModal();
+    await waitFor(() => expect(chipEl(container)).not.toBeNull());
+    fireEvent.click(chipEl(container)!);
+    (hoisted.modal!.props.onAction as () => void)();
+    await waitFor(() => expect(chipEl(container)!.textContent).toBe(LABEL));
+  });
+
+  it("a box that is cancelled changes nothing on the chip", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
+    const { container } = renderModal();
+    await waitFor(() => expect(chipEl(container)).not.toBeNull());
+    fireEvent.click(chipEl(container)!);
+    (hoisted.modal!.props.onCancel as () => void)();
+    await settle();
+    expect(chipEl(container)!.textContent).toBe(LABEL);
+    fireEvent.click(chipEl(container)!); // and it can be pressed again
+    expect(hoisted.modal?.props.title).toBe("Install the starter set?");
+  });
 });

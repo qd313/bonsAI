@@ -146,12 +146,15 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = fa
  * A "downloads off" refusal while the screen shows them on sends the screen's value once and tries once more
  * (plan 104, B1); only a second refusal reads as off. `leaveOut` (the starter set only) names what the person left
  * out on the first-time setup; the back end keeps it for a restart after a reload (starter_left_out.py).
+ * `onAnswered` (optional) is told once the start has been answered, accepted or not, or has failed, so a
+ * button can show "Starting" for exactly that long.
  */
 export function startLocalOllamaSetup(
   profile: string,
   onStatus?: (s: LocalOllamaSetupStatus) => void,
   onRefused?: (reason: string) => void,
-  leaveOut: readonly StarterLeftOut[] = []
+  leaveOut: readonly StarterLeftOut[] = [],
+  onAnswered?: () => void
 ): void {
   const refuse = (reason: string, toastTitle: string) => {
     if (!onRefused) {
@@ -193,17 +196,20 @@ export function startLocalOllamaSetup(
         .then((st) => onStatus?.(st))
         .catch(() => {});
     });
-  void start(false).catch((e: unknown) => {
-    refuse(formatDeckyRpcError(e), "Setup RPC failed");
-  });
+  void start(false)
+    .catch((e: unknown) => {
+      refuse(formatDeckyRpcError(e), "Setup RPC failed");
+    })
+    .finally(() => onAnswered?.());
 }
 
 /**
  * Browse models' "Install the starter set": the download notice first (the sites, the sizes, the ring
  * on Cancel), then the same setup run the old Tier 1 button started. Resolves true when it started. What the
  * person left out on the first-time setup stays out, and the box says so; with no note, every piece is listed.
+ * `hooks` (optional): `onAccepted` runs the moment the box is accepted; `onAnswered` when the start has been answered.
  */
-export async function askThenInstallStarterSet(): Promise<boolean> {
+export async function askThenInstallStarterSet(hooks?: { onAccepted?: () => void; onAnswered?: () => void }): Promise<boolean> {
   const leftOut = readStarterLeftOut();
   const go = await confirmDownload(starterSetNotices({ leftOut }), {
     always: true,
@@ -212,6 +218,7 @@ export async function askThenInstallStarterSet(): Promise<boolean> {
     actionLabel: STARTER_SET_BUTTON_LABEL,
   });
   if (!go) return false;
-  startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS, undefined, undefined, leftOut);
+  hooks?.onAccepted?.();
+  startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS, undefined, undefined, leftOut, hooks?.onAnswered);
   return true;
 }

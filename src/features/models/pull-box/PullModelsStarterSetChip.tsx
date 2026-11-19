@@ -28,7 +28,7 @@
  * box with its own OK). The box is the shell's usual download notice, so closing it hands the ring
  * back through the same nested-box handoff as the screen's other download boxes.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";
 import { useHandRingOnGone } from "../../../shared/dpad/useHandRingOnGone";
 import { useStarterSetRunWatch } from "../useStarterSetRunWatch";
@@ -38,6 +38,11 @@ import { isTagInstalled } from "./pullModelFilters";
 import { askThenInstallStarterSet, STARTER_SET_BUTTON_LABEL } from "../localOllamaStarterSet";
 import { readStarterLeftOut } from "../starterSetLeftOut";
 
+/**
+ * In: the installed tags, the filters column's moves (`nav`), the ring-landing hook and the A-button wrapper.
+ * Out: the button, or nothing once the whole starter set is there. "Starting…" shows from the box's yes until
+ * the start is answered.
+ */
 export function PullModelsStarterSetChip(props: {
   installedTags: Set<string>;
   nav: Record<string, unknown>;
@@ -51,6 +56,11 @@ export function PullModelsStarterSetChip(props: {
   // whatever the ending, the speech models are read again.
   const [runDone, setRunDone] = useState(false);
   const [lookAgain, setLookAgain] = useState(0);
+  // From the press until the box is cancelled, or until the start has been answered, a second press does nothing.
+  // The label reads "Starting…" from the moment the box is accepted (the start can take many seconds to answer);
+  // the chip stays where it is and keeps the ring, so it is not disabled.
+  const pressedRef = useRef(false);
+  const [starting, setStarting] = useState(false);
   const watchRun = useStarterSetRunWatch((phase) => {
     if (phase === "done") setRunDone(true);
     setLookAgain((n) => n + 1);
@@ -75,10 +85,25 @@ export function PullModelsStarterSetChip(props: {
   const speechMissing = !leftOut.includes("voice") && speechReady != null && STARTER_SPEECH_MODELS.some((m) => speechReady[m] !== true);
   if (runDone || (ollamaPartThere && !speechMissing)) return null;
   const press = () => {
-    void askThenInstallStarterSet().then((started) => {
-      if (started) watchRun();
-    });
+    if (pressedRef.current) return;
+    pressedRef.current = true;
+    void askThenInstallStarterSet({
+      onAccepted: () => setStarting(true),
+      onAnswered: () => {
+        pressedRef.current = false;
+        setStarting(false);
+      },
+    })
+      .then((started) => {
+        if (started) watchRun();
+        else pressedRef.current = false;
+      })
+      .catch(() => {
+        pressedRef.current = false;
+        setStarting(false);
+      });
   };
+  const label = starting ? "Starting…" : STARTER_SET_BUTTON_LABEL;
   return (
     <Button
       ref={(el: HTMLElement | null) => {
@@ -91,10 +116,10 @@ export function PullModelsStarterSetChip(props: {
         ev.preventDefault();
         press();
       }}
-      aria-label={STARTER_SET_BUTTON_LABEL}
+      aria-label={label}
       {...({ ...nav, onOKButton: okButtonRuns(press) } as unknown as Record<string, unknown>)}
     >
-      {STARTER_SET_BUTTON_LABEL}
+      {label}
     </Button>
   );
 }

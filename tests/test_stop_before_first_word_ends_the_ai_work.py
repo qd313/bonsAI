@@ -1,4 +1,4 @@
-﻿"""Stop pressed before the first word ends the ask and lets go of the AI at once.
+"""Stop pressed before the first word ends the ask and lets go of the AI at once.
 
 With the model not loaded, Ollama takes the question and says nothing until its first word, so the
 Stop used to find no connection to close and the Deck's AI carried on until it was ready to speak.

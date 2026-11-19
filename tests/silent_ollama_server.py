@@ -1,8 +1,9 @@
 """Title: A local stand-in for an Ollama that takes the question and never answers
 
-Purpose: Listens on a free local port, reads each chat request in full, then says nothing at all, the way
+Purpose: Listens on a free local port, reads each chat request in full, then says nothing at all (a plain GET
+lookup gets a quick empty answer), the way
 Ollama does while it loads a model or reads a long question before its first word. It records how many
-requests arrived and when each client went away, so a test can tell whether a Stop really let go of the
+chat requests arrived and when each client went away, so a test can tell whether a Stop really let go of the
 connection.
 Used for: tests/test_ollama_chat_hears_stop_before_first_word.py and the Stop-before-first-word tests.
 Solves: the same raw-socket server being written out in each test that needs a server that never replies.
@@ -23,6 +24,7 @@ class SilentOllamaServer:
         self.port = self._listener.getsockname()[1]
         self.url = f"http://127.0.0.1:{self.port}/api/chat"
         self.requests_seen = 0
+        self.request_lines: list[str] = []
         self.client_gone_at: list[float] = []
         self.got_request = threading.Event()
         self.client_gone = threading.Event()
@@ -57,6 +59,16 @@ class SilentOllamaServer:
                 if not piece:
                     break
                 body += piece
+            request_line = head.split(b"\r\n")[0].decode("latin-1")
+            self.request_lines.append(request_line)
+            if request_line.startswith("GET "):
+                # The ask's side lookups (loaded models, installed models) get a quick empty answer.
+                conn.sendall(
+                    b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 13\r\n"
+                    b"Connection: close\r\n\r\n" + b'{"models":[]}'
+                )
+                conn.close()
+                return
             self.requests_seen += 1
             self.got_request.set()
             while conn.recv(65536):  # nothing is ever sent; this returns only when the client is gone

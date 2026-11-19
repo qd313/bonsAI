@@ -3,15 +3,22 @@
 Purpose: When someone presses Stop mid-answer, this is the chain that makes the AI really
 stop, not just the UI -- while leaving the model loaded, so the next question starts warm (the
 maintainer's call, 2026-09-26). Closing the live network connection is the stop: Ollama cancels a
-request once its client goes away. Nothing is unloaded on a normal Stop.
+request once its client goes away. Nothing is unloaded on a normal Stop once words are flowing.
+
+One exception, on purpose (2026-11-19, the Cancel and Stop kill-switch rule): a Stop pressed before the
+first word, while the model is still loading or reading the question, shuts the connection's socket at
+once, and Ollama then cancels the load itself ("client connection closed before llama-server finished
+loading, aborting load", measured on the Deck, Ollama 0.40.16). The model is therefore NOT loaded
+afterwards, and the next question loads it again from the start. We do not unload anything ourselves.
 
 Used for: `spawn_ollama_stop_thread()` is what the Stop-button RPC calls; it runs
 `best_effort_abort_ollama_inference()` on a background thread so Stop returns to the screen
 right away. `close_ollama_chat_response()` is called separately, from the Stop RPC and from the
 thread that is actually blocked reading the stream, to unblock it and end the connection.
-`close_stopped_chat_connection()` is what the Stop RPC uses: it closes an open connection at once,
-and for one still being opened it closes it on a small thread, never by waiting on the back end's
-one event loop.
+`close_stopped_chat_connection()` is what the Stop RPC uses: it closes an open connection at once, shuts
+the socket of one that has no reply yet, and for one not connected yet it closes it on a small thread,
+never by waiting on the back end's one event loop. `record_chat_socket()` is how the ask keeps that
+socket where Stop can find it.
 
 Solves: Until 2026-09-26 every Stop also unloaded the model (network unload, then `ollama stop`,
 then ending the AI worker processes), because a network unload could report success while work
@@ -38,6 +45,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, Optional
 
+from backend.core.abort_blocked_read import shut_socket
 from backend.ollama.ollama_connectivity import (
     guess_ollama_cli_paths,
     is_loopback_ollama_base,
@@ -101,6 +109,14 @@ def close_stopped_chat_connection(
     if resp is not None:
         close_ollama_chat_response(resp, logger)
         return None
+    # No reply yet (the model is loading, or reading the question): the connection's socket is all
+    # there is. Shutting it wakes the blocked call and makes Ollama cancel its load. Only the stopped
+    # question's own socket: a fresh ready-event per model call tells a newer question's apart.
+    sock = getattr(plugin, "_active_ollama_chat_socket", None)
+    if sock is not None and getattr(plugin, "_chat_resp_ready_evt", None) is stopped_evt:
+        shut_socket(sock)
+        logger.info("shut the stopped question's socket (no reply yet; Ollama can cancel its load)")
+        return None
     if not isinstance(stopped_evt, threading.Event):
         return None
 
@@ -117,6 +133,31 @@ def close_stopped_chat_connection(
     thread = threading.Thread(target=_close_when_it_opens, name="bonsai-ollama-late-close", daemon=True)
     thread.start()
     return thread
+
+
+def record_chat_socket(plugin: Any) -> Callable[[Any], None]:
+    """The ask's ``on_connection_opened`` hook: keeps the live connection's socket on the plugin.
+
+    One is made per ask. Called with the socket when it connects, and with ``None`` when the request
+    ends. A clear only removes this ask's own socket, so a call that ends late never wipes the socket
+    of a question asked after it. If Stop was already pressed by the time the socket exists (the Stop
+    came while it was still connecting), it is shut at once.
+    """
+    mine: list[Any] = [None]
+
+    def _record(sock: Any) -> None:
+        if sock is None:
+            if getattr(plugin, "_active_ollama_chat_socket", None) is mine[0]:
+                plugin._active_ollama_chat_socket = None
+            mine[0] = None
+            return
+        mine[0] = sock
+        plugin._active_ollama_chat_socket = sock
+        check = getattr(plugin, "_abort_ollama_chat_check", None)
+        if callable(check) and check():
+            shut_socket(sock)
+
+    return _record
 
 
 def spawn_ollama_stop_thread(

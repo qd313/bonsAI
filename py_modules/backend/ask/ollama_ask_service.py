@@ -78,6 +78,7 @@ from backend.ask.ollama_ask_extras import (
     with_pyro_carousel_tip,
 )
 from backend.ask.ollama_service import post_ollama_chat
+from backend.ask.ollama_stop_service import record_chat_socket
 from backend.prompts.ollama_prompts import picture_user_message
 from backend.ask.ollama_attempt_outcome import body_looks_out_of_memory, strip_ollama_http_body
 from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
@@ -473,6 +474,7 @@ async def run_ask_ollama(
                         on_http_response_opened=_on_http_response_opened,
                         on_http_response_done=_on_http_response_done,
                         on_delta=on_delta_cb,
+                        on_connection_opened=record_chat_socket(plugin_inst),
                         think_effort=str(settings.get("ask_think_effort") or "off"),
                         # The Terse stop asks for a branch menu on a Speed or Expert reply, so the reply reader must
                         # read it out (it only did for Strategy). False for everything else.

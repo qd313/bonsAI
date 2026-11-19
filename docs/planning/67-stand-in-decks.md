@@ -2,6 +2,10 @@
 
 **Status:** written 2026-09-23 from a planning chat with the maintainer. Nothing built, nothing installed,
 nothing run. Phase 0 is next, and it starts only when the maintainer says so.
+**2026-11-19: the line above is out of date.** One stand-in exists: this PC on Windows (Steam's Big Picture with
+Decky), driven through the rig tools' list of machines as `this-pc`, in use since 2026-10-10
+(`workshop:test-evidence/plan87-S-S0-SETUP.json`). A stand-in's result never counts as a Deck pass. The rest of
+this plan is not built.
 **Roadmap entry:** **Stand-in Decks on the maintainer's PC** — ★★★★★ `[QA]` `[platform]`, under Features.
 **Related:** [plan 21](../../../bonsAI-workshop/planning/21-ai-owned-testing-program.md), the wider AI-owned testing program, and
 [plan 19](19-controller-macro-test-rig.md), the controller test rig. This plan adds more machines to

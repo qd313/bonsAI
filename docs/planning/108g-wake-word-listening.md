@@ -301,7 +301,7 @@ before each lands. The open-source reviewer reads lane A.
   Open-source: g7 and lane A. Pass each a model and an effort by hand (Sonnet high).
 - **The bookkeeper is handed:** D145's g-calls as answered; the rows of § 6 as open rows when their phase lands; the
   step 0 numbers with their evidence files; the entry's move to Verify when phase 3 lands; the items for the "checks
-  only you can do" page; and one stale line to fix (the briefs name it).
+  only you can do" page. (The stale Voice line the briefs name was corrected on 2026-11-19.)
 - **The step 0 report** goes into this file as a new last section, in plain words, numbers after meaning.
 - **At the end, the two write-ups** the maintainer asked for: the code-work summary (files changed, what surprised,
   what would have made it easier) and the plain "how it was built" guide.

@@ -550,10 +550,9 @@ roadmap, the testing files or the changelog (the bookkeeper's).
 ## The bookkeeper's paperwork
 
 - **At go:** D145's g-calls as answered, in the house shape. The roadmap entry gains the step 0 date.
-- **After step 0:** the entry's status line says go or no-go with the numbers and their evidence files. One stale
-  line to fix while there: `docs/testing.md:293` still says "A live recording round-trip on-Deck is still
-  unverified"; row P86-VOICE-01 passed on 2026-10-16 (`docs/archive/testing-closed-2026.md:858`), so the line should
-  say what is still owed is the maintainer's own voice.
+- **After step 0:** the entry's status line says go or no-go with the numbers and their evidence files. (The stale
+  Voice line at `docs/testing.md:293`, "A live recording round-trip on-Deck is still unverified", was corrected on
+  2026-11-19 with the rows that passed; nothing is owed for it.)
 - **As each phase lands:** its rows from the plan's § 6 as open rows in `docs/testing.md`; the hand checks in
   `docs/testing-manual.md` and on the "checks only you can do" page. The entry reads PARTIAL from phase 1 and moves
   to Verify, with its rows named, when phase 3 lands.

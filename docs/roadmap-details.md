@@ -533,6 +533,11 @@ starting screen — each walk file already says which screen that is — before 
 in place, a real overnight run can put this row on the schedule. Evidence
 `workshop:test-evidence/overnight-2026-09-26-200443.md` (+ `.json`).
 
+**2026-11-19, a correction (checked for plan 108e):** a saved walk does not say which screen it starts from. Each of
+the 106 walk files in the workshop's `checks` folder holds its presses, its expected landings and its run options,
+and no tab and no chat. So the next step above cannot be built as written: the night run's own list has to hold each
+walk's start ([plan 108e](planning/108e-finish-the-controller-test-rig.md)).
+
 ## Flow L10 findings
 
 Only the open item from plan 70's last three Deck blocks (flows L8, L9 and L10, 2026-09-27) stays here. The rest,

@@ -82,7 +82,7 @@ Checked on 2026-11-19. The file and line behind each point is in the briefs.
    live in the workshop.
 7. **The roadmap entry for stand-in Decks ([plan 67](67-stand-in-decks.md)) says "nothing built".** The tools
    project built the list of machines and a pretend controller in October, and bonsAI was opened and walked on this
-   PC as a stand-in on 2026-10-08. That entry needs a correction; it is not this plan's work.
+   PC as a stand-in on 2026-10-08. That entry was corrected on 2026-11-19; it is not this plan's work.
 
 **Never written down**
 
@@ -263,7 +263,8 @@ part of what the night run does.
 - **Reviewers.** The security reviewer reads N1, N3, F1 and S1 before they land: a script that presses a real
   device with nobody there, starts a program named in a settings file, and runs copy and remote commands. It reads
   R4 in the tools project too. The open-source reviewer is needed only if a lane adds a dependency; none is planned.
-- **The bookkeeper is handed:** the rows in § 6; the roadmap entry's new wording; the correction to the stand-in
-  Decks entry; one findings-log row per ask sent upstream; OVERNIGHT-RUN-01 closed only on the evidence files.
+- **The bookkeeper is handed:** the rows in § 6; the roadmap entry's new wording; one findings-log row per ask sent
+  upstream; OVERNIGHT-RUN-01 closed only on the evidence files. (The stand-in Decks entry was corrected on
+  2026-11-19.)
 - **At the end,** the two write-ups the maintainer asked for: the code-work summary (files, what surprised, what
   would have made it easier), and the plain "how the night run is built" guide.

@@ -413,8 +413,9 @@ stopgap); a saved walk that carries its starting point (drafted ask 9). Posted o
 - **The roadmap entry** stays in Features as PARTIAL. It drops "handheld runs over Bluetooth" only on call e1 (a),
   with a line in `docs/roadmap-shelved.md`. When the NIGHT rows pass, row OVERNIGHT-RUN-01 closes with their
   evidence files named, and the entry keeps only what is left.
-- **The stand-in Decks entry** loses "nothing built": the tools project built the machine list and the pretend
-  controller in October and bonsAI was walked on this PC on 2026-10-08 (that project's roadmap, lines 466-490).
+- **The stand-in Decks entry** lost "nothing built" on 2026-11-19, so nothing is owed here: the tools project built
+  the machine list and the pretend controller in October and bonsAI was walked on this PC on 2026-10-08 (that
+  project's roadmap, lines 466-490).
 - **`docs/mcp-setup.md`, the findings log:** one row per ask sent to the tools project, saying whether it was posted.
 - **No changelog line:** nothing a player sees changes.
 

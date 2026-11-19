@@ -48,13 +48,12 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
 - [Plan 94 notes moved from the roadmap (2026-10-17)](#plan-94-notes-moved-from-the-roadmap-2026-10-17)
 - [Plan 96 notes moved from the roadmap (2026-10-18)](#plan-96-notes-moved-from-the-roadmap-2026-10-18)
-- [Plan 97 second sweep notes moved from the roadmap (2026-10-22)](#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22)
-- [Plan 97 third sweep notes moved from the roadmap (2026-10-22)](#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16)
 - [Plan 105 notes moved from the roadmap (2026-11-17)](#plan-105-notes-moved-from-the-roadmap-2026-11-17)
+- [Cancel and slow controls sweep notes moved from the roadmap (2026-11-19)](#cancel-and-slow-controls-sweep-notes-moved-from-the-roadmap-2026-11-19)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -667,83 +666,6 @@ Older dated notes moved here, word for word, to keep the roadmap under its size 
 
   **Look check run on the Deck 2026-10-18 (plan 96 block M, build `a1b00906`, before these fixes):** Settings, Permissions, Search, Developer (sections closed) and Ollama clean; About's Steam-drawn language dropdown reads as a light button (Steam's own control); Main's findings were the transcript's own rows and the chips (now exempt). Evidence `workshop:test-evidence/plan96-QA-LOOK-Main.json`, and the same name ending `-Settings`, `-Permissions`, `-Search`, `-Developer`, `-Ollama` and `-About`.
 
-## Plan 97 second sweep notes moved from the roadmap (2026-10-22)
-
-Older entries and dated notes moved here, word for word, when the entries were rewritten for Verify or took a new note (plan 97 second sweep).
-
-**A spoiler line inside a bold heading shows raw ** marks (older entry, word for word):**
-
-- ★ `[reply]` **A spoiler line inside a bold heading shows raw ** marks** — **OPEN, found 2026-10-14 (plan 93 Deck block D1).**
-  A hidden block written on one line inside a heading (for example "**7." on a long answer) leaves the bold marks showing as plain text. The code that opens a one-line hidden block out of a heading (`expandOneLineSpoilerFences`, found by lane O3) does not carry the bold marks over. Seen again on the Deck 2026-10-14 (block D3, build `8ff99a0a`): the two asterisks before "7." are still in the drawn text of the section that holds the hidden block. Evidence `workshop:test-evidence/plan93-P93-O3-SPOILER-CUT-D3.json`.
-
-**While an answer writes, it briefly shrinks by a line now and then (6 to 27 px) (older entry, word for word):**
-
-- ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page)).**
-  The Deck measured 6 to 27 px dips, seven times in one answer, none at the finish; last night's measurement shows the same. Likely the letter scramble's paragraph gap settling (lane O3's reading, not proven). Seen again in block D3 (two dips of 8 px, `plan93-P93-M4-ANSWER-FINISH-after-chip-D3.json`). Evidence `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`.
-  **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
-
-**With an external controller, Steam's on-screen keyboard does not appear for Rename chat (nor with Steam + X); it works on the Deck itself (older entry, word for word):**
-
-- ★★ `[platform]` **With an external controller, Steam's on-screen keyboard does not appear for Rename chat (nor with Steam + X); it works on the Deck itself** — **OPEN, a real bug to fix (the maintainer's call 2026-10-18); found 2026-10-18 by the maintainer's hand check (plan 96 check 2, the Deck's own screen).**
-  On the Deck itself the keyboard pops up and the rename works (passed). With an external controller it never shows, even with Steam + X. The maintainer: "That's still a bug that needs to be fixed. A user on the couch with a controller cannot use that part of the plugin." Evidence: the maintainer's answer on the [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 2; no picture.
-
-**A faded ghost of the tab bar is left drawn over the chip row after touching the screen (older entry, word for word):**
-
-- ★★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`) and again 2026-10-18 (build `f7413dbc` or `bba825e5`); raised to three stars by the maintainer 2026-10-18.**
-  **2026-10-18 (plan 96 hand check 7): confirmed by hand, FAIL (rows TAB-BAR-GHOST-01 and P84-TABS-02).** With Deep Rock Galactic: Survivor running, right after tapping the "How to use bonsAI" chip while re-asking a Strategy question ("I'm at: Managing the initial tutorial area"), a second strip is drawn over the top of the chat: the L1 and R1 badges with the Search and bonsAI icons and a greyed "61 earlier" pill behind them. The session's reading: it looks like Steam's own bumper tab-switch hint (the L1/R1 bar Steam draws while a bumper is held), left stuck after the touch, not the plugin's own tab bar; unproven. Evidence `workshop:test-evidence/plan96-HAND-ghost-tab-bar.png`, [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 7.
-
-**Switching tabs with LB/RB should glide, not jump (older entry, word for word):**
-
-- **Switching tabs with LB/RB should glide, not jump** (older line)
-  Mock-ups are owed later, drawn from the real tab bar's icons and sizes. A rough first sketch exists ([sketch](demos/tab-switch-mockups.html): plain squares for icons, never checked by pressing the buttons), and no video of today's tab switching exists yet to compare against.
-
-**The tab bar's icons are hard to see on the Deck's own screen (older entry, word for word):**
-
-- ★★ `[ui]` **The tab bar's icons are hard to see on the Deck's own screen** — **VERIFY, built 2026-10-12 (plan 92: `6b126422`, `4ffc612a`, then heavier again in `21176d82`). Was OPEN, reported 2026-10-12 (plan 92).**
-  **First try:** about 3 percent more bright pixels, no icon clearly heavier. **Second try (`21176d82`):** Search, Ollama, Settings, Permissions and Developer show 29 to 39 percent more ink than before; Main 23 percent; About 16 percent (the "i" hardly changed). "Noticeable side by side at 3x; at normal size it is a modest change, not dramatic."
-
-## Plan 97 third sweep notes moved from the roadmap (2026-10-22)
-
-Older entries and dated notes moved here, word for word, when the entries were rewritten for Verify or took a new note (plan 97 third sweep).
-
-**The ring does not show properly on the "How to use bonsAI" chip (older entry, word for word):**
-
-- ★ `[focus]` **The ring does not show properly on the "How to use bonsAI" chip** — **OPEN, found 2026-10-22 by the maintainer's eye (the checks page).**
-  His note: "make sure the focus ring works on the How to use bonsAI chip". It is the help-chip half of row **CHIP-BUTTON-06**, which stays open. Plan 97 block A measures it (**P97-A-HELP-CHIP-RING**).
-  **2026-10-22 (plan 97 block A, the monitor, build `73738058`):** the help chip could not be shown (it appears only on a first run; block B shows it on purpose, not run yet), so its half is not read. A normal suggestion chip with the ring on it shows only the soft blue fill and no white ring; its left edge sits exactly at the panel's left edge, so a ring drawn outside it would be cut off. Evidence `workshop:test-evidence/plan97-A-HELP-CHIP-RING.json`. Stays open.
-
-**Switching tabs with LB/RB should glide, not jump (older entry, word for word):**
-
-- ★ `[tabs]` **Switching tabs with LB/RB should glide, not jump** — **OPEN, asked 2026-10-17. Mock-ups must be done and one picked before any building.**
-  Today the next tab simply appears. The maintainer wants a subtle animation that makes the change easy to follow by eye (for example, the active marker sliding to the next tab while the page eases across). It must respect reduced motion and never delay the next press.
-  Mock-ups drawn 2026-10-22 (plan 97 lane G1, `65ef9074`): three options at true size from the real tab bar, each with a Reduced motion twin ([mock-ups](demos/tab-switch-mockups.html), published for the pick: <https://claude.ai/artifact/DdRGuwdixAkPxx3YWZkSr6>). The maintainer's pick is owed; nothing is built. The first sketch's line moved to [roadmap-details.md](roadmap-details.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
-  **Plan 97 (call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** stays in the plan: mock-ups first (lane G1), then the maintainer's pick, then the build.
-
-**After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded (older entry, word for word):**
-
-- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **OPEN, seen ten times: nine on 2026-10-17 by the README filming (plan 95: five on the Deck's own screen, four on the monitor), one on 2026-10-18 (plan 96 block E); after the plan 94 sighting below.**
-  Up keeps working; Down is dead from the question box, an answer, "Hide details" or the notes line. Triggers seen: Delete chat's box, the Your notes box, Steam's settings, a plugin reload, and most often (3 of 4 tries on the monitor) the plugin's own Close menu & take screenshot then reopening the menu; one more close and reopen cleared it. In every stuck reading the panel page had no focus (`document.hasFocus()` false; true in every working one), and `window.focus()` could not give it back, so the plan 76 refocus guard cannot work there. Not every time.
-  Every reading and the next steps: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17). Same root cause likely as the Settings case in the entry below. Planned in [plan 96](../../bonsAI-workshop/planning/96-ship-ready-bug-session.md) row R1.
-  **2026-10-18 (plan 96 block V, Deck's own screen): not reproduced in nine tries.** Three on the About language pop-up route (`workshop:test-evidence/plan96-P96-R1-TRIGGER-1.json` to `-3.json`), three with the plugin's own screenshot then reopen (`plan96-P96-R1-TRIGGER-B-1.json` to `-3.json`), three controls (`plan96-P96-R1-CONTROL-1.json` to `-3.json`): the page had focus and Down moved every time. Root cause still unknown; the README's known-problems line keeps "reload the plugin". Stays OPEN.
-  **2026-10-18 (plan 96 block E, build `f7413dbc`), the tenth sighting and the clearest state so far:** Deep Rock Galactic: Survivor running about 5 minutes after launch, the help chip showing (the first-run test had just wiped the browser flags). Down from the question box was dead with the box empty or filled; the page's active element was the Ask button and `document.hasFocus()` was false. Left, Right, LB/RB, three menu close-and-reopens and reopening the plugin did not clear it; one plugin reload did (9 GB free). Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN-try2.json` (its "blocked_route_first" field); block D saw the same dead state with a game up, cleared the first time by two menu chords and the second time only by a reload (`plan96-P96-F6-EXPLAIN.json`). Nine tries without a game did not reproduce it (above): a running game right after launch is now the strongest suspect.
-
-**A faded ghost of the tab bar is left drawn over the chip row after touching the screen (older entry, word for word):**
-
-- ★★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`) and again 2026-10-18 (build `f7413dbc` or `bba825e5`); raised to three stars by the maintainer 2026-10-18.**
-  After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
-  Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes, including plan 81 and plan 84: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
-  **2026-10-18 (plan 96 hand check 7): confirmed by hand, FAIL (rows TAB-BAR-GHOST-01 and P84-TABS-02).** The full note, with the picture and the session's reading, moved to [roadmap-details.md](roadmap-details.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
-  **2026-10-22 (plan 97 block A, no game, the monitor, build `73738058`):** the ghost strip was never shown in 155 samples (baseline, a new chat view and one D-pad press) (`workshop:test-evidence/plan97-A-GHOST-NOGAME.json`). The pop-up half could not run (the help chip shows only on a first run). The game half waits for block B, not run yet.
-  **Maintainer's call 2026-10-18 (raised to three stars):** "We need to dive deep into the plugin code and figure out the root cause. This has been happening for weeks/months ever since we started updating the tab bar. That's the old old tab bar, like a zombie, it keeps rearing its head. It seems caused by, or reacting to, touchscreen activity and popups. We need to nail this down." Scoping note, 2026-10-18: [plan96-scope-ghost-tab-bar.md](audit/plan96-scope-ghost-tab-bar.md).
-
-**Tab sections: the D-pad ring goes wrong after sections are opened (the 2026-10-17 note, word for word):**
-
-  **2026-10-17 (plan 94 block 6, Deck, build `e9b50cc8`): seen once, with a possible trigger.** After a Steam pop-up (the About language list) and Steam's browser, Down from an open section line on Settings stopped moving the ring: the page's own focus moved to the switch below while the ring stayed on the line. A Quick Access close and reopen did not clear it; a plugin reload did, which also folds the sections, so the two causes could not be told apart. Evidence `workshop:test-evidence/plan94-P94-DEV-TAB-ON.json`, `workshop:test-evidence/plan94-P94-RING-STALL.json`.
-
-**The streamed answer's own redraws were costing most of the panel's frame rate (the 2026-10-11 note, word for word):**
-
-  **2026-10-11 (plan 89 block 5, build `9b4d0503`, Deep Rock Galactic: Survivor, answer from this PC's AI):** the panel drew a median of about 60 frames a second while the answer wrote (lowest slice 54.9). Not a full fight: the game paused itself on a level-up screen about 40 s into the run. Row SCR-10 stays owed for a real fight; the look is the maintainer's. Evidence `workshop:test-evidence/plan89-SCR-10-FIGHT.json`.
-
 ## Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)
 
 Older entries and sentences moved here word for word by the plan 103 bookkeeper sweep K2, each headed by where it stood.
@@ -840,7 +762,7 @@ Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each bl
 
 **Bugs entry: tab sections (the 2026-10-17 and 2026-11-09 notes, as they stood)**
 
-  **2026-10-17 (plan 94 block 6) and 2026-10-22 (plan 97 L14, `6da3e2d7`):** the Settings case (Down from an open section line stopped moving after a Steam pop-up) is covered by the freeze fix, now Done; row **P97-L14-SECTIONS** passed on the Deck 2026-10-22: Down from an open section line moved the ring 3 of 3 with the page without focus, on the Ollama, Settings (Data) and Developer tabs (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try3.json`, control `-try2.json`). That row never owed parts (b) and (c), so they stay open and untouched. The 2026-10-17 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22). The 2026-10-13 note (plan 93): [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
+  **2026-10-17 (plan 94 block 6) and 2026-10-22 (plan 97 L14, `6da3e2d7`):** the Settings case (Down from an open section line stopped moving after a Steam pop-up) is covered by the freeze fix, now Done; row **P97-L14-SECTIONS** passed on the Deck 2026-10-22: Down from an open section line moved the ring 3 of 3 with the page without focus, on the Ollama, Settings (Data) and Developer tabs (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try3.json`, control `-try2.json`). That row never owed parts (b) and (c), so they stay open and untouched. The 2026-10-17 note, word for word: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22). The 2026-10-13 note (plan 93): [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
   **Deck 2026-11-09 (plan 103 block D0b, old build, row P103-M-TAB-SECTIONS):** a 20-press walk with three sections open: every stop was visible, no setting changed, and the last four Down presses did not move because the ring was already on the last button. Whether Terse mode takes the ring is **UNCLEAR, not a pass**: the control is not on the Settings tab, so the walk could not reach it (the runbook named a control that is not drawn there) (`workshop:test-evidence/plan103-P103-M-TAB-SECTIONS.json`). Parts (b) and (c) stay open.
 
 **Features entry: AI models screen (the 2026-10-13 and 2026-10-14 notes, as they stood)**
@@ -866,7 +788,7 @@ Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each bl
 
 **Verify entry: the streamed answer's frame rate (the 2026-10-22 note, as it stood)**
 
-  **2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor):** the real fight COULD NOT RUN. One A at the game's title screen opened its save-slot screen (three saved games, each with a delete button), and the runbook stops there; no frame rate was sampled. Row SCR-10 stays owed for a real fight. Evidence `workshop:test-evidence/plan97-SCR-10.json`. The 2026-10-11 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
+  **2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor):** the real fight COULD NOT RUN. One A at the game's title screen opened its save-slot screen (three saved games, each with a delete button), and the runbook stops there; no frame rate was sampled. Row SCR-10 stays owed for a real fight. Evidence `workshop:test-evidence/plan97-SCR-10.json`. The 2026-10-11 note, word for word: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
 
 **Sweep 2 (2026-11-17): entries as they stood before the Deck's block D1 results and the landings were written in (each now has a new Verify, Bugs or Features entry)**
 
@@ -906,3 +828,46 @@ Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each bl
 *Features entry: finish the controller test rig (the 2026-11-16 note, as it stood)*
 
   **2026-11-16 (plan 104 block D2c):** saved walks that depend on chat contents cannot be replayed on a changed chat: four replayed and none matched (the test chat had changed since they were saved, and a replay sets up no start of its own); the two Ollama-tab walks were not run. Evidence `workshop:test-evidence/plan104-P104-D2C4-REPLAYS.json`.
+
+## Cancel and slow controls sweep notes moved from the roadmap (2026-11-19)
+
+Moved word for word by the docs sweep after the cancel and slow controls round, to make room in the roadmap. Each block names the entry it stood in; the entry keeps its place and a link here.
+
+*Features entry: Pressing Left enough times reaches the Quick Access Menu (the two 2026-11-17 notes, as they stood)*
+
+  **Deck 2026-11-17 (plan 105 block D0, before the build, row P105-M-LEFT-EDGES, `workshop:test-evidence/plan105-P105-M-LEFT-EDGES.json`):** Left from the first control of the Ollama, Settings, Permissions and About tabs already lets the ring out to Steam's side rail; the tab bar always keeps it inside bonsAI; the question box and the idle mode button move it to the paperclip.
+  **Deck 2026-11-17 (block D3b, build `1b45aa04b`, `workshop:test-evidence/plan105-P105-LEFT-TO-MENU-01-d3b.json`): PASS** on the paperclip, an answer paragraph and the "N earlier" line (out on the third Left); on Settings, Permissions and About (out on the first); the tab bar wraps; the Reply style slider holds two and the third goes out; presses 3 to 5 s apart never leave the paperclip; LEFT-HOLDS-STILL-01's two Lefts hold on the paperclip and a paragraph, a 3 s hold stays. **Not yet:** the first suggestion chip (no chips showed) and "Suggest as a tip" (all three Lefts stayed, unclear). The dock's "Show details" line goes out on the first Left (Bugs). Row **P105-LEFT-TO-MENU-01** stays open.
+
+*Verify entry: Make the preset chips look more like chips (the maintainer's eye and the owed list, as they stood)*
+
+  **The maintainer's eye, 2026-10-22 (the checks page):** "raised like buttons" PASS (row **CHIP-BUTTON-01**, closed) and "the soft blue fill" PASS (the look of row P79-CHIP-SOFT-FILL). The help and agent chips FAILED: "make sure the focus ring works on the How to use bonsAI chip" (row **CHIP-BUTTON-06** stays open; see the Verify entry on the help chip). The short chip's centring: no verdict (a new Features entry asks for the decode to move in step with the scroll). **The chip pace: "as they are", closed (the maintainer's call of 2026-10-22, plan 99 § 2 call 12).**
+  Still owed: **CHIP-BUTTON-05** by eye (not part of that answer), **CHIP-BUTTON-06**, a short chip's centring (no short chip without a tip dot showed in 417 s on 2026-10-11, so that rests on its tests only; row P79-LONG-CHIPS is closed). The chip pace is no longer owed (call 12; its Deck rows P78-TIP-CHIP and P78-CHIP-PACE passed, in Done). **CHIP-BUTTON-05 and CHIP-BUTTON-06 stay owed.** **2026-11-17 (plan 105, `8d39cdc84`):** the agent chip now shows the blue focus fill under the ring (the help chip's fill already did); CHIP-BUTTON-06 is still owed on the Deck. **Deck 2026-11-17 (plan 105 block D1): COULD NOT RUN** (no agent chip appeared in the whole block); the agent chip could not be shown on demand, so it needs a hand check (`workshop:test-evidence/plan105-CHIP-BUTTON-06.json`). **Deck 2026-11-17 (plan 106 block W1c, build `4dfa35f7e`): the agent chip's blue fill under the ring PASSED** (Pyro answer, pictures saved; `workshop:test-evidence/plan106-CHIP-BUTTON-06.json`); **CHIP-BUTTON-05 and the maintainer's eye on CHIP-BUTTON-06 are still owed.**
+
+*Verify entry: Developer option, sections open and close as the D-pad walks (the two block D3 notes, as they stood)*
+
+  **Deck 2026-11-17 (block D3a, build `94a561bbf`):** the open-and-close rule passed; two of five arrivals left every section shut; the glide was 37.6 px for 7 frames (`workshop:test-evidence/plan105-P105-SECTIONS-AUTO-01.json`).
+  **Deck 2026-11-17 (block D3b, build `1b45aa04b`, after `69d616afc` and `79d075ae8`):** arrivals PASS (the first section open on 5 of 5 Ollama and 3 of 3 Developer arrivals) and walking Down opens the next section PASS. **The glide still FAILS:** Up onto "Use local knowledge base" the row drops 20.8 px at about 38 ms and is back by about 150 ms (within 0.5 px at 300 ms); Up onto the Reply style slider settles 4 px lower (`workshop:test-evidence/plan105-P105-SECTIONS-AUTO-01-d3b.json`). Row **P105-SECTIONS-AUTO-01** stays open; the switch is off by default.
+
+*Verify entry: First-time setup, bring back the starter set (the 2026-10-14 note, as it stood)*
+
+  **2026-10-14 (plan 93):** the starter set is back: "Install the starter set" brings gemma4:e2b-it-qat, the note-search model and the two speech models (`bbd5de86`, `0f8f32aa`; see the Verify entry on the starter model). "Cut the steps" is not touched.
+
+*Verify entry: The Ollama tab looks dated, fold Cancel into the buttons (the block D3b note, as it stood)*
+
+  **Deck 2026-11-17 (block D3b, build `1b45aa04b`, `workshop:test-evidence/plan105-P105-OLLAMA-BUTTONS-01-d3b.json`): PASS** for the stops in order both ways (Update never skipped, nothing twice, every stop fully visible), the connection line staying 44 px before and after A with the ring kept, Left out from it and Right back, and no raw installer box. **Not run on purpose:** the job card, its Cancel and the bar (they need a real Ollama update, the maintainer's call; tests cover them). **Plan 106 (lanes F3, R1 and R2; Deck block W1, build `4dfa35f7e`):** lane D4b is built, the library download and the voice install on the same card with the voice install's first Cancel (`c275d29fe` to `04d4346ea`), and the three card notes are fixed. **Deck:** the ring is on Cancel at once and stays; the bar sits at the foot with the ring fully visible; **the card's site line is cut off with "…" (FAIL, in Bugs)**; the "Turn on internet downloads?" box and the bar leaving after a finish are still owed (`workshop:test-evidence/plan106-P105-OLLAMA-BUTTONS-01.json`, row P105-OLLAMA-BUTTONS-01). The voice install's card could not run: the Deck has no voice engine (row P105-JOB-CARD-ELSEWHERE-01, still owed).
+
+*Verify entry: Show details, the D-pad and the tab strip (the 2026-11-10 note, as it stood)*
+
+  **Deck 2026-11-10 (plan 103 block D2, build `3eabdfa27ab3`):** Down from "Hide details" lands on the strip 3 of 3 with no notes line, on the notes line then the strip 3 of 3 with one, and the same with a game running; the page never read out of focus (about 95 reads; about 125 across all of block D2). Not run: two fresh chats, an older answer, a covered answer. **P103-DETAILS-STRIP-01** stays owed for those, and the out-of-focus half rests on its tests until a Deck try catches the page out of focus (`workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json`, `-try2.json`). The original sighting: `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 1). Older text: [roadmap-details.md](roadmap-details.md#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10).
+
+*Features entry: Finish the controller test rig (the 2026-11-17 driver tools note, as it stood)*
+
+  **2026-11-17 (plan 105):** three driver tools landed: place a hand-written chat on the Deck (`ac2593acb`), wait for an answer the driver sent (`301811069`), and the knowledge-base read-back on this PC (`7798379af`); no Deck row of their own. Block D1 tried two: placing took 1.22 s and removing 1.04 s, but the open plugin did not show the placed chat (it reads its chat list once); the wait script printed READY and one line that fitted the sampler's timing (`workshop:test-evidence/plan105-P97-L3-SPOILER-BOLD.json`, `workshop:test-evidence/plan105-P105-ANSWER-FOLLOW-01.json`). **Block D2 (2026-11-17):** after a plugin reload the placed chat showed first in the chats menu (placing took 2.2 s, removing it 1.1 s, and the chat folder came back byte for byte; `workshop:test-evidence/plan105-P97-L3-SPOILER-BOLD-try2.json`). The 2026-11-16 replay note: [Detail](roadmap-details.md#plan-105-notes-moved-from-the-roadmap-2026-11-17).
+
+*Verify entry: sweep every tab for lopsided buttons (the 2026-10-18 look check note, as it stood)*
+
+  **Deck 2026-10-18 (plan 96 block F, build `24f5c300`):** the look check on Main found nothing; that was the Main run still owed after `bba825e5` (`workshop:test-evidence/plan96-QA-LOOK4-main.json`). The "AI is not set up" answer variant could not be made by the rig (it needs A on a text box). **Still owed:** the same run on the monitor (the ask names both screens). Older notes: [roadmap-details.md](roadmap-details.md#plan-96-notes-moved-from-the-roadmap-2026-10-18).
+
+*Verify entry: Steam's on-screen keyboard for Rename chat (the 2026-10-22 Deck note, as it stood)*
+
+  **Deck 2026-10-22 (plan 97 block D8, build `15565346`): row P97-L10-RENAME-KEYBOARD passed with the rig.** The ring was on the name field when the box opened, one A on the field showed Steam's keyboard, a typed letter landed, Save renamed the chat and renaming back worked (`workshop:test-evidence/plan97-P97-L10-RENAME-KEYBOARD.json`). It shows only that nothing broke. **Still owed:** the maintainer's own controller, **P97-L10-RENAME-KEYBOARD-HAND** in [testing-manual.md](testing-manual.md). Older notes: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).

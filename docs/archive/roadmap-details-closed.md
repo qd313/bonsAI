@@ -1777,14 +1777,14 @@ Older entries and notes moved here, word for word, when the entries took a new n
 
 - ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **VERIFY, fixed in part 2026-10-22 (plan 97 L4, `e4da5763`, `209f16ff`, `a19f5b8f`; the letter cells moved unchanged in `9b983587`). Was OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of D131).**
   Three causes were measured in a browser with the plugin's stylesheet and fixed: a paragraph break (9 px), a single line break inside a paragraph (about 13 px on the Deck, the larger share) and the end of a list followed by a paragraph (6 px). A dip of about 2.6 px after a heading line remains (and in the two non-default scramble styles), recorded for block E.
-  Owes Deck row **P97-L4-ANSWER-DIPS** (block E3): no drop over 2 px while writing; a heading-line dip of about 3 px is recorded, not failed. Evidence of the failure `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`. Older notes: [roadmap-details.md](roadmap-details.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
+  Owes Deck row **P97-L4-ANSWER-DIPS** (block E3): no drop over 2 px while writing; a heading-line dip of about 3 px is recorded, not failed. Evidence of the failure `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`. Older notes: [roadmap-details.md](roadmap-details-closed.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
 
 **After a Steam box Down stops moving the ring (plan 97 L14), the entry before the fourth sweep, word for word:**
 
 - ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **VERIFY, fixed 2026-10-22 (plan 97 L14: `2b924080`, `6da3e2d7`, `2263aa83`). Was OPEN, seen ten times by 2026-10-18 and twice more in plan 97 block B.**
   Cause, from block B's readings: after a Steam box or the menu closing, the panel's page comes back without the browser's focus (`document.hasFocus()` false); the plugin's own plain focus moves then do nothing while Steam's own transfers still work. Now the moves from the question box, the Ask strip's buttons and the Show reasoning line, and Down from a Settings section line, go through Steam's transfer when the page has lost focus, and each one is logged (`dpad.lostFocusHop`). Left and Right from the question box with focus lost may still leave the panel (known).
   **Deck 2026-10-22 (plan 97 block B, build `73738058`, before the fix):** stuck reproduced after the plugin's "Close menu & take screenshot" and the chord reopen (FREEZE-2: Down dead from the question box; Left, Right, LB/RB, three menu close-and-reopens and a reopen from the Decky list did not clear it, only a plugin reload did) and again after Steam's "Delete chat?" box and B (game up about 6 minutes); FREEZE-1 and FREEZE-3 moved on every Down. Evidence `workshop:test-evidence/plan97-P97-B-FREEZE-1.json`, `-2.json`, `-3.json`, `plan97-P97-B-AFTER-POPUP-FOCUS.json`.
-  Owes Deck rows **P97-L14-FREEZE** and **P97-L14-SECTIONS** (block E11); they count only when the page reads no focus, and are UNCLEAR if that state is not reached in six tries. Every reading: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17); older entry: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
+  Owes Deck rows **P97-L14-FREEZE** and **P97-L14-SECTIONS** (block E11); they count only when the page reads no focus, and are UNCLEAR if that state is not reached in six tries. Every reading: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17); older entry: [roadmap-details.md](roadmap-details-closed.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
 
 **Opening the plugin with the test rig failed twice after a plugin reload (plan 97), the entry before the fourth sweep, word for word:**
 
@@ -1792,3 +1792,82 @@ Older entries and notes moved here, word for word, when the entries took a new n
   After a plugin reload with no game running, the first try to open the plugin failed in 3 of 3 rounds (round 1 on the connection to Steam's debugger, rounds 2 and 3 because the Quick Access pane did not appear); the next try always worked (round 1 needed a third). Row **P89-RIG-OPEN-AFTER-RELOAD** failed. Evidence `workshop:test-evidence/plan92-P89-RIG-OPEN-AFTER-RELOAD.json`; the first sighting `workshop:test-evidence/p88-DECK-RESTORED.json`.
   **2026-10-14 (plan 93 lane R):** fixed on a branch in the rig's own repo. **2026-10-22 (plan 97, call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** that branch was merged into the rig's main and the server rebuilt before go; fixed in the rig's repo, and the Deck proof is owed (block A, row **P89-RIG-OPEN-AFTER-RELOAD**).
   **2026-10-22 (plan 97 block A, Deck, build `73738058`):** the fix merged before go FAILED: the first try failed in 2 of the 2 counted rounds (round 1 not counted, the tool's connection closed). The tool waited for the Quick Access page, not for the plugin's own tab; waiting 90 s with the menu open did not bring the tab back, closing and reopening the menu did. Fixed again that night in the rig's repo (the open call now closes and reopens the menu when the plugin's tab is missing) and merged into its main (`43afc0b`). It loads only in a new chat; proof owed in block D1 (row **P89-RIG-OPEN-AFTER-RELOAD**, second try). Evidence `workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD.json`.
+
+<!-- The two Plan 97 sweep sections below were moved here from roadmap-details.md on 2026-11-19 (cancel and slow controls sweep, size trim), word for word. -->
+
+## Plan 97 second sweep notes moved from the roadmap (2026-10-22)
+
+Older entries and dated notes moved here, word for word, when the entries were rewritten for Verify or took a new note (plan 97 second sweep).
+
+**A spoiler line inside a bold heading shows raw ** marks (older entry, word for word):**
+
+- ★ `[reply]` **A spoiler line inside a bold heading shows raw ** marks** — **OPEN, found 2026-10-14 (plan 93 Deck block D1).**
+  A hidden block written on one line inside a heading (for example "**7." on a long answer) leaves the bold marks showing as plain text. The code that opens a one-line hidden block out of a heading (`expandOneLineSpoilerFences`, found by lane O3) does not carry the bold marks over. Seen again on the Deck 2026-10-14 (block D3, build `8ff99a0a`): the two asterisks before "7." are still in the drawn text of the section that holds the hidden block. Evidence `workshop:test-evidence/plan93-P93-O3-SPOILER-CUT-D3.json`.
+
+**While an answer writes, it briefly shrinks by a line now and then (6 to 27 px) (older entry, word for word):**
+
+- ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page)).**
+  The Deck measured 6 to 27 px dips, seven times in one answer, none at the finish; last night's measurement shows the same. Likely the letter scramble's paragraph gap settling (lane O3's reading, not proven). Seen again in block D3 (two dips of 8 px, `plan93-P93-M4-ANSWER-FINISH-after-chip-D3.json`). Evidence `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`.
+  **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
+
+**With an external controller, Steam's on-screen keyboard does not appear for Rename chat (nor with Steam + X); it works on the Deck itself (older entry, word for word):**
+
+- ★★ `[platform]` **With an external controller, Steam's on-screen keyboard does not appear for Rename chat (nor with Steam + X); it works on the Deck itself** — **OPEN, a real bug to fix (the maintainer's call 2026-10-18); found 2026-10-18 by the maintainer's hand check (plan 96 check 2, the Deck's own screen).**
+  On the Deck itself the keyboard pops up and the rename works (passed). With an external controller it never shows, even with Steam + X. The maintainer: "That's still a bug that needs to be fixed. A user on the couch with a controller cannot use that part of the plugin." Evidence: the maintainer's answer on the [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 2; no picture.
+
+**A faded ghost of the tab bar is left drawn over the chip row after touching the screen (older entry, word for word):**
+
+- ★★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`) and again 2026-10-18 (build `f7413dbc` or `bba825e5`); raised to three stars by the maintainer 2026-10-18.**
+  **2026-10-18 (plan 96 hand check 7): confirmed by hand, FAIL (rows TAB-BAR-GHOST-01 and P84-TABS-02).** With Deep Rock Galactic: Survivor running, right after tapping the "How to use bonsAI" chip while re-asking a Strategy question ("I'm at: Managing the initial tutorial area"), a second strip is drawn over the top of the chat: the L1 and R1 badges with the Search and bonsAI icons and a greyed "61 earlier" pill behind them. The session's reading: it looks like Steam's own bumper tab-switch hint (the L1/R1 bar Steam draws while a bumper is held), left stuck after the touch, not the plugin's own tab bar; unproven. Evidence `workshop:test-evidence/plan96-HAND-ghost-tab-bar.png`, [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 7.
+
+**Switching tabs with LB/RB should glide, not jump (older entry, word for word):**
+
+- **Switching tabs with LB/RB should glide, not jump** (older line)
+  Mock-ups are owed later, drawn from the real tab bar's icons and sizes. A rough first sketch exists ([sketch](demos/tab-switch-mockups.html): plain squares for icons, never checked by pressing the buttons), and no video of today's tab switching exists yet to compare against.
+
+**The tab bar's icons are hard to see on the Deck's own screen (older entry, word for word):**
+
+- ★★ `[ui]` **The tab bar's icons are hard to see on the Deck's own screen** — **VERIFY, built 2026-10-12 (plan 92: `6b126422`, `4ffc612a`, then heavier again in `21176d82`). Was OPEN, reported 2026-10-12 (plan 92).**
+  **First try:** about 3 percent more bright pixels, no icon clearly heavier. **Second try (`21176d82`):** Search, Ollama, Settings, Permissions and Developer show 29 to 39 percent more ink than before; Main 23 percent; About 16 percent (the "i" hardly changed). "Noticeable side by side at 3x; at normal size it is a modest change, not dramatic."
+
+## Plan 97 third sweep notes moved from the roadmap (2026-10-22)
+
+Older entries and dated notes moved here, word for word, when the entries were rewritten for Verify or took a new note (plan 97 third sweep).
+
+**The ring does not show properly on the "How to use bonsAI" chip (older entry, word for word):**
+
+- ★ `[focus]` **The ring does not show properly on the "How to use bonsAI" chip** — **OPEN, found 2026-10-22 by the maintainer's eye (the checks page).**
+  His note: "make sure the focus ring works on the How to use bonsAI chip". It is the help-chip half of row **CHIP-BUTTON-06**, which stays open. Plan 97 block A measures it (**P97-A-HELP-CHIP-RING**).
+  **2026-10-22 (plan 97 block A, the monitor, build `73738058`):** the help chip could not be shown (it appears only on a first run; block B shows it on purpose, not run yet), so its half is not read. A normal suggestion chip with the ring on it shows only the soft blue fill and no white ring; its left edge sits exactly at the panel's left edge, so a ring drawn outside it would be cut off. Evidence `workshop:test-evidence/plan97-A-HELP-CHIP-RING.json`. Stays open.
+
+**Switching tabs with LB/RB should glide, not jump (older entry, word for word):**
+
+- ★ `[tabs]` **Switching tabs with LB/RB should glide, not jump** — **OPEN, asked 2026-10-17. Mock-ups must be done and one picked before any building.**
+  Today the next tab simply appears. The maintainer wants a subtle animation that makes the change easy to follow by eye (for example, the active marker sliding to the next tab while the page eases across). It must respect reduced motion and never delay the next press.
+  Mock-ups drawn 2026-10-22 (plan 97 lane G1, `65ef9074`): three options at true size from the real tab bar, each with a Reduced motion twin ([mock-ups](demos/tab-switch-mockups.html), published for the pick: <https://claude.ai/artifact/DdRGuwdixAkPxx3YWZkSr6>). The maintainer's pick is owed; nothing is built. The first sketch's line moved to [roadmap-details.md](roadmap-details-closed.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
+  **Plan 97 (call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** stays in the plan: mock-ups first (lane G1), then the maintainer's pick, then the build.
+
+**After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded (older entry, word for word):**
+
+- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **OPEN, seen ten times: nine on 2026-10-17 by the README filming (plan 95: five on the Deck's own screen, four on the monitor), one on 2026-10-18 (plan 96 block E); after the plan 94 sighting below.**
+  Up keeps working; Down is dead from the question box, an answer, "Hide details" or the notes line. Triggers seen: Delete chat's box, the Your notes box, Steam's settings, a plugin reload, and most often (3 of 4 tries on the monitor) the plugin's own Close menu & take screenshot then reopening the menu; one more close and reopen cleared it. In every stuck reading the panel page had no focus (`document.hasFocus()` false; true in every working one), and `window.focus()` could not give it back, so the plan 76 refocus guard cannot work there. Not every time.
+  Every reading and the next steps: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17). Same root cause likely as the Settings case in the entry below. Planned in [plan 96](../../bonsAI-workshop/planning/96-ship-ready-bug-session.md) row R1.
+  **2026-10-18 (plan 96 block V, Deck's own screen): not reproduced in nine tries.** Three on the About language pop-up route (`workshop:test-evidence/plan96-P96-R1-TRIGGER-1.json` to `-3.json`), three with the plugin's own screenshot then reopen (`plan96-P96-R1-TRIGGER-B-1.json` to `-3.json`), three controls (`plan96-P96-R1-CONTROL-1.json` to `-3.json`): the page had focus and Down moved every time. Root cause still unknown; the README's known-problems line keeps "reload the plugin". Stays OPEN.
+  **2026-10-18 (plan 96 block E, build `f7413dbc`), the tenth sighting and the clearest state so far:** Deep Rock Galactic: Survivor running about 5 minutes after launch, the help chip showing (the first-run test had just wiped the browser flags). Down from the question box was dead with the box empty or filled; the page's active element was the Ask button and `document.hasFocus()` was false. Left, Right, LB/RB, three menu close-and-reopens and reopening the plugin did not clear it; one plugin reload did (9 GB free). Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN-try2.json` (its "blocked_route_first" field); block D saw the same dead state with a game up, cleared the first time by two menu chords and the second time only by a reload (`plan96-P96-F6-EXPLAIN.json`). Nine tries without a game did not reproduce it (above): a running game right after launch is now the strongest suspect.
+
+**A faded ghost of the tab bar is left drawn over the chip row after touching the screen (older entry, word for word):**
+
+- ★★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`) and again 2026-10-18 (build `f7413dbc` or `bba825e5`); raised to three stars by the maintainer 2026-10-18.**
+  After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
+  Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes, including plan 81 and plan 84: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
+  **2026-10-18 (plan 96 hand check 7): confirmed by hand, FAIL (rows TAB-BAR-GHOST-01 and P84-TABS-02).** The full note, with the picture and the session's reading, moved to [roadmap-details.md](roadmap-details-closed.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
+  **2026-10-22 (plan 97 block A, no game, the monitor, build `73738058`):** the ghost strip was never shown in 155 samples (baseline, a new chat view and one D-pad press) (`workshop:test-evidence/plan97-A-GHOST-NOGAME.json`). The pop-up half could not run (the help chip shows only on a first run). The game half waits for block B, not run yet.
+  **Maintainer's call 2026-10-18 (raised to three stars):** "We need to dive deep into the plugin code and figure out the root cause. This has been happening for weeks/months ever since we started updating the tab bar. That's the old old tab bar, like a zombie, it keeps rearing its head. It seems caused by, or reacting to, touchscreen activity and popups. We need to nail this down." Scoping note, 2026-10-18: [plan96-scope-ghost-tab-bar.md](audit/plan96-scope-ghost-tab-bar.md).
+
+**Tab sections: the D-pad ring goes wrong after sections are opened (the 2026-10-17 note, word for word):**
+
+  **2026-10-17 (plan 94 block 6, Deck, build `e9b50cc8`): seen once, with a possible trigger.** After a Steam pop-up (the About language list) and Steam's browser, Down from an open section line on Settings stopped moving the ring: the page's own focus moved to the switch below while the ring stayed on the line. A Quick Access close and reopen did not clear it; a plugin reload did, which also folds the sections, so the two causes could not be told apart. Evidence `workshop:test-evidence/plan94-P94-DEV-TAB-ON.json`, `workshop:test-evidence/plan94-P94-RING-STALL.json`.
+
+**The streamed answer's own redraws were costing most of the panel's frame rate (the 2026-10-11 note, word for word):**
+
+  **2026-10-11 (plan 89 block 5, build `9b4d0503`, Deep Rock Galactic: Survivor, answer from this PC's AI):** the panel drew a median of about 60 frames a second while the answer wrote (lowest slice 54.9). Not a full fight: the game paused itself on a level-up screen about 40 s into the run. Row SCR-10 stays owed for a real fight; the look is the maintainer's. Evidence `workshop:test-evidence/plan89-SCR-10-FIGHT.json`.

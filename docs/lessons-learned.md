@@ -551,6 +551,12 @@ clearing call is in the first-run gate (`useDisclaimerAndLocalRuntimeGates.tsx`)
 
 **On the Deck, Update always downloads Ollama again, even at the newest version; "Install Ollama" skips the download.** Plan 106's driver pressed Update on a Deck already at the newest Ollama (0.40.16) and got a real download of about 2.5 to 3 minutes each time, with the models re-pulled (the `update_installed` profile). A row that must not download has to use Install, not Update. With Internet downloads already on, Update starts at once with no box, and the run ends while you walk, so put the ring where you need it before pressing A. Evidence `workshop:test-evidence/plan106-P106-OLLAMA-CANCEL-01.json` and the handover `workshop:planning/assets/106-handover-W1c.md`.
 
+**The Deck's podman waits ten seconds before it forces a container away, and a container whose first process is a shell ignores the polite stop.**
+Cancelling the voice engine build removed its build container the ordinary way, so a Cancel took about ten seconds to end. Removing a running test container took 10.2 s on the Deck; `podman rm -f -t 0` took 0.14 s (measured over SSH, podman 6.0.2, 2026-11-18). A shell as the first process never hears the stop signal, so the ten seconds always run out. For a Cancel, remove with no wait.
+
+**A network read or a request that is waiting cannot be woken by a flag; shut its socket from another thread.**
+A Cancel flag is only looked at between steps, so a stalled read or a request waiting for its first byte kept a Cancel waiting for up to two minutes. Shutting the socket from another thread wakes the read at once (0.000 s on the Deck, measured over SSH 2026-11-18). Ollama also drops a model load when its client goes away: a request dropped 3 s into a cold load made it log "client connection closed before llama-server finished loading, aborting load" and no AI worker was left a second later. So Stop should shut the connection, not only stop reading.
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without

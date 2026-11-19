@@ -65,6 +65,12 @@ def _remove_container(
             return
 
 
+def raise_if_cancelled(cancel_event: Any) -> None:
+    """Raise the Cancel error when the flag is set, so an install ends as cancelled before its next step."""
+    if cancel_event is not None and cancel_event.is_set():
+        raise RuntimeError(CANCELLED_MESSAGE)
+
+
 def _stop_step(
     proc: "subprocess.Popen[str]",
     env: Optional[dict[str, str]],

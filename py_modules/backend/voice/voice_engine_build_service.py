@@ -43,7 +43,7 @@ from backend.voice.voice_engine_record import (
 )
 from backend.voice.voice_engine_swap import new_staging_dir, remove_staging, swap_in_staged_engine
 from backend.voice.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
-from backend.voice.voice_stoppable_run import run_stoppable
+from backend.voice.voice_stoppable_run import CANCELLED_MESSAGE, run_stoppable
 from backend.voice.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
@@ -97,8 +97,14 @@ def _write_silence_wav(path: str, seconds: float = 0.5) -> None:
         wf.writeframes(pcm)
 
 
-def _whisper_inference_ok(whisper_bin: str, env: dict[str, str], model_path: str) -> bool:
-    """True when whisper-cli can finish one decode pass (catches SIGILL / broken ggml builds)."""
+def _whisper_inference_ok(
+    whisper_bin: str, env: dict[str, str], model_path: str, cancel_event: Any = None
+) -> bool:
+    """True when whisper-cli can finish one decode pass (catches SIGILL / broken ggml builds).
+
+    With a `cancel_event` the pass is stoppable (a Cancel ends it within a second and the Cancel error
+    is raised, not turned into False). Without one it runs as a plain blocking call, as before.
+    """
     if not whisper_bin or not os.path.isfile(model_path):
         return False
     try:
@@ -106,37 +112,44 @@ def _whisper_inference_ok(whisper_bin: str, env: dict[str, str], model_path: str
             wav_path = tmp.name
         try:
             _write_silence_wav(wav_path)
-            proc = subprocess.run(
-                [
-                    whisper_bin,
-                    "-m",
-                    model_path,
-                    "-f",
-                    wav_path,
-                    "-l",
-                    "en",
-                    "-t",
-                    str(WHISPER_THREADS),
-                    "-nt",
-                    *WHISPER_CLI_INFERENCE_ARGS,
-                ],
-                capture_output=True,
-                text=True,
-                timeout=60,
-                env=env,
-            )
+            cmd = [
+                whisper_bin,
+                "-m",
+                model_path,
+                "-f",
+                wav_path,
+                "-l",
+                "en",
+                "-t",
+                str(WHISPER_THREADS),
+                "-nt",
+                *WHISPER_CLI_INFERENCE_ARGS,
+            ]
+            if cancel_event is None:
+                proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60, env=env)
+            else:
+                proc = run_stoppable(cmd, env=env, timeout=60, cancel_event=cancel_event)
             return proc.returncode == 0
         finally:
             try:
                 os.remove(wav_path)
             except OSError:
                 pass
+    except RuntimeError as exc:
+        if str(exc) == CANCELLED_MESSAGE:
+            raise
+        return False
     except Exception:
         return False
 
 
 def _voice_bin_cpu_safe_marker(bin_dir: str) -> str:
     return os.path.join(bin_dir, VOICE_BIN_CPU_SAFE_MARKER)
+
+
+def _voice_bin_is_cpu_safe(plugin_root: str, settings_dir: str) -> bool:
+    bin_dir = voice_bin_dir(plugin_root, settings_dir)
+    return os.path.isfile(_voice_bin_cpu_safe_marker(bin_dir))
 
 
 def _voice_bin_mark_cpu_safe(bin_dir: str) -> None:

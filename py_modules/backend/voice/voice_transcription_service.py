@@ -125,13 +125,14 @@ from backend.voice.voice_engine_build_service import (
     _prune_voice_bin_non_libs,
     _run_whisper_container_build,
     _voice_bin_cpu_safe_marker,
+    _voice_bin_is_cpu_safe,
     _voice_bin_keep_names,
     _voice_bin_mark_cpu_safe,
     _whisper_inference_ok,
     _write_silence_wav,
 )
 from backend.voice.voice_engine_record import ENGINE_CHANGED_LINE, voice_engine_changed
-from backend.voice.voice_stoppable_run import run_stoppable
+from backend.voice.voice_stoppable_run import raise_if_cancelled, run_stoppable
 from backend.voice.voice_model_download_service import (
     DEFAULT_VOICE_STT_MODEL,
     VALID_VOICE_STT_MODELS,
@@ -230,15 +231,11 @@ def new_voice_transcription_state() -> dict[str, Any]:
     }
 
 
-def _voice_bin_is_cpu_safe(plugin_root: str, settings_dir: str) -> bool:
-    bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    return os.path.isfile(_voice_bin_cpu_safe_marker(bin_dir))
-
-
 def _voice_binary_ready_for_inference(
     plugin_root: str,
     settings_dir: str,
     model_path: str = "",
+    cancel_event: Optional[threading.Event] = None,
 ) -> Optional[str]:
     path = whisper_binary_usable(plugin_root, settings_dir)
     if not path:
@@ -248,7 +245,7 @@ def _voice_binary_ready_for_inference(
         if _voice_bin_is_cpu_safe(plugin_root, settings_dir):
             return path
         env = voice_whisper_runtime_env(plugin_root, settings_dir)
-        if not _whisper_inference_ok(path, env, model_path):
+        if not _whisper_inference_ok(path, env, model_path, cancel_event):
             return None
         _voice_bin_mark_cpu_safe(bin_dir)
         return path
@@ -274,7 +271,9 @@ def install_whisper_cli(
 
     cli_ready = whisper_binary_usable(plugin_root, settings_dir)
     model_path = voice_model_path(plugin_root, settings_dir, DEFAULT_VOICE_STT_MODEL)
-    ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path) if cli_ready else None
+    # The checks below can each run a test decode: they hear a Cancel, and the install ends as cancelled.
+    ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path, cancel_event) if cli_ready else None
+    raise_if_cancelled(cancel_event)
     server_ready = whisper_server_binary_usable(plugin_root, settings_dir) if cli_ready else None
     if ready_path and server_ready:
         stage("binary_ready", path=ready_path)
@@ -293,8 +292,7 @@ def install_whisper_cli(
     pull = run_stoppable([podman, "pull", WHISPER_CPP_IMAGE], env=env, timeout=900, cancel_event=cancel_event)
     if pull.returncode != 0:
         raise RuntimeError((pull.stderr or pull.stdout or "podman pull failed")[:500])
-    if cancel_event.is_set():
-        raise RuntimeError("Binary install cancelled.")
+    raise_if_cancelled(cancel_event)
 
     if ready_path and not server_ready:
         stage("binary_build_start", target="whisper-server")
@@ -302,24 +300,26 @@ def install_whisper_cli(
         stage("binary_ready", path=ready_path)
         return
 
-    ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path)
+    ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path, cancel_event)
+    raise_if_cancelled(cancel_event)
     if ready_path and whisper_server_binary_usable(plugin_root, settings_dir):
         stage("binary_ready", path=ready_path)
         return
 
     stage("binary_build_start")
     dest = _build_whisper_cli_in_container(podman, env, plugin_root, settings_dir, cancel_event)
+    raise_if_cancelled(cancel_event)
 
-    model_path = voice_model_path(plugin_root, settings_dir, DEFAULT_VOICE_STT_MODEL)
     if os.path.isfile(model_path):
         env_rt = voice_whisper_runtime_env(plugin_root, settings_dir)
-        if not _whisper_inference_ok(dest, env_rt, model_path):
+        if not _whisper_inference_ok(dest, env_rt, model_path, cancel_event):
             raise RuntimeError(
                 "whisper-cli was built but failed an inference smoke test on this CPU. "
                 "Try Install voice engine again after a plugin restart."
             )
         _voice_bin_mark_cpu_safe(voice_bin_dir(plugin_root, settings_dir))
 
+    raise_if_cancelled(cancel_event)
     stage("binary_ready", path=dest)
 
 

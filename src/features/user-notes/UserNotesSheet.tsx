@@ -80,7 +80,16 @@ export type UserNotesSheetProps = {
  * Can go wrong: a call the back end refuses shows its words under the list and changes nothing on screen.
  */
 export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheetProps): React.ReactElement {
-  const [notes, setNotes] = useState<UserNote[] | null>(null);
+  const [notes, setNotesState] = useState<UserNote[] | null>(null);
+  /*
+   * The list as it is now, kept in step with every change. A call that answers later (a save, a remove) must
+   * work from this, not from the list it saw at the press, or it writes back what other presses changed since.
+   */
+  const notesRef = useRef<UserNote[] | null>(null);
+  const setNotes = useCallback((next: UserNote[] | null | ((prev: UserNote[] | null) => UserNote[])) => {
+    notesRef.current = typeof next === "function" ? next(notesRef.current) : next;
+    setNotesState(notesRef.current);
+  }, []);
   const [message, setMessage] = useState("");
   const toggleEls = useRef(new Map<string, HTMLElement>());
   const binEls = useRef(new Map<string, HTMLElement>());
@@ -100,7 +109,7 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
     return () => {
       alive = false;
     };
-  }, [load]);
+  }, [load, setNotes]);
 
   const closeOnce = useCallback(() => {
     if (done.current) return;
@@ -136,8 +145,6 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
     const showRemoving = () => setRemoving(new Set(removingIds.current));
     showRemoving();
     setMessage(SHEET_REMOVING);
-    const list = notes ?? [];
-    const at = list.findIndex((n) => n.id === note.id);
     const res = await removeNote(note.id);
     removingIds.current.delete(note.id);
     showRemoving();
@@ -145,7 +152,9 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
       setMessage(res.error);
       return;
     }
-    const rest = list.filter((n) => n.id !== note.id);
+    const before = notesRef.current ?? [];
+    const at = before.findIndex((n) => n.id === note.id);
+    const rest = before.filter((n) => n.id !== note.id);
     setNotes(rest);
     setMessage(SHEET_REMOVED);
     /* The bin that held the ring is gone: land on the row now in its place, else the one before, else Close. */

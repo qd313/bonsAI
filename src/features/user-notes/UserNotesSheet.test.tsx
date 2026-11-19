@@ -231,6 +231,41 @@ describe("the notes sheet", () => {
     expect(container.textContent).not.toContain(SHEET_REMOVING);
   });
 
+  it.each([
+    ["the remove answering first", true],
+    ["the switch's save answering first", false],
+  ])("Remove on one note and a flip on another, both out together (%s): the flip stays and the row is gone", async (_name, removeFirst) => {
+    vi.useFakeTimers();
+    const answers: Record<string, (v: unknown) => void> = {};
+    hoisted.call.mockImplementation((method: string) => new Promise((resolve) => (answers[method] = resolve)));
+    const { container } = await mountSheet();
+    await act(async () => {
+      fireEvent.click(row(container, "n-3").querySelector<HTMLElement>("[aria-label^='Remove note']")!);
+    });
+    await act(async () => {
+      fireEvent.click(toggleOf(container, "n-1"));
+    });
+    expect(toggleOf(container, "n-1").getAttribute("aria-pressed")).toBe("true");
+    const answerRemove = () => act(async () => answers.delete_user_note!({ ok: true }));
+    const answerSave = () => act(async () => answers.save_user_note!({ ok: true, note: { ...NOTES[2], on: true } }));
+    if (removeFirst) {
+      await answerRemove();
+      expect(toggleOf(container, "n-1").getAttribute("aria-pressed")).toBe("true");
+      await answerSave();
+    } else {
+      await answerSave();
+      await answerRemove();
+    }
+    act(() => {
+      vi.runAllTimers();
+    });
+    vi.useRealTimers();
+    expect(row(container, "n-3")).toBeNull();
+    expect(toggleOf(container, "n-1").getAttribute("aria-pressed")).toBe("true");
+    expect(toggleOf(container, "n-2")).not.toBeNull();
+    expect(document.activeElement).toBe(toggleOf(container, "n-2"));
+  });
+
   it("with no notes it says so", async () => {
     const { container } = await mountSheet([]);
     expect(container.textContent).toContain(SHEET_EMPTY);

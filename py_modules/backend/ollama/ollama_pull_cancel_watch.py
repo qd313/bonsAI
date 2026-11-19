@@ -10,7 +10,8 @@ Used for: run_ollama_pull in local_ollama_setup_service.py.
 Solves: The Cancel button on a model download sitting on "Stopping" for as long as Ollama stayed quiet.
 
 Does not: Decide what a cancelled download returns (the caller does), delete what Ollama already fetched
-(it keeps the part so the next try carries on), or touch a program that has already finished.
+(ollama_cancelled_pull_cleanup.py does that, once the run's status says "cancelled"), or touch a program
+that has already finished.
 
 How it works: used as `with CancelWatch(proc, cancelled) as watch:`. The watcher thread wakes every
 POLL_SECONDS; if the program has ended it quits, if Cancel is set it asks the program to stop, waits one

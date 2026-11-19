@@ -65,7 +65,9 @@ How it works:
    version now answering and one plain result sentence into the status for the tab to show.
 5. Cancelling is checked constantly throughout every stage (including once more before the restart), and anything that goes wrong, or gets
    cancelled, is caught by one wrapping try/except and turned into a plain status a person can
-   read on the tab, rather than an unhandled error.
+   read on the tab, rather than an unhandled error. After a person's Cancel, once that status is
+   set, what the cancelled model download had fetched is deleted (ollama_cancelled_pull_cleanup.py), so the
+   disk space is free again and a later download of that model starts from zero.
 
 Gotchas: The normal system install locations on the Deck cannot be written to, and the Deck's
 Ollama does not run as an always-on background service the ordinary way — both of those are
@@ -101,6 +103,7 @@ from backend.ollama.ollama_binary_install import (
 )
 from backend.ollama import ollama_pull_resume_service
 from backend.ollama.ollama_pull_cancel_watch import CancelWatch
+from backend.ollama.ollama_cancelled_pull_cleanup import PullLeftovers
 from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
 from backend.ollama.starter_left_out import drop_left_out_tags, mark_piece, starter_pieces_at_start
@@ -868,6 +871,9 @@ async def run_local_setup(
     def cancelled() -> bool:
         return cancel_event.is_set()
 
+    leftovers = PullLeftovers()  # a cancelled model download's part is deleted at the end of the run
+    pull_one = leftovers.wrap(lambda t: run_ollama_pull(ollama_bin, t, log, cancelled), cancelled)
+
     task_cancelled = False  # the task itself was cancelled (plugin unload, Clear all data), not a person's Stop
     try:
         state.setdefault("phase", "running")
@@ -988,7 +994,7 @@ async def run_local_setup(
         # The starter set pulls its own way (starter_set_extras.py); every other profile stops at the first failure.
         starter = (await run_starter_downloads(
             state, tags, lambda: list_installed_ollama_tags(DEFAULT_BASE),
-            lambda t: run_ollama_pull(ollama_bin, t, log, cancelled), log, cancelled, speech_download, cancel_event, engine_build)
+            pull_one, log, cancelled, speech_download, cancel_event, engine_build)
             if prof == "tier1_essentials" else None)
         for i, tag in enumerate(tags if starter is None else []):
             if cancelled():
@@ -996,7 +1002,7 @@ async def run_local_setup(
             state["pull_step"] = i + 1
             state["current_tag"] = tag
             state["progress_text"] = ""
-            ok, err = await asyncio.to_thread(lambda t=tag: run_ollama_pull(ollama_bin, t, log, cancelled))
+            ok, err = await asyncio.to_thread(pull_one, tag)
             if cancelled():
                 raise RuntimeError("Cancelled.")
             if not ok:
@@ -1039,6 +1045,8 @@ async def run_local_setup(
                     # deletes Ollama a moment later); leave whatever is up as it is.
                     forget_setup_started_ollama_serve()
             terminate_setup_started_ollama_serve()
+            if _a_persons_stop(task_cancelled):  # not an unload: a reload carries the download on from its part
+                await asyncio.to_thread(leftovers.clean_up)
         forget_setup_started_ollama_serve()
 
 

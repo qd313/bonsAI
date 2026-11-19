@@ -77,19 +77,22 @@ async def _no_wait(_seconds: float) -> None:
 def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio.Event, *,
                      sleep: Optional[Callable[[float], None]] = None, keys_ready: bool = True,
                      profile: str = "custom", extra: Optional[dict] = None,
-                     drive: Optional[Callable[[Any], Any]] = None) -> dict:
+                     drive: Optional[Callable[[Any], Any]] = None, tags: tuple = ("tiny:1b",),
+                     state: Optional[dict] = None) -> dict:
     """Run one custom setup run on the pretend engine and return its status.
 
     `pull` stands in for the model download; `sleep` for time.sleep (a test presses Stop from it);
     `keys_ready` False runs the real missing-keys step instead of skipping it; `profile` and `extra` (more
     patches, target -> patch arguments) let a test reach the install and restart steps too; `drive` (an async
-    function given the running task) lets a test cancel the task itself, as the plugin's unload does.
+    function given the running task) lets a test cancel the task itself, as the plugin's unload does;
+    `tags` are the models the run downloads; `state` lets a test hold the status dict while the run writes to it.
     """
     from backend.ollama import local_ollama_setup_service as setup
 
     S = "backend.ollama.local_ollama_setup_service"
     logger = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
-    state: dict = {"phase": "running", "pull_tags": ["tiny:1b"]}
+    state = state if state is not None else {}
+    state.update({"phase": "running", "pull_tags": list(tags)})
     patches: dict = {
         f"{S}.sys.platform": {"new": "linux"},
         f"{S}.resolve_ollama_executable": {"return_value": "/x/ollama"},

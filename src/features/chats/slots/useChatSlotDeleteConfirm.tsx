@@ -14,13 +14,14 @@
  *
  * Does not: Delete anything until Delete is pressed. Never makes a chat unless a caller asked for one
  * through `replaceWith`, and then only after the delete succeeded. Never closes the box before the delete
- * (and that new chat) is done. Does not move the ring itself; the box-return
+ * (and that new chat) is done. Says so in a toast when the delete did not happen. Does not move the ring itself; the box-return
  * registry (modalReturnFocusRegistry.ts) does, under the "chat-slot-rename" id the row always used.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
 
 import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
+import { toastChatChangeFailed } from "./chatSlotFailureToast";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
@@ -87,15 +88,26 @@ export function useChatSlotDeleteConfirm({
               corrects the session note the rebuild reads).
             */
             void (async () => {
+              let deleted = false;
               try {
-                if (await onDeleteSlot(slotId)) {
+                deleted = await onDeleteSlot(slotId);
+              } catch {
+                deleted = false;
+              }
+              try {
+                if (deleted) {
                   /*
                     New chat at ten chats: making the new chat the open one corrects the same note
                     (bonsaiSessionSurvival.ts, patchPendingSessionActiveSlot), so the rebuild comes
                     back on it, with no wait for the screen to draw it.
                   */
                   await options?.replaceWith?.();
+                } else {
+                  // The box still closes, but the person is told the chat is still there.
+                  toastChatChangeFailed("delete");
                 }
+              } catch {
+                // The delete worked and only the new chat failed, so this is not a failed delete: no delete toast. The box closes either way.
               } finally {
                 finish();
               }

@@ -38,6 +38,7 @@ vi.mock("@decky/ui", async () => {
   };
 });
 
+import { toaster } from "@decky/api";
 import { useChatSlotDeleteConfirm } from "./useChatSlotDeleteConfirm";
 import { peekModalReturnFocus, clearModalReturnFocus } from "../../../shared/dpad/modalReturnFocusRegistry";
 
@@ -45,6 +46,7 @@ beforeEach(() => {
   shown = [];
   modalRootCancel = undefined;
   close.mockClear();
+  vi.mocked(toaster.toast).mockClear();
   clearModalReturnFocus();
 });
 
@@ -141,5 +143,53 @@ describe("the Delete chat box", () => {
   it("asks for the ring back when it closes, under the id the row always used", () => {
     openDeleteBox(vi.fn(async () => true));
     expect(peekModalReturnFocus()).toBe("chat-slot-rename");
+  });
+
+  it("the Delete button reads Deleting... while the delete is on its way, and Cancel and B do nothing meanwhile", async () => {
+    let finishDelete: (ok: boolean) => void = () => undefined;
+    const onDeleteSlot = vi.fn(() => new Promise<boolean>((resolve) => (finishDelete = resolve)));
+    const { box, buttons } = openDeleteBox(onDeleteSlot);
+    fireEvent.click(buttons[0]!);
+    expect(Array.from(box.container.querySelectorAll("button")).map((b) => b.textContent)).toEqual(["Deleting…", "Cancel"]);
+    fireEvent.click(buttons[1]!);
+    modalRootCancel!();
+    expect(close).not.toHaveBeenCalled();
+    await act(async () => finishDelete(true));
+    expect(close).toHaveBeenCalledTimes(1);
+    expect(onDeleteSlot).toHaveBeenCalledTimes(1);
+  });
+
+  it("a good delete shows no toast", async () => {
+    const { buttons } = openDeleteBox(vi.fn(async () => true));
+    fireEvent.click(buttons[0]!);
+    await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
+    expect(toaster.toast).not.toHaveBeenCalled();
+  });
+
+  it("a delete that comes back false closes the box and says the chat could not be deleted", async () => {
+    const { buttons } = openDeleteBox(vi.fn(async () => false));
+    fireEvent.click(buttons[0]!);
+    await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
+    expect(toaster.toast).toHaveBeenCalledTimes(1);
+    const shown = vi.mocked(toaster.toast).mock.calls[0]![0];
+    expect(`${shown.title} ${shown.body}`).toMatch(/could not be deleted/i);
+  });
+
+  it("a delete that throws closes the box and says so too, with no error left unhandled", async () => {
+    const { buttons } = openDeleteBox(vi.fn(async () => Promise.reject(new Error("rpc gone"))));
+    fireEvent.click(buttons[0]!);
+    await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
+    expect(toaster.toast).toHaveBeenCalledTimes(1);
+  });
+
+  it("a new chat that fails to be made after a good delete closes the box and does not claim the delete failed", async () => {
+    const { result } = renderHook(() =>
+      useChatSlotDeleteConfirm({ onDeleteSlot: vi.fn(async () => true), onCompleteNestedDeckyModalClose: (fn) => fn() }),
+    );
+    result.current("b", "Beta", document.createElement("div"), undefined, { replaceWith: () => Promise.reject(new Error("no")) });
+    const box = render(shown[0]!);
+    fireEvent.click(box.container.querySelectorAll("button")[0]!);
+    await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
+    expect(toaster.toast).not.toHaveBeenCalled();
   });
 });

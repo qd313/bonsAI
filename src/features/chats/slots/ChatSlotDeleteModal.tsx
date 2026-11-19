@@ -31,6 +31,8 @@ export function ChatSlotDeleteModal({ label, onKeep, onDelete }: ChatSlotDeleteM
       title="Delete chat?"
       body={`Delete "${label}" and its transcript? This cannot be undone.`}
       actionLabel="Delete"
+      /* The box stays up until the delete (and any new chat) is done, so the button says it is working. */
+      actionBusyLabel="Deleting…"
       onCancel={onKeep}
       onAction={onDelete}
     />

@@ -36,7 +36,7 @@
  * transfer (the stops' nav nodes, `focusRegisteredReplyStop`). The card is the ring's first stop when it
  * appears, unless the person is typing.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Focusable, showModal } from "@decky/ui";
 
 import { getUserNotesState, beginEditReturn, dismissOffer, editReturnDone, endEditOpen, markOfferKept, offerRingDone, setOfferError, setOfferText, toggleOfferScope, useUserNotesState, visibleRecord } from "./userNotesStore";
@@ -193,7 +193,9 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
   const forEl = useRef<HTMLElement | null>(null);
   const editNav: NavHolder = useRef<NavHolder["current"]>(null);
   const notNowNav: NavHolder = useRef<NavHolder["current"]>(null);
+  /* The ref is the guard (it answers at once, even before a redraw); the state is only the label. */
   const saving = useRef(false);
+  const [savingLabel, setSavingLabel] = useState(false);
 
   const offered = record !== null && record.phase === "offered";
   const ringPending = offered && record.ringPending;
@@ -254,6 +256,7 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
   const keep = async () => {
     if (saving.current) return;
     saving.current = true;
+    setSavingLabel(true);
     const pressed = keepEl.current;
     const hadRing = elementHasGamepadFocus(pressed);
     const sourceTurnId = replyKey === "live" ? "" : replyKey;
@@ -263,6 +266,7 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
       sourceTurnId,
     });
     saving.current = false;
+    setSavingLabel(false);
     if (result.ok) {
       markOfferKept();
       handRingOnWhenGone(pressed, hadRing);
@@ -301,7 +305,7 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
           onClick={() => void keep()}
           {...stopProps(() => keepEl.current, { up: onMoveUpOut, down: toFor, left: holdLeft, right: toEdit }, replyStopNavRef("note-keep"))}
         >
-          Keep
+          {savingLabel ? "Saving…" : "Keep"}
         </Focusable>
         <Focusable
           className="bonsai-note-card__btn"

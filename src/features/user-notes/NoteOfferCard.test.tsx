@@ -212,6 +212,42 @@ describe("the note card", () => {
     expect(container.querySelector("[aria-label^='Keep this note']")).not.toBeNull();
   });
 
+  it("Keep reads Saving… at the press, the button stays and keeps the ring, and a second press sends nothing", async () => {
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const { container } = mountCard();
+    const keep = stop(container, "Keep this note");
+    await act(async () => keep.__nav?.onOKButton?.());
+    expect(stop(container, "Keep this note")).toBe(keep);
+    expect(keep.textContent).toBe("Saving…");
+    expect(ringOn()).toBe("Keep this note");
+    await act(async () => keep.__nav?.onOKButton?.());
+    expect(hoisted.call).toHaveBeenCalledTimes(1);
+    await act(async () => answer({ ok: true, note: KEPT_NOTE }));
+    await flush();
+    expect(container.querySelector(".bonsai-note-card--kept")?.textContent).toBe(
+      "Kept. Ask reads it on every Hollow Knight question from now on.",
+    );
+  });
+
+  it("a refused Keep goes back to reading Keep with the back end's words, and can be pressed again", async () => {
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const { container } = mountCard();
+    await act(async () => stop(container, "Keep this note").__nav?.onOKButton?.());
+    expect(stop(container, "Keep this note").textContent).toBe("Saving…");
+    await act(async () => answer({ ok: false, error: "That's one note too many. Remove one first.", code: "too_many" }));
+    await flush();
+    expect(stop(container, "Keep this note").textContent).toBe("Keep");
+    expect(container.querySelector("[role='alert']")?.textContent).toBe("That's one note too many. Remove one first.");
+    hoisted.call.mockResolvedValue({ ok: true, note: KEPT_NOTE });
+    await act(async () => stop(container, "Keep this note").__nav?.onOKButton?.());
+    await flush();
+    expect(hoisted.call).toHaveBeenCalledTimes(2);
+  });
+
   it("a failed call says the note could not be saved", async () => {
     hoisted.call.mockRejectedValue(new Error("RPC timeout"));
     receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });

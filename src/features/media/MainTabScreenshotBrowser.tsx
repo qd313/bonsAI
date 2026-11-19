@@ -98,7 +98,11 @@ export function MainTabScreenshotBrowser({
   setUnifiedInput,
   onNavigateToPermissions,
 }: MainTabScreenshotBrowserProps) {
+  // The clipboard read can take seconds; a second press while it runs would paste the same text twice.
+  const pasteRunning = useRef(false);
   const onPasteClipboardStash = useCallback(async () => {
+    if (pasteRunning.current) return;
+    pasteRunning.current = true;
     try {
       const raw = await readClipboardText();
       const piece = sanitizeClipboardStashText(raw);
@@ -114,6 +118,8 @@ export function MainTabScreenshotBrowser({
       toaster.toast({ title: "Pasted from clipboard", body: "", duration: 2200 });
     } catch (e: unknown) {
       toaster.toast({ title: "Clipboard unavailable", body: formatDeckyRpcError(e), duration: 4000 });
+    } finally {
+      pasteRunning.current = false;
     }
   }, [setUnifiedInput, onCloseScreenshotBrowser]);
 

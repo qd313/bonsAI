@@ -9,7 +9,7 @@
  * Does not: Fire Steam's own B or D-pad events (the test stand-in for Decky's UI drops them), see whether Steam
  *           really moved the ring, or prove the fix on the Deck. It owes Deck row P96-F5-PICKER.
  */
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { MainTabScreenshotBrowser, type MainTabScreenshotBrowserProps } from "./MainTabScreenshotBrowser";
@@ -18,6 +18,18 @@ import * as registry from "../../shared/dpad/navFocusRegistry";
 import { resetUiDocument } from "../../shared/dpad/uiDocument";
 
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
+
+/* The clipboard read is the slow step (it can take seconds on the Deck): each test says when it answers. */
+let clipboardAnswer: (text: string) => void = () => {};
+let clipboardRead: Promise<string> = Promise.resolve("");
+vi.mock("./clipboardStash", async () => {
+  const actual = await vi.importActual<typeof import("./clipboardStash")>("./clipboardStash");
+  return { ...actual, readClipboardText: vi.fn(() => clipboardRead) };
+});
+/* One read in flight: every press made before it answers waits on the same answer, as the real read would. */
+const startClipboardRead = () => {
+  clipboardRead = new Promise<string>((resolve) => (clipboardAnswer = resolve));
+};
 
 /* The real registry, with the three calls the picker makes watched (and still doing their real work). */
 vi.mock("../../shared/dpad/navFocusRegistry", async () => {
@@ -151,5 +163,43 @@ describe("closing the picker puts the ring on the question box", () => {
     fireEvent.click(screen.getByAltText("older.jpg").closest("button")!);
     expect(props.onSelectRecentScreenshot).toHaveBeenCalledTimes(1);
     expect(props.onSelectRecentScreenshot).toHaveBeenCalledWith(props.recentScreenshots[1]);
+  });
+});
+
+describe("Paste clipboard while the clipboard is being read", () => {
+  it("pastes once when it is pressed twice before the read answers", async () => {
+    const setUnifiedInput = vi.fn();
+    const onCloseScreenshotBrowser = vi.fn();
+    render(<MainTabScreenshotBrowser {...propsFor({ setUnifiedInput, onCloseScreenshotBrowser })} />);
+    startClipboardRead();
+    const paste = screen.getByText("Paste clipboard");
+    fireEvent.click(paste);
+    fireEvent.click(paste);
+    await act(async () => {
+      clipboardAnswer("hello from the clipboard");
+      await Promise.resolve();
+    });
+    expect(setUnifiedInput).toHaveBeenCalledTimes(1);
+    expect(onCloseScreenshotBrowser).toHaveBeenCalledTimes(1);
+  });
+
+  it("can paste again after a read that came back empty (the guard is always released)", async () => {
+    const setUnifiedInput = vi.fn();
+    render(<MainTabScreenshotBrowser {...propsFor({ setUnifiedInput })} />);
+    startClipboardRead();
+    const paste = screen.getByText("Paste clipboard");
+    fireEvent.click(paste);
+    await act(async () => {
+      clipboardAnswer("");
+      await Promise.resolve();
+    });
+    expect(setUnifiedInput).not.toHaveBeenCalled();
+    startClipboardRead();
+    fireEvent.click(paste);
+    await act(async () => {
+      clipboardAnswer("second try");
+      await Promise.resolve();
+    });
+    expect(setUnifiedInput).toHaveBeenCalledTimes(1);
   });
 });

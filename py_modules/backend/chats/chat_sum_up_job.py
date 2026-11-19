@@ -222,7 +222,20 @@ async def _run_sum_up_job(
         if plugin._background_state.get("status") != "pending":
             # A Stop already rewrote this to "cancelled" -- leave it exactly as Stop left it.
             return
-        if outcome.status == "written" and outcome.summary is not None:
+        if outcome.status == "stopped":
+            # The call itself saw the Stop (it can win the race against Stop's own rewrite of the
+            # state). That is a Stop, not a failure: no error line under the button, no summary.
+            plugin._background_state = {
+                **plugin._background_state,
+                "status": "cancelled",
+                "success": False,
+                "response": "Request cancelled.",
+                "cancelled": True,
+                "completed_at": time.time(),
+                "partial_response": None,
+                "streaming": False,
+            }
+        elif outcome.status == "written" and outcome.summary is not None:
             await chat_turn_recorder.save_chat_summary(plugin, slot_id, outcome.summary)
             plugin._background_state = {
                 **plugin._background_state,

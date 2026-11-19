@@ -143,7 +143,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         lines = [c.args[0] % c.args[1:] for c in log.info.call_args_list + log.warning.call_args_list]
         return outcome, "\n".join(lines)
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_a_server_error_logs_the_servers_own_words(self, mock_urlopen):
         """The commonest way a loaded Deck fails: the model's runner dies and Ollama answers HTTP
         500. The log used to say only "failed"; the body that names the cause was never written."""
@@ -159,7 +159,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertIn(_RUNNER_STOPPED, log)
         self.assertIn("16384", log)  # the window, beside the input estimate
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_an_error_streamed_mid_answer_is_a_model_error_with_its_words(self, mock_urlopen):
         mock_urlopen.return_value = ndjson_response([json.dumps({"error": "model runner has unexpectedly stopped"})])
 
@@ -168,7 +168,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertEqual(outcome.reason, REASON_MODEL_ERROR)
         self.assertIn("model runner has unexpectedly stopped", log)
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_a_stream_that_ends_without_finishing_is_cut_off(self, mock_urlopen):
         mock_urlopen.return_value = ndjson_response(
             [json.dumps({"message": {"role": "assistant", "content": "Game: Hades"}})]
@@ -179,7 +179,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertEqual((outcome.status, outcome.reason), ("failed", REASON_CUT_OFF))
         self.assertIn(REASON_CUT_OFF, log)
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_no_connection_is_unreachable(self, mock_urlopen):
         mock_urlopen.side_effect = urllib.error.URLError(ConnectionRefusedError())
 
@@ -188,7 +188,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertEqual(outcome.reason, REASON_UNREACHABLE)
 
     @patch("backend.chats.chat_summary_service.SUMMARY_TIME_LIMIT_SECONDS", 0.1)
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_running_out_of_time_says_so_in_the_outcome_and_the_log(self, mock_urlopen):
         mock_urlopen.return_value = _Slow()
 
@@ -198,7 +198,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertIn("chat_summary: timed_out in", log)
         self.assertIn("limit", log)
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_an_empty_reply_says_how_the_model_ended(self, mock_urlopen):
         mock_urlopen.return_value = ndjson_response(
             [json.dumps({"message": {"role": "assistant", "content": ""}, "done": True, "done_reason": "length"})]
@@ -209,7 +209,7 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
         self.assertEqual((outcome.status, outcome.reason), ("failed", REASON_EMPTY))
         self.assertIn("length", log)
 
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_a_written_summary_has_no_reason(self, mock_urlopen):
         mock_urlopen.return_value = one_line_reply("Player asked how to beat the first boss.")
 
@@ -235,7 +235,7 @@ class SummaryMarkTests(unittest.TestCase):
             self.assertEqual(normalize_summary_mark(nothing), "")
 
     @patch("backend.chats.chat_summary_service._title_to_second_guess", return_value="")
-    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.open_reporting_socket")
     def test_a_summary_that_hit_a_server_error_is_marked_with_why_before_the_answer(
         self, mock_urlopen, _title
     ):

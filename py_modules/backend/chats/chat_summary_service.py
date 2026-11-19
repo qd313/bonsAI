@@ -77,7 +77,8 @@ from backend.chats.chat_summary_title import (
     title_to_second_guess,
 )
 from backend.ask.ollama_chat_stream import _stream_ollama_chat_once
-from backend.ask.ollama_stop_service import close_ollama_chat_response
+from backend.ask.ollama_stop_service import close_ollama_chat_response, record_chat_socket
+from backend.core.abort_blocked_read import shut_socket
 from backend.ask.ollama_window_fit import ollama_base_from_chat_url
 from backend.prompts.reply_style_blocks import build_reply_language_block
 from backend.ollama.token_accounting_service import estimate_tokens_from_chars
@@ -301,15 +302,22 @@ async def write_chat_summary(
     def _on_done() -> None:
         plugin._active_ollama_chat_http_response = None
 
-    plugin._chat_resp_ready_evt = threading.Event()
+    this_call_evt = threading.Event()
+    plugin._chat_resp_ready_evt = this_call_evt
     plugin._active_ollama_chat_pc_ip = ollama_base_from_chat_url(url)
     plugin._active_ollama_chat_model = str(model_name)
 
     def _on_deadline() -> None:
         deadline_hit.set()
-        close_ollama_chat_response(
-            getattr(plugin, "_active_ollama_chat_http_response", None), logger
-        )
+        resp = getattr(plugin, "_active_ollama_chat_http_response", None)
+        if resp is not None:
+            close_ollama_chat_response(resp, logger)
+            return
+        # No reply yet (the model is still loading): the socket is all there is to wake. Only this
+        # call's own, in case a newer question has taken the slot since.
+        sock = getattr(plugin, "_active_ollama_chat_socket", None)
+        if sock is not None and getattr(plugin, "_chat_resp_ready_evt", None) is this_call_evt:
+            shut_socket(sock)
 
     timer = threading.Timer(SUMMARY_TIME_LIMIT_SECONDS, _on_deadline)
     timer.daemon = True
@@ -338,6 +346,7 @@ async def write_chat_summary(
                 _on_done,
                 None,  # on_delta: a live-text callback would show the summary as the answer
                 requested_window_tokens=int(window_tokens or 0),
+                on_connection_opened=record_chat_socket(plugin),
             ),
         )
     finally:

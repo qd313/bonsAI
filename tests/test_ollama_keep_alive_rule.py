@@ -28,7 +28,6 @@ from main import Plugin  # noqa: E402
 _REPLY = '{"message":{"role":"assistant","content":"ok"},"done":true}'
 _DECK = "127.0.0.1:11434"
 _PC = "192.168.1.20:11434"
-_URLOPEN = "backend.ask.ollama_chat_stream.urllib.request.urlopen"
 # The answer's own call opens through this (it hands its socket over so Stop can end a model still loading).
 _OPEN_WITH_SOCKET = "backend.ask.ollama_chat_stream.open_reporting_socket"
 
@@ -146,7 +145,7 @@ class SumUpJobRequestBodyTests(ChatSlotJobTestCase):
                 "backend.chats.chat_sum_up_job._pick_model_and_window",
                 return_value=("test-model", 16384, f"http://{address}/api/chat"),
             ),
-            patch(_URLOPEN, side_effect=seen),
+            patch(_OPEN_WITH_SOCKET, side_effect=seen),
         ):
             ack = await self.plugin.sum_up_chat_slot(sid, address)
             self.assertTrue(ack.get("accepted"), ack)

@@ -35,6 +35,7 @@ import { endSheetOpen, getUserNotesState } from "./userNotesStore";
 export const SHEET_SAY = "Ask reads the ones that are on, every time you ask about that game.";
 export const SHEET_EMPTY = "You have no notes.";
 export const SHEET_REMOVED = "Removed. Ask won't read it again.";
+export const SHEET_REMOVING = "Removing…";
 
 const SWITCH_W = 34;
 const SWITCH_H = 18;
@@ -87,6 +88,9 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
   const done = useRef(false);
   /** Notes whose switch save is out right now. */
   const saving = useRef(new Set<string>());
+  /** Notes whose Remove is out: the ref is the guard, the state is what redraws the row dimmed. */
+  const removingIds = useRef(new Set<string>());
+  const [removing, setRemoving] = useState<ReadonlySet<string>>(new Set());
 
   useEffect(() => {
     let alive = true;
@@ -110,7 +114,7 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
    * switch already shows where the first press sent it, and a second request would race the first.
    */
   const flip = async (note: UserNote) => {
-    if (saving.current.has(note.id)) return;
+    if (saving.current.has(note.id) || removingIds.current.has(note.id)) return;
     saving.current.add(note.id);
     const show = (on: boolean) => setNotes((prev) => (prev ?? []).map((n) => (n.id === note.id ? { ...n, on } : n)));
     show(!note.on);
@@ -127,9 +131,16 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
   };
 
   const remove = async (note: UserNote) => {
+    if (removingIds.current.has(note.id)) return;
+    removingIds.current.add(note.id);
+    const showRemoving = () => setRemoving(new Set(removingIds.current));
+    showRemoving();
+    setMessage(SHEET_REMOVING);
     const list = notes ?? [];
     const at = list.findIndex((n) => n.id === note.id);
     const res = await removeNote(note.id);
+    removingIds.current.delete(note.id);
+    showRemoving();
     if (!res.ok) {
       setMessage(res.error);
       return;
@@ -180,7 +191,12 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
             {notes === null ? <div style={{ color: "#8fa8c4" }}>Loading your notes…</div> : null}
             {notes !== null && notes.length === 0 ? <div style={{ color: "#8fa8c4" }}>{SHEET_EMPTY}</div> : null}
             {(notes ?? []).map((note) => (
-              <div key={note.id} data-bonsai-user-note={note.id} style={{ display: "flex", gap: 6, alignItems: "stretch" }}>
+              <div
+                key={note.id}
+                data-bonsai-user-note={note.id}
+                data-removing={removing.has(note.id) ? "true" : undefined}
+                style={{ display: "flex", gap: 6, alignItems: "stretch", opacity: removing.has(note.id) ? 0.45 : 1 }}
+              >
                 <Focusable
                   className="bonsai-settings-focus-btn-host"
                   style={{ flex: "1 1 auto", minWidth: 0 }}

@@ -32,7 +32,7 @@ vi.mock("@decky/ui", async () => {
 });
 vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout: hoisted.call }));
 
-import { SHEET_EMPTY, SHEET_REMOVED, SHEET_SAY, UserNotesSheet, openUserNotesSheet } from "./UserNotesSheet";
+import { SHEET_EMPTY, SHEET_REMOVED, SHEET_REMOVING, SHEET_SAY, UserNotesSheet, openUserNotesSheet } from "./UserNotesSheet";
 import { getUserNotesState, resetUserNotesStore, setNotesModalHooks } from "./userNotesStore";
 import type { UserNote } from "../search-tab/searchTypes";
 
@@ -180,6 +180,55 @@ describe("the notes sheet", () => {
       fireEvent.click(toggleOf(container, "n-3"));
     });
     expect(hoisted.call).toHaveBeenCalledTimes(1);
+  });
+
+  it("Remove dims the row at the press, ignores a second press, and the ring moves only when the row goes", async () => {
+    vi.useFakeTimers();
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    const { container } = await mountSheet();
+    const bin = row(container, "n-2").querySelector<HTMLElement>("[aria-label^='Remove note']")!;
+    act(() => bin.focus());
+    await act(async () => {
+      fireEvent.click(bin);
+      fireEvent.click(bin);
+    });
+    expect(row(container, "n-2").style.opacity).toBe("0.45");
+    expect(row(container, "n-2").getAttribute("data-removing")).toBe("true");
+    expect(row(container, "n-3").style.opacity).toBe("1");
+    expect(container.textContent).toContain(SHEET_REMOVING);
+    expect(hoisted.call).toHaveBeenCalledTimes(1);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(document.activeElement).toBe(bin);
+    await act(async () => {
+      answer({ ok: true });
+    });
+    act(() => {
+      vi.runAllTimers();
+    });
+    vi.useRealTimers();
+    expect(row(container, "n-2")).toBeNull();
+    expect(container.textContent).toContain(SHEET_REMOVED);
+    expect(document.activeElement).toBe(toggleOf(container, "n-1"));
+  });
+
+  it("a refused Remove puts the row back to normal and shows the back end's words", async () => {
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    const { container } = await mountSheet();
+    await act(async () => {
+      fireEvent.click(row(container, "n-2").querySelector<HTMLElement>("[aria-label^='Remove note']")!);
+    });
+    expect(row(container, "n-2").style.opacity).toBe("0.45");
+    await act(async () => {
+      answer({ ok: false, error: "That note is gone.", code: "not_found" });
+    });
+    expect(row(container, "n-2").style.opacity).toBe("1");
+    expect(row(container, "n-2").getAttribute("data-removing")).toBeNull();
+    expect(container.textContent).toContain("That note is gone.");
+    expect(container.textContent).not.toContain(SHEET_REMOVING);
   });
 
   it("with no notes it says so", async () => {

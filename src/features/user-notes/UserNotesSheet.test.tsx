@@ -143,6 +143,45 @@ describe("the notes sheet", () => {
     expect(toggleOf(container, "n-3").getAttribute("aria-pressed")).toBe("true");
   });
 
+  it("the switch shows its new value at the press, before the back end answers", async () => {
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    const { container } = await mountSheet();
+    await act(async () => {
+      fireEvent.click(toggleOf(container, "n-3"));
+    });
+    expect(toggleOf(container, "n-3").getAttribute("aria-pressed")).toBe("false");
+    await act(async () => {
+      answer({ ok: true, note: { ...NOTES[0], on: false } });
+    });
+    expect(toggleOf(container, "n-3").getAttribute("aria-pressed")).toBe("false");
+  });
+
+  it("a refused switch goes back to its old value and shows the back end's words", async () => {
+    let answer: (v: unknown) => void = () => {};
+    hoisted.call.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    const { container } = await mountSheet();
+    await act(async () => {
+      fireEvent.click(toggleOf(container, "n-3"));
+    });
+    expect(toggleOf(container, "n-3").getAttribute("aria-pressed")).toBe("false");
+    await act(async () => {
+      answer({ ok: false, error: "That note is gone.", code: "not_found" });
+    });
+    expect(toggleOf(container, "n-3").getAttribute("aria-pressed")).toBe("true");
+    expect(container.textContent).toContain("That note is gone.");
+  });
+
+  it("two quick presses on one switch send one request", async () => {
+    hoisted.call.mockReturnValue(new Promise(() => {}));
+    const { container } = await mountSheet();
+    await act(async () => {
+      fireEvent.click(toggleOf(container, "n-3"));
+      fireEvent.click(toggleOf(container, "n-3"));
+    });
+    expect(hoisted.call).toHaveBeenCalledTimes(1);
+  });
+
   it("with no notes it says so", async () => {
     const { container } = await mountSheet([]);
     expect(container.textContent).toContain(SHEET_EMPTY);

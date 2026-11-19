@@ -85,6 +85,8 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
   const binEls = useRef(new Map<string, HTMLElement>());
   const closeEl = useRef<HTMLElement | null>(null);
   const done = useRef(false);
+  /** Notes whose switch save is out right now. */
+  const saving = useRef(new Set<string>());
 
   useEffect(() => {
     let alive = true;
@@ -102,14 +104,25 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
     onClose();
   }, [onClose]);
 
+  /*
+   * The switch shows the new value at the press and goes back if the save is refused (the Search tab does the
+   * same for the same notes). A second press on a note whose save is still out is ignored, not queued: the
+   * switch already shows where the first press sent it, and a second request would race the first.
+   */
   const flip = async (note: UserNote) => {
+    if (saving.current.has(note.id)) return;
+    saving.current.add(note.id);
+    const show = (on: boolean) => setNotes((prev) => (prev ?? []).map((n) => (n.id === note.id ? { ...n, on } : n)));
+    show(!note.on);
     const res = await switchNote(note.id, !note.on);
+    saving.current.delete(note.id);
     if (res.ok && res.note) {
       const saved = res.note;
       setNotes((prev) => (prev ?? []).map((n) => (n.id === saved.id ? saved : n)));
       setMessage("");
-    } else if (!res.ok) {
-      setMessage(res.error);
+    } else {
+      show(note.on);
+      if (!res.ok) setMessage(res.error);
     }
   };
 

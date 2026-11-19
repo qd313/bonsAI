@@ -21,16 +21,26 @@
  * (modalReturnFocusRegistry.ts, under the id the chat boxes always used) keeps them outside React.
  */
 import { useCallback } from "react";
+import { toaster } from "@decky/api";
 import { showModal } from "@decky/ui";
 
 import { ChatSlotPickerModal, type ChatPickRow } from "./ChatSlotPickerModal";
 import { MAX_CHAT_SLOTS } from "./chatSlotLimit";
 import { useChatSlotDeleteConfirm } from "./useChatSlotDeleteConfirm";
+import { formatDeckyRpcError } from "../../../shared/deckyCall";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
   type ModalReturnTransfer,
 } from "../../../shared/dpad/modalReturnFocusRegistry";
+
+/*
+ * The create that is on its way, if any. Kept outside the hook on purpose: the chats menu, the + beside
+ * the chat's name and the held Ask each call the hook on their own, and one press of any of them must
+ * keep the others from sending a second create. It is cleared when the create ends, whether it was
+ * answered, failed or timed out (every step of a create has its own deadline, deckyCall.ts).
+ */
+let createInFlight: Promise<void> | null = null;
 
 export type UseStartNewChatArgs = {
   /** Every saved chat, newest first (the Main tab's list; the chat title store's `chats`). */
@@ -49,7 +59,8 @@ export type UseStartNewChatArgs = {
  * `returnFocusEl` is where the ring goes when the picker or the box closes and `returnTransfer` is
  * Steam's transfer onto it when it sits outside the plugin's own box (the chat's name).
  *
- * 1. Fewer than ten chats: make the chat now; "made" is what comes back.
+ * 1. Fewer than ten chats: make the chat now; "made" is what comes back. A press while a create is already
+ *    on its way does nothing more; a create that fails says so in a toast.
  * 2. Ten: open the picker and hand back "asking". The rest happens in the boxes.
  */
 export function useStartNewChat({
@@ -68,9 +79,20 @@ export function useStartNewChat({
 
   return useCallback(
     (returnFocusEl: HTMLElement | null, returnTransfer?: ModalReturnTransfer): "made" | "asking" => {
-      const make = async () => {
+      const make = (): Promise<void> => {
+        if (createInFlight) return createInFlight;
         setAtCreate?.(false);
-        await createSlot();
+        const run = (async () => {
+          try {
+            await createSlot();
+          } catch (e) {
+            toaster.toast({ title: "Could not start a new chat", body: formatDeckyRpcError(e), duration: 4000 });
+          } finally {
+            createInFlight = null;
+          }
+        })();
+        createInFlight = run;
+        return run;
       };
       if (chats.length < MAX_CHAT_SLOTS) {
         void make();

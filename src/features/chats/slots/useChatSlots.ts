@@ -276,9 +276,12 @@ export function useChatSlots({
    * Resolves `false` only when a chat was asked for and the back end had no such chat; every other
    * outcome (switched, or switched to no chat) is `true`. `selectSlot` and `restoreRememberedSlot`
    * below are the two doors onto it.
+   *
+   * `restoring` is the plugin coming back to the chat it remembers: the rows on screen are already that
+   * chat's (the session note put them back), so they are left alone while the chat is read again.
    */
   const selectSlotChecked = useCallback(
-    async (slotId: string | null): Promise<boolean> => {
+    async (slotId: string | null, restoring = false): Promise<boolean> => {
       /* Captured before anything below overwrites them: they describe the slot being LEFT. */
       const leavingId = activeSlotIdRef.current;
       const leavingTurnCount = activeSlotTurnCountRef.current;
@@ -290,10 +293,20 @@ export function useChatSlots({
        * above. Waiting for the fetch to resolve left the OLD chat's finished reply on screen,
        * wearing the new chat's identity, for the length of one RPC — the "ghost reply" bug
        * (roadmap: "A new chat shows the previous chat's last reply until the panel is reopened").
-       * This never touches askThreadCollapsed/askThreadDisplayQuestion/expandedTurnKey — those
-       * still come from the branches below, once the real transcript (or "no chat") is known.
        */
       resetLiveAskPresentation?.();
+      /*
+       * The saved rows are the same case: until the new chat has been read they are still the chat
+       * being LEFT, drawn under the new chat's name (and for good if the read never answers). They
+       * are blanked at the switch from one chat to another. Not on a restore, where they are the
+       * right chat's already.
+       */
+      if (slotId && !restoring && leavingId && leavingId !== slotId) {
+        activeSlotTurnCountRef.current = -1;
+        setAskThreadCollapsed([]);
+        setAskThreadDisplayQuestion("");
+        setExpandedTurnKey("live");
+      }
       // Same reason as the live answer above: the chat being left must not lend its card to the next.
       setChatMemory(NO_CHAT_MEMORY);
       let loaded = true;
@@ -360,7 +373,7 @@ export function useChatSlots({
    */
   const restoreRememberedSlot = useCallback(
     async (slotId: string) => {
-      const loaded = await selectSlotChecked(slotId);
+      const loaded = await selectSlotChecked(slotId, true);
       if (!loaded && activeSlotIdRef.current === slotId) await selectSlotChecked(null);
     },
     [activeSlotIdRef, selectSlotChecked],

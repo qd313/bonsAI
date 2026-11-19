@@ -189,6 +189,61 @@ describe("the shared two-button confirm box", () => {
     expect(onCancel).not.toHaveBeenCalled();
   });
 
+  describe("a box whose action keeps it open while the work runs (actionBusyLabel)", () => {
+    const buttonsOf = (view: ReturnType<typeof drawBox>["view"]) =>
+      Array.from(view.container.querySelectorAll("button")).map((b) => b.textContent);
+
+    it("changes the action's words at once when it is pressed, keeping the same two buttons", async () => {
+      const box = drawBox({ actionLabel: "Clear all data", actionBusyLabel: "Clearing…" });
+      await waitFor(() => expect(steamRingHolder()).toBe(box.cancel));
+      expect(buttonsOf(box.view)).toEqual(["Clear all data", "Cancel"]);
+      act(() => pressA(box.action));
+      expect(box.onAction).toHaveBeenCalledTimes(1);
+      expect(buttonsOf(box.view)).toEqual(["Clearing…", "Cancel"]);
+      // The same two buttons stay on screen, and the ring has not moved.
+      expect(box.view.container.querySelectorAll("button")[0]).toBe(box.action);
+      expect(steamRingHolder()).toBe(box.cancel);
+    });
+
+    it("also changes for a finger's tap, and a second press and a Cancel press while it works do nothing", () => {
+      const box = drawBox({ actionBusyLabel: "Clearing…" });
+      fireEvent.click(box.action);
+      expect(box.action.textContent).toBe("Clearing…");
+      act(() => pressA(box.action));
+      fireEvent.click(box.action);
+      fireEvent.click(box.cancel);
+      act(() => pressA(box.cancel));
+      modalRootCancel!();
+      expect(box.onAction).toHaveBeenCalledTimes(1);
+      expect(box.onCancel).not.toHaveBeenCalled();
+      expect(box.action.textContent).toBe("Clearing…");
+    });
+
+    it("leaves the action button enabled and the same size while it works", () => {
+      const box = drawBox({ actionBusyLabel: "Clearing…" });
+      fireEvent.click(box.action);
+      expect(box.action.hasAttribute("disabled")).toBe(false);
+      expect(box.action.style.height).toBe("32px");
+      expect(box.action.style.width).toBe("100%");
+    });
+
+    it("without a busy label nothing changes from before: the words stay and a press still acts once", () => {
+      const box = drawBox();
+      act(() => pressA(box.action));
+      fireEvent.click(box.action);
+      expect(box.action.textContent).toBe("Clear");
+      expect(box.onAction).toHaveBeenCalledTimes(1);
+      expect(box.action.style.opacity).toBe("");
+    });
+
+    it("Cancel before the action does not change the action's words", () => {
+      const box = drawBox({ actionBusyLabel: "Clearing…" });
+      fireEvent.click(box.cancel);
+      expect(box.onCancel).toHaveBeenCalledTimes(1);
+      expect(box.action.textContent).toBe("Clear");
+    });
+  });
+
   it("B is Cancel: it runs onCancel and never onAction", () => {
     const { onCancel, onAction } = drawBox();
     expect(modalRootCancel).toBeTypeOf("function");

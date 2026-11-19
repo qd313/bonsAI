@@ -57,6 +57,10 @@
  *   own (downloadNotice.tsx drops its last one for this).
  * - Each button is wired for A (onOKButton on its Focusable) and for a finger (onClick), so a guard makes
  *   sure one press acts once, and B after a press does nothing more.
+ * - A box that stays open while its action works (Clear all data, Delete chat) passes actionBusyLabel: the action's
+ *   words change at once and the button dims, but it stays enabled, in place and the same size, so the ring on it
+ *   does not move. Cancel and B stay ignored after the press, as for every box; the new words say why. Before this
+ *   such a box looked frozen for as long as the work took (minutes for a wipe that deletes models).
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Button, DialogButtonPrimary, Focusable, ModalRoot } from "@decky/ui";
@@ -78,6 +82,13 @@ export type TwoButtonConfirmModalProps = {
   body: ReactNode;
   /** The action button's label, e.g. "Clear" or "Download". */
   actionLabel: string;
+  /**
+   * For a box that stays open while its action works (Clear all data, Delete chat): the words the action button
+   * shows from the moment it is pressed, so the box does not look frozen. Cancel and B stay ignored after the
+   * press (the work cannot be undone half way); these words are what tells the person why. Left out, the box
+   * behaves as it always did. Keep it no longer than the action's own label, so it stays on one line.
+   */
+  actionBusyLabel?: string;
   /** The safe button's label when "Cancel" is not the word (the Thinking notice's "Keep it off"). */
   cancelLabel?: string;
   /** Cancel and B. */
@@ -199,11 +210,13 @@ type Hands = {
 
 const Choice: React.FC<{
   primary?: boolean;
+  /** Draw the button dimmer (the action while its work runs); nothing else about it changes. */
+  dim?: boolean;
   onChoose: () => void;
   navRef: NavRefHolder;
   hands: Hands;
   children: ReactNode;
-}> = ({ primary = false, onChoose, navRef, hands, children }) => {
+}> = ({ primary = false, dim = false, onChoose, navRef, hands, children }) => {
   const Look = primary ? DialogButtonPrimary : Button;
   return (
     <Focusable
@@ -214,7 +227,7 @@ const Choice: React.FC<{
       <Look
         className={FOCUS_RING_BTN_CLASS}
         onClick={onChoose}
-        style={primary ? CONFIRM_ACTION_BUTTON_STYLE : CONFIRM_SAFE_BUTTON_STYLE}
+        style={{ ...(primary ? CONFIRM_ACTION_BUTTON_STYLE : CONFIRM_SAFE_BUTTON_STYLE), ...(dim ? { opacity: 0.6 } : null) }}
       >
         {children}
       </Look>
@@ -234,16 +247,24 @@ export function TwoButtonConfirmModal({
   title,
   body,
   actionLabel,
+  actionBusyLabel,
   cancelLabel = "Cancel",
   onCancel,
   onAction,
   ringStartsOn = "cancel",
 }: TwoButtonConfirmModalProps) {
   const done = useRef(false);
+  const [working, setWorking] = useState(false);
   const once = (act: () => void) => () => {
     if (done.current) return;
     done.current = true;
     act();
+  };
+  // Only the words (and a dimmer look) change: the button stays enabled and in place, so the ring on it is not moved.
+  const doAction = () => {
+    if (done.current) return;
+    if (actionBusyLabel !== undefined) setWorking(true);
+    once(onAction)();
   };
   const actionNav = useRef<NavRefHolder["current"]>(null);
   const cancelNav = useRef<NavRefHolder["current"]>(null);
@@ -284,11 +305,12 @@ export function TwoButtonConfirmModal({
           <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", gap: 8 }}>
             <Choice
               primary
-              onChoose={once(onAction)}
+              onChoose={doAction}
+              dim={working}
               navRef={actionNav}
               hands={{ onMoveLeft: () => true, onMoveRight: () => takeHolderFocus(cancelNav) || true, onMoveUp: up, onMoveDown: down }}
             >
-              {actionLabel}
+              {working && actionBusyLabel !== undefined ? actionBusyLabel : actionLabel}
             </Choice>
             <Choice
               onChoose={once(onCancel)}

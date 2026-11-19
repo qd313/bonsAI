@@ -52,6 +52,7 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable, Optional
 
+from backend.ollama.ollama_binary_install import InstallStopped, run_cancellable
 from backend.ollama.ollama_reply_limits import read_json_capped
 
 # Same value as ollama_local_autostart_service.UNIT_NAME (a test checks they agree). Kept here
@@ -99,29 +100,41 @@ def user_bus_env() -> dict[str, str]:
     return env
 
 
-def _run_user_systemctl(args: list[str], timeout: float = 45.0) -> tuple[int, str]:
-    """(return code, output text) of ``systemctl --user <args>``; (-1, reason) if it cannot run."""
+def _run_user_systemctl(args: list[str], timeout: float = 45.0, cancelled: Optional[Callable[[], bool]] = None) -> tuple[int, str]:
+    """(return code, output text) of ``systemctl --user <args>``; (-1, reason) if it cannot run.
+
+    With ``cancelled`` the call is ended as soon as it turns true (InstallStopped is raised); without it the call
+    runs to its end, as before.
+    """
+    cmd = ["systemctl", "--user", *args]
     try:
-        r = subprocess.run(
-            ["systemctl", "--user", *args],
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            check=False,
-            env=user_bus_env(),
-        )
+        if cancelled is None:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, check=False, env=user_bus_env())
+        else:
+            r = run_cancellable(cmd, env=user_bus_env(), timeout=timeout, cancelled=cancelled)
         return r.returncode, ((r.stdout or "") + (r.stderr or "")).strip()
+    except InstallStopped:
+        raise
     except Exception as exc:
         return -1, str(exc)
 
 
-def try_restart_ollama_user_service(shell_log: Callable[[str], None]) -> None:
+def try_restart_ollama_user_service(shell_log: Callable[[str], None], cancelled: Optional[Callable[[], bool]] = None) -> None:
     """Best-effort start of the user unit for common SteamOS / Linux layouts (ours, then the
-    official installer's). A unit that is not there fails quietly."""
+    official installer's). A unit that is not there fails quietly.
+
+    ``cancelled`` (the setup run's Stop): a call in progress is ended and the rest are skipped. The connection
+    test passes nothing and behaves as before.
+    """
     for unit in (AUTOSTART_UNIT_NAME, OFFICIAL_UNIT_NAME):
         for verb in ("try-restart", "start"):
+            if cancelled is not None and cancelled():
+                return
             shell_log(f"[bonsAI] Trying: systemctl --user {verb} {unit}")
-            _rc, text = _run_user_systemctl([verb, unit], timeout=30.0)
+            try:
+                _rc, text = _run_user_systemctl([verb, unit], timeout=30.0, cancelled=cancelled)
+            except InstallStopped:
+                return
             if text:
                 shell_log(text)
 

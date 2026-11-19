@@ -183,7 +183,7 @@ class UnitSettingsTests(unittest.TestCase):
 class WakingAStoppedServerTests(unittest.TestCase):
     def test_the_wake_up_helper_asks_for_the_unit_the_plugin_writes(self):
         asked: list[list[str]] = []
-        with patch(f"{R}._run_user_systemctl", side_effect=lambda a, timeout=0: asked.append(a) or (0, "")):
+        with patch(f"{R}._run_user_systemctl", side_effect=lambda a, timeout=0, cancelled=None: asked.append(a) or (0, "")):
             restart.try_restart_ollama_user_service(lambda _m: None)
         self.assertIn(["try-restart", "bonsai-ollama-autostart.service"], asked)
         self.assertIn(["start", "bonsai-ollama-autostart.service"], asked)

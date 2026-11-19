@@ -398,14 +398,9 @@ def _make_ollama_keys(
 
     if not key.is_file():
         try:
-            subprocess.run(
-                [ollama_bin, "list"],
-                capture_output=True,
-                text=True,
-                timeout=60,
-                check=False,
-                env=_env_for_ollama_cli(ollama_bin),
-            )
+            run_cancellable([ollama_bin, "list"], env=_env_for_ollama_cli(ollama_bin), timeout=60, cancelled=cancelled)
+        except InstallStopped:
+            return False  # ensure_ollama_cli_home_ready sees the Stop and leaves an AI running
         except Exception as exc:
             shell_log(f"[bonsAI] ollama list warm-up note: {exc}")
 
@@ -945,10 +940,14 @@ async def run_local_setup(
         await emit_stage("service")
         if not probe_ollama_http_ok(DEFAULT_BASE):
             log("[bonsAI] Ollama not responding on localhost:11434; trying user systemd unit…")
-            await asyncio.to_thread(lambda: try_restart_ollama_user_service(log))
+            await asyncio.to_thread(lambda: try_restart_ollama_user_service(log, cancelled))
+            if cancelled():
+                raise RuntimeError("Cancelled.")
             await asyncio.sleep(1.0)
 
         ok_listen = await asyncio.to_thread(lambda: ensure_ollama_server_listening_before_pull(log, ollama_bin, cancelled))
+        if not ok_listen and cancelled():  # a Stop is a Stop, not a failure to start
+            raise RuntimeError("Cancelled.")
         if not ok_listen:
             raise RuntimeError(
                 "Ollama server is not running on localhost:11434 — ``ollama pull`` needs the API. "
@@ -956,6 +955,8 @@ async def run_local_setup(
             )
 
         ok_home = await asyncio.to_thread(lambda: ensure_ollama_cli_home_ready(log, ollama_bin, cancelled))
+        if not ok_home and cancelled():  # a Stop is a Stop, not a failure to start
+            raise RuntimeError("Cancelled.")
         if not ok_home:
             raise RuntimeError(
                 "Ollama home directory could not be initialized (~/.ollama/id_ed25519 missing). "

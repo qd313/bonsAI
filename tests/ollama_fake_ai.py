@@ -40,6 +40,15 @@ class FakeServe:
         return self.returncode or 0
 
 
+class FakeFinished:
+    """A short program that has already finished with nothing to say."""
+
+    returncode = 0
+
+    def communicate(self, timeout: Optional[float] = None) -> tuple[str, str]:
+        return "", ""
+
+
 class FakeAI:
     def __init__(self, up: bool = False) -> None:
         self.up = up
@@ -48,7 +57,9 @@ class FakeAI:
     def probe(self, *args: Any, **kwargs: Any) -> bool:
         return self.up
 
-    def popen(self, cmd: Any, *args: Any, **kwargs: Any) -> FakeServe:
+    def popen(self, cmd: Any, *args: Any, **kwargs: Any) -> Any:
+        if list(cmd)[1:2] == ["list"]:  # the keys step's warm-up, run so that a Stop can end it
+            return FakeFinished()
         assert list(cmd)[1:2] == ["serve"], f"unexpected program started: {cmd}"
         return FakeServe(self)
 

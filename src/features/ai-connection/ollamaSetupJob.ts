@@ -102,7 +102,10 @@ function fractionOf(st: LocalOllamaSetupStatus, kind: RunKind): number | null {
 
 /** What the card says for a running setup of kind `kind`. */
 export function ollamaSetupFace(st: LocalOllamaSetupStatus, kind: RunKind): JobFace {
-  const [title, stoppingTitle] = TITLES[kind];
+  const [title, ownStoppingTitle] = TITLES[kind];
+  /* The restart of the AI server cannot be stopped half way (the Deck would be left with no AI running): a Cancel
+     pressed then is honoured once it is done, usually 5 to 10 seconds, and the card says why it waits. */
+  const stoppingTitle = st.stage === "restart" ? "Stopping after the restart" : ownStoppingTitle;
   const [line1, line2] = st.stage === "pull" ? pullLines(st) : (STEP_LINES[st.stage] ?? ["Working", AWAKE]);
   return { title, stoppingTitle, line1, line2, sites: sitesOf(st, kind), fraction: fractionOf(st, kind) };
 }

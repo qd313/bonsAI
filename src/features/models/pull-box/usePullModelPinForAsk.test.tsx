@@ -54,7 +54,7 @@ describe("usePullModelPinForAsk", () => {
 
   async function pin(tag: string, entry: PullModelEntry | null = null) {
     const { result } = renderHook(() =>
-      usePullModelPinForAsk({ pinBusyTag: null, setPinBusyTag: () => {}, setPinnedAskTag: () => {} }),
+      usePullModelPinForAsk({ pinnedAskTag: null, setPinBusyTag: () => {}, setPinnedAskTag: () => {} }),
     );
     await act(async () => {
       await result.current.pinModelForAsk(entry, tag);

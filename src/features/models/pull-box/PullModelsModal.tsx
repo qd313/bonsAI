@@ -248,7 +248,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     });
 
   // The Try column and switch (useTryOrderPlaces.ts); off, and drawing nothing, unless the box was given a host.
-  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal, catalog: mergedCatalog, tier: modelPolicyTier, word: activeWord, liveSizeGbByTag });
+  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinBusyTag ? "saving" : pinnedAskTag, flatRows, reveal: focusAndReveal, catalog: mergedCatalog, tier: modelPolicyTier, word: activeWord, liveSizeGbByTag });
   const rowTotal = flatRows.length + tryNav.pcCount; // the Deck's rows, then the "On the PC" rows
 
   /** Up out of the top of the box (the strip's first line): the hub's Advanced link, else Steam's own move. */
@@ -454,7 +454,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   // Lifted into usePullModelPinForAsk. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.
-  const { pinModelForAsk } = usePullModelPinForAsk({ pinBusyTag, setPinBusyTag, setPinnedAskTag });
+  const { pinModelForAsk } = usePullModelPinForAsk({ pinnedAskTag, setPinBusyTag, setPinnedAskTag });
 
   // Lifted into usePullModelDeleteConfirm. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.

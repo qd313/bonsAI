@@ -17,8 +17,10 @@
  * summary, or paint anything in the transcript: this job saves no turn and has no answer.
  *
  * How it works:
- *   1. Starting it calls `sum_up_chat_slot`; an accepted job starts a poll of the one background
- *      status, every 1.2 s, the same pace the Ask's own poll uses while nothing is streaming.
+ *   1. Starting it marks the chat busy at the press (the button reads "Summing up" at once, with no
+ *      clock), then calls `sum_up_chat_slot`; a refusal or an error clears that and says why. An accepted
+ *      job starts a poll of the one background status, every 1.2 s, the same pace the Ask's own poll
+ *      uses while nothing is streaming.
  *   2. While the status says a `sum_up` job is pending, the poll keeps its seconds.
  *   3. Anything else ends it: `completed` asks the caller to reload the chat's summary, `failed`
  *      says so in one toast, `cancelled` (Stop) quietly ends it.
@@ -111,25 +113,45 @@ export function useChatSumUpJob(onSummaryWritten: (slotId: string) => void): Cha
     [finish],
   );
 
+  /*
+   * The chat a start is waiting on, set at the press. A ref, not state: two presses before the screen
+   * redraws both see the same closure, and only a ref tells the second one that the first is on its way.
+   */
+  const startingRef = useRef<string | null>(null);
+
   const start = useCallback(
     (slotId: string, pcIp = "") => {
-      if (!slotId || runningSlotId) return;
+      if (!slotId || runningSlotId || startingRef.current) return;
+      // Busy at the press: the button reads "Summing up" now, with no clock until the back end accepts.
+      startingRef.current = slotId;
+      setRunningSlotId(slotId);
+      setSeconds(null);
+      const refused = () => {
+        startingRef.current = null;
+        if (!mountedRef.current) return;
+        setRunningSlotId(null);
+        setSeconds(null);
+      };
       void sumUpChatSlot(slotId, pcIp)
         .then((res) => {
           if (!mountedRef.current) return;
           if (res.accepted) {
+            startingRef.current = null;
             setRunningSlotId(slotId);
             setSeconds(0);
             poll(slotId);
             return;
           }
+          refused();
           // The button is greyed out in the first two of these cases already; this only covers a race.
           if (res.status === "busy") toaster.toast({ title: "Sum up this chat", body: REASON_ANSWER_IN_FLIGHT, duration: 3500 });
           else if (res.status === "nothing_to_do") toaster.toast({ title: "Sum up this chat", body: TOAST_NOTHING_TO_SUM, duration: 3500 });
           else if (res.status === "low_memory") toaster.toast({ title: "Sum up this chat", body: SUM_UP_LOW_MEMORY_TOAST, duration: 5000 });
         })
         .catch(() => {
-          if (mountedRef.current) toaster.toast({ title: "Sum up this chat", body: SUM_UP_FAILED_TOAST, duration: 4000 });
+          const wasMounted = mountedRef.current;
+          refused();
+          if (wasMounted) toaster.toast({ title: "Sum up this chat", body: SUM_UP_FAILED_TOAST, duration: 4000 });
         });
     },
     [poll, runningSlotId],

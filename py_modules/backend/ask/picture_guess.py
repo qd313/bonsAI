@@ -29,6 +29,7 @@ import decky
 from backend.ask.ask_payload import screen_ask_attachments
 from backend.ask.ollama_ask_extras import resolve_ask_model_routing
 from backend.ask.ollama_chat_stream import _stream_ollama_chat_once
+from backend.ask.ollama_stop_service import record_chat_socket
 from backend.ask.ollama_window_fit import ollama_base_from_chat_url
 from backend.media.screenshot_media import prepare_attachment_images
 from backend.ollama.local_ollama_setup_service import list_installed_ollama_tags
@@ -243,7 +244,7 @@ async def ask_picture_guess(plugin: Any, *, url: str, model_name: str, image_b64
             functools.partial(
                 _stream_ollama_chat_once, url, model_name, messages, PICTURE_GUESS_TIME_LIMIT_SECONDS, logger,
                 dict(_GUESS_BUDGETS), "speed", keep_alive, check, opened, done, None,
-                requested_window_tokens=int(window_tokens or 0),
+                requested_window_tokens=int(window_tokens or 0), on_connection_opened=record_chat_socket(plugin),
             ),
         )
     except Exception as exc:  # noqa: BLE001 -- a failed first call must never cost the question

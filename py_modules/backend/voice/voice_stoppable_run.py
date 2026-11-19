@@ -30,25 +30,39 @@ CANCELLED_MESSAGE = "Binary install cancelled."
 POLL_SECONDS = 0.5
 
 
+# Podman's own `rm -f` first sends a polite stop and waits 10 seconds before it kills; the build's shell ignores
+# the polite stop, so Cancel sat on "Stopping the install" for 10 s (10.2 s measured, against 0.14 s with `-t 0`).
+_REMOVE_NO_WAIT = ["rm", "-f", "-t", "0"]
+_OPTION_NOT_KNOWN = ("unknown shorthand flag", "unknown flag", "flag provided but not defined")
+
+
 def _remove_container(
     env: Optional[dict[str, str]],
     podman: Optional[str],
     container_name: Optional[str],
 ) -> None:
-    """`podman rm -f <name>`, errors ignored (the container may not exist yet, or any more)."""
+    """`podman rm -f -t 0 <name>`, errors ignored (the container may not exist yet, or any more).
+
+    An older podman that does not know `-t` is asked once more with plain `rm -f`. Any other failure,
+    "no such container" included, is normal here and gets no second try.
+    """
     if not (podman and container_name):
         return
-    try:
-        subprocess.run(
-            [podman, "rm", "-f", container_name],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            env=env,
-            check=False,
-        )
-    except Exception:
-        pass
+    for args in (_REMOVE_NO_WAIT, ["rm", "-f"]):
+        try:
+            done = subprocess.run(
+                [podman, *args, container_name],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                env=env,
+                check=False,
+            )
+        except Exception:
+            return
+        refused = str(getattr(done, "stderr", "") or "").lower()
+        if done.returncode == 0 or not any(text in refused for text in _OPTION_NOT_KNOWN):
+            return
 
 
 def _stop_step(
@@ -91,7 +105,7 @@ def run_stoppable(
 
     Returns the finished process. Raises RuntimeError(CANCELLED_MESSAGE) when `cancel_event` (anything with
     is_set()) is set, and subprocess.TimeoutExpired when `timeout` passes; either way the process is ended and,
-    when `podman` and `container_name` are given, `podman rm -f <container_name>` removes the container the
+    when `podman` and `container_name` are given, `podman rm -f -t 0 <container_name>` removes the container the
     command started (the command must have been given that name with --name).
     """
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)

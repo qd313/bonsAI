@@ -112,7 +112,7 @@ class TheStepIsLookedAtWhileItRuns(unittest.TestCase):
             _run(rec, timeout=1800, cancel_event=cancel, podman="/usr/bin/podman", container_name="bonsai-whisper-build-ab12")
         self.assertLess(time.monotonic() - started, 2)
         self.assertEqual(str(caught.exception), "Binary install cancelled.")
-        rm = ["/usr/bin/podman", "rm", "-f", "bonsai-whisper-build-ab12"]
+        rm = ["/usr/bin/podman", "rm", "-f", "-t", "0", "bonsai-whisper-build-ab12"]
         self.assertEqual(rec.runs, [rm, rm], "removed once before and once after the process ends")
         self.assertEqual(rec.procs[0].ended_by, "terminate")
         self.assertIsNotNone(rec.procs[0].poll(), "the podman process must not be left running")
@@ -137,7 +137,7 @@ class TheStepIsLookedAtWhileItRuns(unittest.TestCase):
         rec = Recorder()
         with self.assertRaises(subprocess.TimeoutExpired):
             _run(rec, timeout=0.05, cancel_event=None, podman="p", container_name="c1")
-        self.assertEqual(rec.runs, [["p", "rm", "-f", "c1"]] * 2)
+        self.assertEqual(rec.runs, [["p", "rm", "-f", "-t", "0", "c1"]] * 2)
         self.assertIsNotNone(rec.procs[0].poll())
 
     def test_a_process_that_ignores_terminate_is_killed(self):
@@ -149,6 +149,34 @@ class TheStepIsLookedAtWhileItRuns(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 stoppable.run_stoppable(["podman", "pull", "x"], env={}, timeout=5, cancel_event=cancel, poll_seconds=0.01)
         self.assertEqual(rec.procs[0].ended_by, "kill")
+
+
+class TheContainerIsRemovedWithoutPodmansTenSecondWait(unittest.TestCase):
+    """Podman's own `rm -f` waits 10 s for a polite stop the build's shell ignores; `-t 0` kills at once."""
+
+    def _remove(self, answers):
+        calls: list[list[str]] = []
+
+        def fake_run(cmd, **_kw):
+            calls.append(list(cmd))
+            return answers[min(len(calls), len(answers)) - 1]
+
+        with patch.object(stoppable.subprocess, "run", side_effect=fake_run):
+            stoppable._remove_container({}, "podman", "c1")
+        return calls
+
+    def test_a_cancel_asks_podman_to_remove_the_container_with_no_wait(self):
+        calls = self._remove([subprocess.CompletedProcess([], 0, "", "")])
+        self.assertEqual(calls, [["podman", "rm", "-f", "-t", "0", "c1"]])
+
+    def test_an_older_podman_that_does_not_know_the_option_gets_one_more_try_without_it(self):
+        refused = subprocess.CompletedProcess([], 125, "", "Error: unknown shorthand flag: 't' in -t")
+        calls = self._remove([refused, subprocess.CompletedProcess([], 0, "", "")])
+        self.assertEqual(calls, [["podman", "rm", "-f", "-t", "0", "c1"], ["podman", "rm", "-f", "c1"]])
+
+    def test_a_no_such_container_answer_needs_no_second_try(self):
+        gone = subprocess.CompletedProcess([], 1, "", "Error: no container with name or ID \"c1\" found: no such container")
+        self.assertEqual(self._remove([gone]), [["podman", "rm", "-f", "-t", "0", "c1"]])
 
 
 class AContainerThatAppearsLateIsStillRemoved(unittest.TestCase):
@@ -225,8 +253,8 @@ class InstallWhisperCliGivesBothStepsTheFlag(unittest.TestCase):
                     service.install_whisper_cli(root, settings, {}, cancel)
         self.assertEqual(len(rec.runs), 2)
         self.assertEqual(rec.runs[0], rec.runs[1])
-        self.assertEqual(rec.runs[0][:3], ["/usr/bin/podman", "rm", "-f"])
-        self.assertTrue(rec.runs[0][3].startswith("bonsai-whisper-build-"))
+        self.assertEqual(rec.runs[0][:5], ["/usr/bin/podman", "rm", "-f", "-t", "0"])
+        self.assertTrue(rec.runs[0][5].startswith("bonsai-whisper-build-"))
 
 
 if __name__ == "__main__":

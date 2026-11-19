@@ -115,6 +115,21 @@ class PullResumeTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase)
             await self._finish()
         self.assertIsNone(self._note())
 
+    async def test_the_status_says_a_cancel_was_asked_for_while_a_download_runs(self) -> None:
+        with self._setup_run("cancelled"):
+            await self._start_custom()
+            state_the_run_writes_to = self.plugin._local_ollama_setup_state
+            self.assertFalse((await self.plugin.get_local_ollama_setup_status())["cancel_requested"])
+            await self.plugin.cancel_local_ollama_setup()
+            self.assertTrue((await self.plugin.get_local_ollama_setup_status())["cancel_requested"])
+            self.assertIs(self.plugin._local_ollama_setup_state, state_the_run_writes_to, "the run's own status dict was replaced")
+            await self._finish()
+            self.assertEqual((await self.plugin.get_local_ollama_setup_status())["phase"], "cancelled")
+
+    async def test_a_cancel_with_no_download_running_leaves_the_status_alone(self) -> None:
+        await self.plugin.cancel_local_ollama_setup()
+        self.assertFalse((await self.plugin.get_local_ollama_setup_status())["cancel_requested"])
+
     async def test_the_plugin_going_away_mid_download_keeps_the_note(self) -> None:
         with self._setup_run():
             await self._start_custom()

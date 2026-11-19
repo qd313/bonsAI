@@ -214,6 +214,12 @@ async def cancel_local_ollama_setup(self):
     ce = getattr(self, "_local_ollama_cancel_event", None)
     if isinstance(ce, asyncio.Event):
         ce.set()
+    # Say so in the status too, but only while a run is going (a Cancel with nothing running must not mark the
+    # next run's status), and in place: the running task writes to this exact dict, so a new one would orphan it.
+    task = getattr(self, "_local_ollama_setup_task", None)
+    state = getattr(self, "_local_ollama_setup_state", None)
+    if task is not None and not task.done() and isinstance(state, dict):
+        state["cancel_requested"] = True
     # A download the person cancelled must never come back on its own after a reload.
     pull_resume.clear_note(decky.DECKY_PLUGIN_SETTINGS_DIR)
     return {"cancel_requested": True}

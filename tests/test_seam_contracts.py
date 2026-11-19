@@ -90,8 +90,10 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "voice_whisper_cli_path": "(plugin_root: 'str', settings_dir: 'str') -> 'str'",
         "voice_whisper_runtime_env": "(plugin_root: 'str', settings_dir: 'str') -> 'dict[str, str]'",
         "voice_whisper_server_path": "(plugin_root: 'str', settings_dir: 'str') -> 'str'",
-        "whisper_binary_usable": "(plugin_root: 'str', settings_dir: 'str') -> 'Optional[str]'",
-        "whisper_server_binary_usable": "(plugin_root: 'str', settings_dir: 'str') -> 'Optional[str]'",
+        # 2026-11-19: the voice install passes its cancel flag so a Cancel ends the "does the engine start"
+        # check; callers that pass nothing are unchanged.
+        "whisper_binary_usable": "(plugin_root: 'str', settings_dir: 'str', cancel_event: 'Any' = None) -> 'Optional[str]'",
+        "whisper_server_binary_usable": "(plugin_root: 'str', settings_dir: 'str', cancel_event: 'Any' = None) -> 'Optional[str]'",
     },
     # voice capture
     "backend.voice.voice_transcription_service": {

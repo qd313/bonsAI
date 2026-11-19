@@ -237,7 +237,7 @@ def _voice_binary_ready_for_inference(
     model_path: str = "",
     cancel_event: Optional[threading.Event] = None,
 ) -> Optional[str]:
-    path = whisper_binary_usable(plugin_root, settings_dir)
+    path = whisper_binary_usable(plugin_root, settings_dir, cancel_event)
     if not path:
         return None
     bin_dir = voice_bin_dir(plugin_root, settings_dir)
@@ -269,12 +269,12 @@ def install_whisper_cli(
         if on_stage:
             on_stage(name, fields)
 
-    cli_ready = whisper_binary_usable(plugin_root, settings_dir)
+    cli_ready = whisper_binary_usable(plugin_root, settings_dir, cancel_event)
     model_path = voice_model_path(plugin_root, settings_dir, DEFAULT_VOICE_STT_MODEL)
     # The checks below can each run a test decode: they hear a Cancel, and the install ends as cancelled.
     ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path, cancel_event) if cli_ready else None
     raise_if_cancelled(cancel_event)
-    server_ready = whisper_server_binary_usable(plugin_root, settings_dir) if cli_ready else None
+    server_ready = whisper_server_binary_usable(plugin_root, settings_dir, cancel_event) if cli_ready else None
     if ready_path and server_ready:
         stage("binary_ready", path=ready_path)
         return
@@ -302,7 +302,7 @@ def install_whisper_cli(
 
     ready_path = _voice_binary_ready_for_inference(plugin_root, settings_dir, model_path, cancel_event)
     raise_if_cancelled(cancel_event)
-    if ready_path and whisper_server_binary_usable(plugin_root, settings_dir):
+    if ready_path and whisper_server_binary_usable(plugin_root, settings_dir, cancel_event):
         stage("binary_ready", path=ready_path)
         return
 

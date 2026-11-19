@@ -43,6 +43,7 @@ from typing import Any, Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.voice.voice_engine_record import check_voice_engine, write_voice_engine_record
+from backend.voice.voice_stoppable_run import raise_if_cancelled, run_stoppable
 
 
 def _log() -> Any:
@@ -127,7 +128,15 @@ def voice_whisper_runtime_env(plugin_root: str, settings_dir: str) -> dict[str, 
     return env
 
 
-def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
+def _run_help(path: str, env: dict[str, str], cancel_event: Any) -> "subprocess.CompletedProcess[str]":
+    """Run the engine program with -h. With a cancel flag (the voice install's) a Cancel ends it within a second."""
+    if cancel_event is not None:
+        return run_stoppable([path, "-h"], env=env, timeout=15, cancel_event=cancel_event)
+    return subprocess.run([path, "-h"], capture_output=True, text=True, timeout=15, env=env)
+
+
+def whisper_binary_usable(plugin_root: str, settings_dir: str, cancel_event: Any = None) -> Optional[str]:
+    """The program's path when it starts. With `cancel_event` (the voice install's), a Cancel raises the Cancel error."""
     path = resolve_whisper_cli(plugin_root, settings_dir)
     if not path:
         return None
@@ -143,17 +152,12 @@ def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
         return None
     env = voice_whisper_runtime_env(plugin_root, settings_dir)
     try:
-        proc = subprocess.run(
-            [path, "-h"],
-            capture_output=True,
-            text=True,
-            timeout=15,
-            env=env,
-        )
+        proc = _run_help(path, env, cancel_event)
         out = (proc.stdout or "") + (proc.stderr or "")
         if proc.returncode != 0 and "usage:" not in out:
             return None
     except Exception:
+        raise_if_cancelled(cancel_event)  # a Cancel is a Cancel, never "not usable" (that would start a rebuild)
         return None
     if verdict == "unrecorded":
         if write_voice_engine_record(
@@ -164,24 +168,19 @@ def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
     return path
 
 
-def whisper_server_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
+def whisper_server_binary_usable(plugin_root: str, settings_dir: str, cancel_event: Any = None) -> Optional[str]:
     path = voice_whisper_server_path(plugin_root, settings_dir)
     if not os.path.isfile(path) or not os.access(path, os.X_OK):
         return None
-    if not whisper_binary_usable(plugin_root, settings_dir):
+    if not whisper_binary_usable(plugin_root, settings_dir, cancel_event):
         return None
     env = voice_whisper_runtime_env(plugin_root, settings_dir)
     try:
-        proc = subprocess.run(
-            [path, "-h"],
-            capture_output=True,
-            text=True,
-            timeout=15,
-            env=env,
-        )
+        proc = _run_help(path, env, cancel_event)
         out = (proc.stdout or "") + (proc.stderr or "")
         if proc.returncode != 0 and "usage:" not in out:
             return None
     except Exception:
+        raise_if_cancelled(cancel_event)
         return None
     return path

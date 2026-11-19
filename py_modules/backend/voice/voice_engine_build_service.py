@@ -337,7 +337,7 @@ cp -a /tmp/bonsai-whisper-build/ggml/src/libggml*.so* /out/ 2>/dev/null || true
         podman, env, plugin_root, settings_dir, build_script, cancel_event, ("whisper-cli", "whisper-server"), True
     )
 
-    if not whisper_binary_usable(plugin_root, settings_dir):
+    if not whisper_binary_usable(plugin_root, settings_dir, cancel_event):
         raise RuntimeError(
             "whisper-cli was built but failed to run (missing libraries). "
             "Try Install voice engine again."

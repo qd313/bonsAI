@@ -1,5 +1,9 @@
 # 19 — Controller macro test rig + live view — discovery
 
+**2026-11-19: the pieces left are planned in [plan 108e](108e-finish-the-controller-test-rig.md).** Stale in this
+file: the "Still left" list below (its reasons for Bluetooth and for the night run), calls L3, L4 and L8 in § 2, the
+tool names in § 3, and §§ 1, 5 and 7, which are history now.
+
 Planning record for the roadmap entry of the same name. **Discovery locked 2026-08-23** in a
 maintainer Q&A session; the calls in § 2 are decided, everything marked UNKNOWN or *spike* is
 not. Recon and design only — **no implementation**. Effort uses the roadmap GTA scale.

@@ -78,7 +78,6 @@ from __future__ import annotations
 import asyncio
 import os
 import shutil
-import signal
 import subprocess
 import sys
 import time
@@ -101,6 +100,7 @@ from backend.ollama.ollama_binary_install import (
     run_cancellable,
 )
 from backend.ollama import ollama_pull_resume_service
+from backend.ollama.ollama_pull_cancel_watch import CancelWatch
 from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
 from backend.ollama.starter_left_out import drop_left_out_tags, mark_piece, starter_pieces_at_start
@@ -755,19 +755,15 @@ def run_ollama_pull(
             env=_env_for_ollama_cli(ollama_bin),
         )
         assert proc.stdout is not None
-        for line in proc.stdout:
-            if cancelled():
-                proc.send_signal(signal.SIGTERM)
-                try:
-                    proc.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    proc.kill()
-                return False, "Cancelled."
-            line = line.rstrip("\n")
-            if line:
-                shell_log(line)
-                tail_lines.append(line)
-        code = proc.wait()
+        with CancelWatch(proc, cancelled):  # ends the program on Cancel even while it prints nothing
+            for line in proc.stdout:
+                line = line.rstrip("\n")
+                if line:
+                    shell_log(line)
+                    tail_lines.append(line)
+            code = proc.wait()
+        if cancelled():
+            return False, "Cancelled."
         if code != 0:
             return False, _format_ollama_pull_failure(tag, code, tail_lines)
         return True, ""

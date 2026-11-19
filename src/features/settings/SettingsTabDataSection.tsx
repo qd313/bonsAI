@@ -155,6 +155,9 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
                 }
                 /* The wipe on the left and Cancel on the right; see the cache box above. */
                 actionLabel="Clear all data"
+                /* The wipe has no deadline and can take minutes (it deletes models); the box stays up until it
+                   answers and ignores Cancel meanwhile, so the button's words say it is working. */
+                actionBusyLabel="Clearing…"
                 onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
                 onAction={() => {
                   void Promise.resolve(onClearAllPluginData()).finally(() => {

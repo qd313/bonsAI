@@ -10,7 +10,7 @@
  * Does not: open a real Steam box; the stub only records what the tab asks Steam to show.
  */
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 let shown: React.ReactElement[] = [];
@@ -140,5 +140,33 @@ describe("the Clear all data box words stay short", () => {
     expect(words).toMatch(/settings, permissions, chats, notes, cache and logs are deleted/);
     expect(words).toMatch(/downloaded models and the Ollama install/);
     expect(words).toMatch(/Desktop logs stay/);
+  });
+});
+
+describe("the Clear all data box while the wipe runs", () => {
+  it("reads Clearing… on its action as soon as it is pressed, ignores Cancel and B, and closes when the wipe answers", async () => {
+    let finish: () => void = () => {};
+    const wipe = vi.fn(() => new Promise<void>((resolve) => (finish = resolve)));
+    const { buttons, box } = openBox("Clear all data...", { onClearAllPluginData: wipe });
+    fireEvent.click(buttons.find((b) => b.textContent === "Clear all data")!);
+    // The wipe has not answered yet: the box is still up and says it is working.
+    expect(Array.from(box.container.querySelectorAll("button")).map((b) => b.textContent)).toEqual(["Clearing…", "Cancel"]);
+    expect(close).not.toHaveBeenCalled();
+    fireEvent.click(buttons.find((b) => b.textContent === "Cancel")!);
+    modalRootCancel!();
+    fireEvent.click(buttons.find((b) => b.textContent === "Clearing…")!);
+    expect(wipe).toHaveBeenCalledTimes(1);
+    expect(close).not.toHaveBeenCalled();
+    await act(async () => {
+      finish();
+      await Promise.resolve();
+    });
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it("the Clear cache box keeps its Clear label (it closes at once)", () => {
+    const { buttons, box } = openBox("Clear cache...", { onResetSession: vi.fn() });
+    fireEvent.click(buttons.find((b) => b.textContent === "Clear")!);
+    expect(Array.from(box.container.querySelectorAll("button")).map((b) => b.textContent)).toEqual(["Clear", "Cancel"]);
   });
 });

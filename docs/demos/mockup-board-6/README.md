@@ -36,17 +36,15 @@ rest by Opus.
 
 ## Where things stand
 
-Drawn 2026-11-19. The maintainer picked twice that evening; the picks are in
+Drawn 2026-11-19. The maintainer picked in three rounds that evening; the picks are in
 [plan 107, section 4](../../planning/107-bugs-and-verify-toward-zero-third-sweep.md), with the notes word for word.
 
-Picked: tab 1 (A), tab 2 (A1), tab 3 (B, and one library line), tab 4 (B), tab 6 (B), tab 7 (Update asks first;
-X stops nothing, choice C), tab 8 (the question stays; the chip only; "Asking…" liked), tab 9 call one (leave
-it). Tab 5 by a note: AI models goes under Where AI runs.
-
-Still open, each redrawn after a note: tab 5 (the section's name: four drawn), tab 8 (the Ask anyway button's
-look: Looks C, D and E, after "They both look out of place"), tab 9 call three (a much shorter box: Short and
-Shortest, after "Way to wordy on this pop-up"). Tab 9 call two can be skipped.
+**Every call is picked.** Tab 1 (A), tab 2 (A1), tab 3 (B, and one library line), tab 4 (B), tab 5 (AI models
+goes under the first section, which is called "AI & models"), tab 6 (B), tab 7 (Update asks first; X stops
+nothing), tab 8 (the question stays; the chip only; "Ask anyway" inside the warning's bubble, a little more
+see-through, reading "Asking…" from the press), tab 9 (leave the AI untold; the Short box before the first
+downloads). Tab 9's unused switch was skipped, as offered: it stays, switched off.
 
 The page has an on-screen D-pad at its foot (`60-pad.css`, `70-pad.js`), so every panel can be driven by a tap
-with no keyboard. What changed and why: the last two sections of
+with no keyboard. What changed in each round and why: the last three sections of
 [the briefs](../../planning/assets/107-mockup-briefs.md).

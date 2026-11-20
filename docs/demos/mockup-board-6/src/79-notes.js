@@ -176,7 +176,7 @@ TABS.push({
   deciding: [
     "Call one: tell the AI too, or leave it to the line the player sees. You picked: leave it.",
     "Call two (you can skip it): delete the unused switch from the code, or leave it there switched off. A player sees no difference either way. With no pick it stays.",
-    "Call three: you wrote “Way to wordy on this pop-up. Trim this down a lot”. Two shorter versions are drawn, Short and Shortest. Under each one it says what is left out.",
+    "Call three: you wrote “Way to wordy on this pop-up. Trim this down a lot”. Two shorter versions are drawn, Short and Shortest. Under each one it says what is left out. You picked Short.",
   ],
   howto: "Call one shows a real answer from today's setup; no answer from the other setup was kept, so that side shows its numbers. Call two's numbers are just below. For call three, tap a box. Left and Right move between the two buttons, A presses one, B cancels. In today's box, Down and Up scroll the words (the ring stays on Cancel). Use the pad at the bottom of the page, or a keyboard (arrow keys, Enter for A, Esc for B). The line under each box counts its words and says whether they fit without scrolling.",
   controls: b6t9SpeedTable,

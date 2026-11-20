@@ -218,3 +218,12 @@ Trim this down a lot" (tab 9, call three, both marked no). The session (Fable) r
 **Two more rules for the next board:** when a choice is refused with a note, the next drawing starts from the
 plugin's own screen around it (what else sits there, at true size), not from a new idea; and a wording call
 shows its word count and what each shorter version leaves out.
+
+## Third round, 2026-11-19 (late): every call picked
+
+Read from the page: `t5-n-models` liked (the section is called "AI & models"); `t8-lookE` liked, with the note
+"This is the best, inside the chat bubble, but make the button a little more translucent so it fits in better";
+`t9-c3-short` liked. Tab 9's call two was skipped, as offered. The session changed tab 8 once more: Looks C and
+D are taken off the page, and Look E's button is drawn at about half the fill (`.b6t8-any-soft`), with a strip
+under the panel showing the first drawing and the new one on the bubble's own colour. Tabs 5 and 9 say what was
+picked. No call is open on this board.

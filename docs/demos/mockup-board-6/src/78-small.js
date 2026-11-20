@@ -20,7 +20,10 @@
               32 px, 6 px by 12 px padding, 8 px corners, 12 px words, a blue-grey edge)
        lookD  a suggestion chip (the kit's .k2-chip, measured from the Deck: 32 px, 4 px corners, 12.5 px words)
        lookE  inside the warning's bubble, at its foot, in the chat's small-button look
-     The ring on lookC and lookE is drawn as the plugin's white ring; no ring rule of its own was found for
+     Picked the same night: lookE, with the note "This is the best, inside the chat bubble, but make the button
+     a little more translucent so it fits in better". lookC and lookD are taken off the page; lookE's button is
+     now drawn at about half the fill (.b6t8-any-soft), so the bubble's own colour shows through it.
+     The ring on lookE is drawn as the plugin's white ring; no ring rule of its own was found for
      the chat's small button, so the Deck decides that part.
    Every name here starts with b6t8 so it cannot clash with another tab's file.
    ============================================================ */
@@ -163,7 +166,7 @@ function b6t8AnywayPanel(busyAtPress, walk, look) {
   const answer = aBubble2([warn], { stopEach: false });
   const turn = h("div", { class: "k2-turn" }, qBubble2(SAMPLE.q, { stop: false }), answer);
   const inside = look === "in";
-  const btn = h("button", { class: "b6t8-any" + (look ? " b6t8-any-" + (inside ? "chat" : look) : ""), "data-stop": "", "data-start": "" }, "Ask anyway");
+  const btn = h("button", { class: "b6t8-any" + (look ? " b6t8-any-" + (inside ? "chat b6t8-any-soft" : look) : ""), "data-stop": "", "data-start": "" }, "Ask anyway");
   const row = h("div", { class: inside ? "b6t8-infoot" : "b6t8-anyrow" }, btn);
   if (inside) answer.insertBefore(row, answer.querySelector(".k2-bspeak"));
   const body = mainTab2({ transcript: inside ? [turn] : [turn, row], chatName: "Hollow Knight help", dockEl: dock2({}) });
@@ -185,7 +188,14 @@ function b6t8AnywayPanel(busyAtPress, walk, look) {
   });
   return root;
 }
-const b6t8Look = (look) => () => [...b6t8Resettable((w) => b6t8AnywayPanel(true, w, look), "Press Enter on Ask anyway."), b6t8Others()];
+/* the picked button on the bubble's own colour: as first drawn, and with the lighter fill the maintainer asked for */
+function b6t8BeforeNow() {
+  const b = (cls, t) => h("span", { class: "b6t8-pair" }, h("span", { class: "b6t8-any b6t8-any-chat " + cls }, "Ask anyway"), h("i", {}, t));
+  return h("div", { class: "b6t8-ref" },
+    h("span", { class: "b6t8-reft" }, "The button on the bubble's own colour, at true size:"),
+    h("span", { class: "b6t8-swatch" }, b("", "first drawing"), b("b6t8-any-soft", "now: more see-through")));
+}
+const b6t8Look = (look) => () => [...b6t8Resettable((w) => b6t8AnywayPanel(true, w, look), "Press Enter on Ask anyway."), ...(look === "in" ? [b6t8BeforeNow()] : []), b6t8Others()];
 
 TABS.push({
   id: "t8", n: 8, name: "Three small ones", stars: 1,
@@ -197,7 +207,7 @@ TABS.push({
   deciding: [
     "Ten chats: after Cancel or B, does your question stay in the box (1A, as built now, but not yet your word) or is the box cleared (1B)?",
     "Pyro: keep the line in the answer and on the chip (Today), or show it on the chip only (2A)?",
-    "The Ask anyway button's look: you liked that it reads “Asking…” from the press. You wrote that it looks cheap, and then that the two wide ones look out of place. Three new looks are drawn at the end, each one borrowed from a button this screen already has (Look C, Look D, Look E).",
+    "The Ask anyway button's look: you picked Look E, inside the warning's own bubble, and asked for the button to be a little more see-through so it fits in better. It is drawn that way now, at the end of this tab.",
   ],
   howto: "Click a panel, then use the arrow keys, Enter as A and Esc as B. In the ten-chats panels the ring starts on Ask: press Enter, then try Cancel, Esc, or pick a chat and Delete. In the Pyro panels the ring starts on the Agent suggestion chip; the words that repeat have a faint yellow mark (not part of the design). In the Ask anyway panels the ring starts on the button: press Enter or A, or tap it. Start again resets a panel. No keyboard? Tap a panel and use the pad at the bottom of the page. The ten chat names and the Pyro answer are made up for the drawing; every button and box word is the plugin's own.",
   options: [
@@ -213,20 +223,14 @@ TABS.push({
     { id: "2A", group: "c2", label: "2A", title: "The chip only",
       desc: "The AI is no longer told to end with the line. The answer is just the answer; the suggestion shows only on the chip. One fewer line in the answer.",
       build: () => b6t8Resettable((w) => b6t8PyroPanel(false, w), "Press Enter on the chip, or Up to read the answer.") },
-    { id: "eyeToday", group: "eye", groupTitle: "Call three: how the Ask anyway button looks (third try: you wrote that the two wide ones look out of place)", label: "Today", today: true, title: "Today: a small button, and nothing changes when pressed",
+    { id: "eyeToday", group: "eye", groupTitle: "Call three: how the Ask anyway button looks (picked: inside the warning's bubble)", label: "Today", today: true, title: "Today: a small button, and nothing changes when pressed",
       desc: "Under the low-memory warning, pressing Ask anyway shows nothing until the question goes again, so it is not clear the press was taken. A second press does nothing. The memory numbers are an example.",
       build: () => b6t8Resettable((w) => b6t8AnywayPanel(false, w), "Press Enter on Ask anyway.") },
     { id: "eyeNew", group: "eye", label: "Built", title: "Being built this session: the same small button reads \"Asking…\" from the press",
       desc: "The button changes to Asking… the moment it is pressed, until the question goes again. You liked this, and wrote that the button looks cheap. It is the plugin's frosted button made small: as wide as its two words, 34 pixels tall.",
       build: () => [h("span", { class: "b6t8-built" }, "Being built this session"), ...b6t8Resettable((w) => b6t8AnywayPanel(true, w), "Press Enter on Ask anyway.")] },
-    { id: "lookC", group: "eye", label: "Look C", title: "Like Helpful and Not really",
-      desc: "The chat's own small button, the one under every answer: rounded corners, a blue-grey edge, as wide as its words. It sits where Helpful and Not really sit under a normal answer, so it reads as part of the chat. From the press it says Asking… beside a small turning ring. The Open the Ollama tab button under the “AI is not set up” answer is the same button, so it changes with it.",
-      build: b6t8Look("chat") },
-    { id: "lookD", group: "eye", label: "Look D", title: "Like a suggestion chip",
-      desc: "The look of the two chips above the question box: square corners, a dark frosted fill, as wide as its words. With the ring on it, it fills blue the way a chip does. It would be the one chip-shaped button inside the chat. Same Asking… and turning ring.",
-      build: b6t8Look("chip") },
-    { id: "lookE", group: "eye", label: "Look E", title: "Inside the warning, at its foot",
-      desc: "The button moves into the warning's own bubble, under a thin line, in the chat's small-button look. It then belongs to the warning it answers, and no loose row sits under the bubble. Down from the warning's words lands on it. Same Asking… and turning ring.",
+    { id: "lookE", group: "eye", label: "Picked", title: "Picked: inside the warning's bubble, now a little more see-through",
+      desc: "Your pick, with your note: “make the button a little more translucent so it fits in better”. The button sits inside the warning's own bubble, under a thin line. Its fill is now about half as strong, so the bubble's colour shows through it. Down from the warning's words lands on it, and from the press it says Asking… beside a small turning ring. The strip under the panel shows the first drawing and this one side by side. The Open the Ollama tab button under the “AI is not set up” answer is the same button, so it moves into its bubble too.",
       build: b6t8Look("in") },
   ],
 });

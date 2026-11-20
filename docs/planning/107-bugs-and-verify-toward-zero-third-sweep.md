@@ -34,7 +34,7 @@ with both lists as short as honesty allows.
 
 | List | Today | What this plan can close by itself | What stays, and why |
 |---|---|---|---|
-| Main roadmap, Bugs | 19 | up to 12 by itself, and up to 5 more through your picks of 2026-11-19 (§ 4) | the README clips close only on your yes to the new ones |
+| Main roadmap, Bugs | 19 | up to 12 by itself, and up to 7 more through your picks of 2026-11-19 (§ 4) | the README clips close only on your yes to the new ones |
 | Main roadmap, Verify | 38 | about 22 to 26 | about 8 need your hands (a finger, a locked account, a real fight, your eye); a few can only ever be proven by tests and come to you as a yes-or-no list |
 | Knowledge base, Bugs | 7 open, 5 accepted | 2 to 5 | the two hard ones close only if the fifth try meets the bar you set; the accepted five move to their own list |
 | Knowledge base, Deck checks | 7 | 3 to 4 | two cannot be produced on a real screen; one needs a game played once by hand |
@@ -90,19 +90,18 @@ bookkeeping sweep files these under this plan's decision number.
 | 8 | "Ask anyway" reads "Asking…" from the press | **Liked**, with the note "Make the button look more like the other buttons in steam os and bonsai, this looks cheap" | lane A1 builds "Asking…" (wave 1). The look is a new call, in the next table |
 | 9 | Tell the AI when a game has no notes | **Leave it:** only the player sees the line | nothing to build. The call is closed |
 | 7 | What X does while a long job runs (picked later the same evening) | **C:** X stops nothing; only A on Cancel stops. Your note: "I don't want x to stop anything" | the second half of lane X1: X no longer stops a job on any tab, and the small X beside Cancel goes. It lands after lane M3, so Cancel on the main screen can be reached before X stops working |
-| 5 | Where "AI models" lives on the Ollama tab (your note, later the same evening) | **"None of these, put it under Where AI runs and let's think of a slightly more fitting name for that section"** | lane M2: the AI models line goes; the first section holds one AI models button, with the AI on the Deck or on a PC. The session's reading: it takes the place of Browse models, because both open the same box. The name is the open call below |
+| 5 | Where "AI models" lives on the Ollama tab (your note, later the same evening) | **"None of these, put it under Where AI runs and let's think of a slightly more fitting name for that section"** | lane M2: the AI models line goes; the first section holds one AI models button, with the AI on the Deck or on a PC. The session's reading: it takes the place of Browse models, because both open the same box. The name is the next row |
+| 5 | The name of that section (third round, the same night) | **"AI & models"** | lane M2 builds the move with this name. Messages elsewhere that point to "Where AI runs" are reworded with it |
+| 8 | The look of the "Ask anyway" button (third round) | **Look E:** inside the warning's own bubble. Your note: "This is the best, inside the chat bubble, but make the button a little more translucent so it fits in better" | lane L1. Drawn again with a lighter fill, so the bubble's colour shows through. The report shows it on the Deck for your eye |
+| 9 | The box that asks before the first downloads (third round) | **Short:** 80 words in place of 238, with nothing to scroll | lane N1, with a security read, because every download box gets the same shorter site lines |
 
-**Still open** (three calls, and one you can skip). The first round of these was hard to understand, and the page
-was at fault: it could only be driven from a keyboard, tab 5 opened an empty box, and two calls were in the
-session's own words. All of that was put right the same evening. You then picked again and left three notes; each
-was redrawn a second time.
+**Nothing is still open.** It took three rounds. The first drawings of some calls were hard to understand, and
+the page was at fault: it could only be driven from a keyboard, tab 5 opened an empty box, and two calls were in
+the session's own words. Those were put right, and each call you sent back with a note was drawn again until you
+picked.
 
-| Tab | The call | Where it stands | If you do not pick |
-|---|---|---|---|
-| 5 | The name of the section that now holds AI models | Four names drawn on the real tab: "AI & models", "AI setup", "Where AI runs & models", or keep "Where AI runs". You can also write your own in the note box | the name stays "Where AI runs"; the button still moves |
-| 8 | The look of the "Ask anyway" button | The two wide looks were refused: "They both look out of place". Three new ones, each borrowed from a button the chat screen already has: like Helpful and Not really (Look C), like a suggestion chip (Look D), or inside the warning's own bubble (Look E) | keeps today's small look |
-| 9 | The box that asks before the first downloads | Both drawings were refused: "Way to wordy on this pop-up. Trim this down a lot". Two shorter wordings drawn: Short (80 words in place of 238, nothing to scroll) and Shortest (27 words). Under each it says what is left out. Both still name every site | stays as it is |
-| 9 | An unused switch inside the code (the honest answer's Speed option) | No screen shows it, so you can skip it | stays, switched off |
+One call you skipped, as the page offered: the unused switch inside the code (tab 9, the honest answer's Speed
+option). It stays, switched off. No screen shows it.
 
 **Not drawn, because nothing on screen changes:**
 - **Old backups in the Deck's home folder:** the 208 MB one from plan 100 and six smaller ones from August and
@@ -132,8 +131,9 @@ was redrawn a second time.
   download bar's Cancel; Update asks first; the Pyro character's suggestion shows on the chip only; X no longer
   stops a download or an install, only Cancel does; and AI models sits in the first section of the Ollama tab,
   one line fewer on that tab.
-- Plus whatever you pick of the three calls still open: that section's name, the look of "Ask anyway", and the
-  shorter box before the first downloads.
+- **From your later picks:** that section is called "AI & models"; "Ask anyway" sits inside the warning it
+  answers; and the box that asks before the first downloads says the same in about a third of the words, with
+  nothing to scroll.
 
 ## 6. Who does what
 
@@ -211,11 +211,11 @@ file).
 | T1 | The "summed itself up" row sits above the answer it speaks of | Opus medium, second opinion | FL landed (same D-pad files) |
 | M3 | On Main, Down from the question strip reaches the bar's Cancel | **Opus high**, second opinion | its Deck measurement. X is left alone in this lane; lane X1 takes it away everywhere |
 | X1 | Update asks first. X no longer stops a long job on any tab: only A on Cancel does, and the small X beside Cancel goes | Sonnet high, security read | M3 landed (same files, and Cancel on the main screen must be reachable before X stops working) |
-| M2 | AI models sits in the first section of the Ollama tab, with the AI on the Deck or on a PC; the AI models line goes | Opus medium, second opinion | X1 landed (the same section's files). The section's name waits for your pick; until then it stays "Where AI runs" |
+| M2 | AI models sits in the first section of the Ollama tab, with the AI on the Deck or on a PC; the AI models line goes; the section is called "AI & models" | Opus medium, second opinion | X1 landed (the same section's files) |
+| L1 | "Ask anyway" sits inside the warning's own bubble, as a small button with a light fill; from the press it reads "Asking…" | Opus medium, second opinion (the button becomes a new D-pad stop inside the bubble) | A1 and T1 landed (same files) |
+| N1 | The box before the first downloads: 80 words in place of 238, nothing to scroll, every site still named | Sonnet medium, security read | O1, M1 and X1 landed (the same download-box files) |
 
-**Still waiting for a pick:** the section's name (tab 5; a words-only change on top of M2), the "Ask anyway"
-button's look (tab 8; a small lane after A1), and the shorter box before the first downloads (tab 9; it changes
-the line every download box shows, so it gets a security read). The session reads the page at every check-in.
+**No lane waits for a pick any more.**
 
 **Given more than a Sonnet helper, and why:**
 - **The Down loop in a stopped answer (FL): Opus high and the hard second opinion.** It is a come-back: an entry
@@ -426,8 +426,7 @@ the plan landed in the code. The checks page gets a "Plan 107" round with pictur
 1. Unplug the outside screen's cable from the Deck; leave the charger in.
 2. On this PC: restart Steam, set it to offline, open Big Picture and leave it as the front window.
 3. Open a new chat, pick Fable 5.2 at high effort, and say "Run plan 107".
-4. Most picks are in (§ 4). Three calls are still open on mock-up board 6 (and one you can skip); pick whenever you like, and each pick
-   starts its lane at the next check-in.
+4. Every call on mock-up board 6 is picked (§ 4). Nothing waits for a pick.
 5. Confirm the rename check (answer 7) and say what to do with the old backups (§ 4).
 6. Say which goes first, this plan or plan 108 (the feature plans another chat is drafting). They cannot share
    the Deck or land at the same time.

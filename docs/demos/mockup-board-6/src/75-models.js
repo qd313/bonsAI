@@ -144,7 +144,7 @@ TABS.push({
   ],
   deciding: [
     "You wrote: “None of these, put it under Where AI runs and let's think of a slightly more fitting name for that section.” That is drawn below. The AI models line is gone. The first section holds one AI models button, in the place of Browse models, because both opened the same box. It is there with the AI on a PC as well.",
-    "What is left to pick is the section's name. Four are drawn. If you have a better one, write it in the note box.",
+    "The section's name was the last thing to pick. Four are drawn. You picked Name 1: AI & models.",
   ],
   howto: "The easy way: press Show me under a panel and watch. To try it yourself, tap a panel, then use the pad at the bottom of the page (or a keyboard: arrow keys, Enter for A, Esc for B). You can also tap the AI models button directly. The white ring starts on the first line. Tap the first switch, or the button under the panel, to see the section with the AI on a PC. The box that opens is a stand-in: Close shuts it. The other three lines are drawn shut and do not open here.",
   options: [

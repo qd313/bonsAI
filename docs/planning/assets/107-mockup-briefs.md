@@ -195,3 +195,26 @@ the page the same evening:
 
 **A rule for the next board:** every pressable panel must work by tap alone, and every stand-in box must say what
 it is and close by tap. Check each tab with a mouse and no keyboard before publishing.
+
+## Changed again on 2026-11-19 (late), after the second round of picks
+
+The maintainer picked again and left three notes. Tab 7's choice C was liked (X stops nothing). The notes:
+"None of these, put it under Where AI runs and let's think of a slightly more fitting name for that section"
+(tab 5), "They both look out of place" (tab 8, Looks A and B, both marked no) and "Way to wordy on this pop-up.
+Trim this down a lot" (tab 9, call three, both marked no). The session (Fable) redrew the three:
+
+- **Tab 5 (`75-models.js`, `65-models.css`), third drawing.** The AI models line is gone and the first section
+  holds one AI models button, in Browse models' place (both opened the same box). Four names for the section are
+  the choices (`t5-n-models`, `t5-n-setup`, `t5-n-where`, `t5-n-keep`), each on the real tab with the section
+  open; `t5-today` stays for comparison. The first switch, or a button under the panel, draws the section with
+  the AI on a PC. "Show me" walks from the top of the tab: five presses in the new place, twelve today.
+- **Tab 8 (`78-small.js`, `68-small.css`), third drawing of the button.** Looks A and B are taken off the page.
+  Look C is the chat's own small button (Helpful, Not really), Look D a suggestion chip, Look E the small
+  button inside the warning's bubble. Under each sits a strip of the screen's other buttons at true size.
+- **Tab 9 (`79-notes.js`, `69-notes.css`), second drawing of the box.** "The explaining sentence first" is taken
+  off the page. `t9-c3-short` (80 words) and `t9-c3-shortest` (27 words) stand beside today's 238. The line
+  under each box counts its words and says whether they fit without scrolling.
+
+**Two more rules for the next board:** when a choice is refused with a note, the next drawing starts from the
+plugin's own screen around it (what else sits there, at true size), not from a new idea; and a wording call
+shows its word count and what each shorter version leaves out.

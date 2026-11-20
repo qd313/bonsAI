@@ -13,9 +13,15 @@
      Today it is the plugin's frosted settings button (src/styles/settingsGlassButton.ts:63-81) made small: 11 px
      words, 4 px by 10 px padding, 34 px tall, as wide as its words. Reading "Asking…" from the press is being
      built this session. On 2026-11-19 the maintainer liked that and wrote that the button "looks cheap" and
-     should look more like the other buttons in SteamOS and bonsAI, so two looks are drawn beside it:
-       lookA  full width, the same frosted look at its normal size (36 px, 12 px words), a turning ring while asking
-       lookB  full width, Steam's flat grey button as the kit draws it (.k-btn), a turning ring while asking
+     should look more like the other buttons in SteamOS and bonsAI. Two wide looks were drawn (full width,
+     frosted; full width, Steam grey) and both were refused: "They both look out of place". Third drawing: the
+     looks the chat screen's own buttons already have, each at the size of its words.
+       lookC  the chat's small button under an answer, as Helpful and Not really (section-6.ts:264-285:
+              32 px, 6 px by 12 px padding, 8 px corners, 12 px words, a blue-grey edge)
+       lookD  a suggestion chip (the kit's .k2-chip, measured from the Deck: 32 px, 4 px corners, 12.5 px words)
+       lookE  inside the warning's bubble, at its foot, in the chat's small-button look
+     The ring on lookC and lookE is drawn as the plugin's white ring; no ring rule of its own was found for
+     the chat's small button, so the Deck decides that part.
    Every name here starts with b6t8 so it cannot clash with another tab's file.
    ============================================================ */
 const B6T8_Q = "how do I beat the Mantis Lords";
@@ -142,15 +148,29 @@ function b6t8PyroPanel(tipInAnswer, walk) {
   return root;
 }
 
-/* ---------- For the eye: Ask anyway ---------- */
+/* ---------- Call three: Ask anyway ---------- */
+/* the other buttons this screen already has, at true size, to hold a look against */
+function b6t8Others() {
+  const chat = (icon, t) => h("span", { class: "b6t8-any b6t8-any-chat" }, h("span", { class: "b6t8-ico", html: icon }), t);
+  return h("div", { class: "b6t8-ref" },
+    h("span", { class: "b6t8-reft" }, "The other buttons on this screen, at true size:"),
+    h("span", { class: "k2-chip b6t8-refchip" }, "How do I fix stuttering?"),
+    chat(ICONS.up, "Helpful"), chat(ICONS.down, "Not really"),
+    h("span", { class: "k2-ask" }, "Ask", h("span", { html: ICONS2.send })));
+}
 function b6t8AnywayPanel(busyAtPress, walk, look) {
   const warn = "Not enough free memory to start the AI. The Deck has about 5,200 MB free and the AI needs about 4,100 MB, so loading it would leave only about 1,100 MB (bonsAI keeps at least 2,000 MB back). To make room, close the game, pick a smaller model on the Ollama tab, or use the AI on a PC. Asking anyway may freeze the Deck.";
-  const turn = h("div", { class: "k2-turn" }, qBubble2(SAMPLE.q, { stop: false }), aBubble2([warn], { stopEach: false }));
-  const btn = h("button", { class: "b6t8-any" + (look ? " b6t8-any-" + look : ""), "data-stop": "", "data-start": "" }, "Ask anyway");
-  const row = h("div", { class: "b6t8-anyrow" }, btn);
-  const body = mainTab2({ transcript: [turn, row], chatName: "Hollow Knight help", dockEl: dock2({}) });
+  const answer = aBubble2([warn], { stopEach: false });
+  const turn = h("div", { class: "k2-turn" }, qBubble2(SAMPLE.q, { stop: false }), answer);
+  const inside = look === "in";
+  const btn = h("button", { class: "b6t8-any" + (look ? " b6t8-any-" + (inside ? "chat" : look) : ""), "data-stop": "", "data-start": "" }, "Ask anyway");
+  const row = h("div", { class: inside ? "b6t8-infoot" : "b6t8-anyrow" }, btn);
+  if (inside) answer.insertBefore(row, answer.querySelector(".k2-bspeak"));
+  const body = mainTab2({ transcript: inside ? [turn] : [turn, row], chatName: "Hollow Knight help", dockEl: dock2({}) });
   const root = deckFrame({ body, header: false });
   root.classList.add("b6t8");
+  // the button is the newest thing in the chat: show the foot of the chat, as the plugin does
+  requestAnimationFrame(() => { body.scroller.scrollTop = body.scroller.scrollHeight; });
   let pressed = false;
   btn.addEventListener("click", () => {
     if (pressed) return;
@@ -158,12 +178,14 @@ function b6t8AnywayPanel(busyAtPress, walk, look) {
     if (busyAtPress) { btn.replaceChildren(look ? h("span", { class: "b6t8-spin" }) : "", "Asking…"); btn.classList.add("b6t8-busy"); }
     walk.replaceChildren(busyAtPress ? "Pressed: the button says Asking… at once." : "Pressed: nothing on the screen changes yet.");
     setTimeout(() => {
-      row.replaceWith(h("div", { class: "b6t8-wait" }, "(the question goes again; the answer would start here)"));
-      walk.replaceChildren(`${B6T8_SLOW_MS / 1000} s later (drawn; the real wait varies): the row goes away and the question goes again.`);
+      const wait = h("div", { class: "b6t8-wait" }, "(the question goes again; the answer would start here)");
+      if (inside) { row.remove(); turn.after(wait); } else row.replaceWith(wait);
+      walk.replaceChildren(`${B6T8_SLOW_MS / 1000} s later (drawn; the real wait varies): the button goes away and the question goes again.`);
     }, B6T8_SLOW_MS);
   });
   return root;
 }
+const b6t8Look = (look) => () => [...b6t8Resettable((w) => b6t8AnywayPanel(true, w, look), "Press Enter on Ask anyway."), b6t8Others()];
 
 TABS.push({
   id: "t8", n: 8, name: "Three small ones", stars: 1,
@@ -175,7 +197,7 @@ TABS.push({
   deciding: [
     "Ten chats: after Cancel or B, does your question stay in the box (1A, as built now, but not yet your word) or is the box cleared (1B)?",
     "Pyro: keep the line in the answer and on the chip (Today), or show it on the chip only (2A)?",
-    "The Ask anyway button's look: you liked that it reads “Asking…” from the press, and wrote that the button looks cheap. Two better looks are drawn at the end (Look A, Look B). Pick one, or keep the small one.",
+    "The Ask anyway button's look: you liked that it reads “Asking…” from the press. You wrote that it looks cheap, and then that the two wide ones look out of place. Three new looks are drawn at the end, each one borrowed from a button this screen already has (Look C, Look D, Look E).",
   ],
   howto: "Click a panel, then use the arrow keys, Enter as A and Esc as B. In the ten-chats panels the ring starts on Ask: press Enter, then try Cancel, Esc, or pick a chat and Delete. In the Pyro panels the ring starts on the Agent suggestion chip; the words that repeat have a faint yellow mark (not part of the design). In the Ask anyway panels the ring starts on the button: press Enter or A, or tap it. Start again resets a panel. No keyboard? Tap a panel and use the pad at the bottom of the page. The ten chat names and the Pyro answer are made up for the drawing; every button and box word is the plugin's own.",
   options: [
@@ -191,17 +213,20 @@ TABS.push({
     { id: "2A", group: "c2", label: "2A", title: "The chip only",
       desc: "The AI is no longer told to end with the line. The answer is just the answer; the suggestion shows only on the chip. One fewer line in the answer.",
       build: () => b6t8Resettable((w) => b6t8PyroPanel(false, w), "Press Enter on the chip, or Up to read the answer.") },
-    { id: "eyeToday", group: "eye", groupTitle: "Call three: how the Ask anyway button looks (from your note that it looks cheap)", label: "Today", today: true, title: "Today: a small button, and nothing changes when pressed",
+    { id: "eyeToday", group: "eye", groupTitle: "Call three: how the Ask anyway button looks (third try: you wrote that the two wide ones look out of place)", label: "Today", today: true, title: "Today: a small button, and nothing changes when pressed",
       desc: "Under the low-memory warning, pressing Ask anyway shows nothing until the question goes again, so it is not clear the press was taken. A second press does nothing. The memory numbers are an example.",
       build: () => b6t8Resettable((w) => b6t8AnywayPanel(false, w), "Press Enter on Ask anyway.") },
     { id: "eyeNew", group: "eye", label: "Built", title: "Being built this session: the same small button reads \"Asking…\" from the press",
       desc: "The button changes to Asking… the moment it is pressed, until the question goes again. You liked this, and wrote that the button looks cheap. It is the plugin's frosted button made small: as wide as its two words, 34 pixels tall.",
       build: () => [h("span", { class: "b6t8-built" }, "Being built this session"), ...b6t8Resettable((w) => b6t8AnywayPanel(true, w), "Press Enter on Ask anyway.")] },
-    { id: "lookA", group: "eye", label: "Look A", title: "Wide and frosted, like bonsAI's own buttons",
-      desc: "The same frosted look and white ring as Test connection or Install voice engine, at their normal size: the full width of the panel, 36 pixels tall, words in the middle. From the press it reads Asking… beside a small turning ring, like the one on the download bar. No D-pad move changes. The Open the Ollama tab button under the “AI is not set up” answer is the same button, so it changes with it.",
-      build: () => b6t8Resettable((w) => b6t8AnywayPanel(true, w, "wide"), "Press Enter on Ask anyway.") },
-    { id: "lookB", group: "eye", label: "Look B", title: "Wide and flat grey, like Steam's own buttons",
-      desc: "The plain grey button Steam uses on its own quick-menu pages, at the full width of the panel. Same Asking… and turning ring. It would be the one Steam-grey button on the main screen: the Ask button and the chips there are frosted. The Open the Ollama tab button changes with it.",
-      build: () => b6t8Resettable((w) => b6t8AnywayPanel(true, w, "steam"), "Press Enter on Ask anyway.") },
+    { id: "lookC", group: "eye", label: "Look C", title: "Like Helpful and Not really",
+      desc: "The chat's own small button, the one under every answer: rounded corners, a blue-grey edge, as wide as its words. It sits where Helpful and Not really sit under a normal answer, so it reads as part of the chat. From the press it says Asking… beside a small turning ring. The Open the Ollama tab button under the “AI is not set up” answer is the same button, so it changes with it.",
+      build: b6t8Look("chat") },
+    { id: "lookD", group: "eye", label: "Look D", title: "Like a suggestion chip",
+      desc: "The look of the two chips above the question box: square corners, a dark frosted fill, as wide as its words. With the ring on it, it fills blue the way a chip does. It would be the one chip-shaped button inside the chat. Same Asking… and turning ring.",
+      build: b6t8Look("chip") },
+    { id: "lookE", group: "eye", label: "Look E", title: "Inside the warning, at its foot",
+      desc: "The button moves into the warning's own bubble, under a thin line, in the chat's small-button look. It then belongs to the warning it answers, and no loose row sits under the bubble. Down from the warning's words lands on it. Same Asking… and turning ring.",
+      build: b6t8Look("in") },
   ],
 });

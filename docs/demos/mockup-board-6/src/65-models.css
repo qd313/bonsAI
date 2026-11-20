@@ -1,9 +1,10 @@
 <style>
 /* ============================================================
-   Tab 5 (models): the Ollama tab's "AI models" takes two presses.
+   Tab 5 (models): "AI models" under "Where AI runs", and that section's name.
    Everything here starts with .b6t5 so it cannot touch another tab.
-   The section line and the button are the kit's (43-tabs.css); these rules add the ring on a line,
-   the band with Open all, the AI models box stand-in, and the press counter under each panel.
+   The section line, the switches and the frosted buttons are the kit's and tab 2's (43-tabs.css, 62-card.css);
+   these rules add the ring on a line, the AI models button's two halves, the connection line, the PC address
+   row, the AI models box stand-in, and the press counter under each panel.
    ============================================================ */
 
 /* The ring on a section line, as the plugin draws it: Steam's row fill and a white ring inside the line. */
@@ -14,33 +15,47 @@
 }
 .b6t5 .qam .k-fold.ring .k-fs { color: #dcdedf; }
 .b6t5 .k-foldbody { padding: 2px 0 6px; border-bottom: 1px solid #272c32; }
+.b6t5 .k-fold .k-ft { white-space: nowrap; }
 
-/* Option A: the line that opens the box shows the licence as its value and a plain arrow. */
-.b6t5 .b6t5-door .k-fs { color: #9fb7d5; }
-.b6t5 .b6t5-door .k-fc { width: 12px; font-size: 13px; }
+/* The AI models button: Browse models' frosted look, the licence level beside the name, an arrow last. */
+.b6t5-models { gap: 8px; }
+.b6t5-models .b6t5-mn { flex: none; }
+.b6t5-models .b6t5-lv { flex: 1 1 auto; min-width: 0; text-align: right; font-weight: 400; color: #9fb7d5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t5-models .b6t5-ar { flex: none; color: #9ce7ff; }
+.b6t2-btn.b6t5-ctr { justify-content: center; min-height: 34px; }
 
-/* Option B: the button on its own, with the same gap a section line leaves. */
-.b6t5 .b6t5-plain { padding: 6px 0; border-bottom: 1px solid #272c32; }
+/* The connection line with the AI on this Deck (OllamaConnectionLine.tsx): 44 px, a dot, two lines, an arrow. */
+.b6t5-conn { display: flex; align-items: center; gap: 10px; width: 100%; height: 44px; padding: 0 10px; box-sizing: border-box; border-radius: 4px; text-align: left;
+  border: 1px solid rgba(255,255,255,.2); background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); color: #e8eef5; }
+.b6t5-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,.55); }
+.b6t5-ct { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.b6t5-c1, .b6t5-c2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b6t5-c1 { font-size: 12px; font-weight: 600; line-height: 15px; height: 15px; }
+.b6t5-c2 { font-size: 10px; color: #9fb7d5; line-height: 13px; height: 13px; }
+.b6t5-re { flex: none; color: #9ce7ff; font-size: 15px; line-height: 1; }
 
-/* The band over the bottom of the panel holding Open all (the plugin's FoldAllButton). */
-.b6t5-dock { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: #0e141b; display: flex; justify-content: flex-end; padding: 8px 10px 8px 0; }
-.b6t5-all { display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px 0 8px; border-radius: 2px; border: 0; background: #32373d; color: #dcdedf; font-size: 11px; font-weight: 400; box-shadow: 0 3px 10px rgba(0,0,0,.55); }
-.b6t5-all .b6t5-alli { font-size: 13px; }
-.qam .b6t5-all[data-stop].ring { outline: none; box-shadow: 0 3px 10px rgba(0,0,0,.55); background: #fff; color: #0e141b; }
+/* With the AI on a PC: the address box with Test connection and Find LAN beside it, then the result line. */
+.b6t5-addr { display: flex; align-items: flex-end; gap: 8px; }
+.b6t5-addrbox { flex: 1 1 auto; min-width: 0; }
+.b6t5-cap { font-variant: small-caps; letter-spacing: .06em; font-size: 11px; font-weight: 600; color: #b8c6d6; margin-bottom: 2px; }
+.b6t5-field { display: block; width: 100%; height: 30px; box-sizing: border-box; padding: 0 8px; margin-bottom: 4px; border-radius: 2px; border: 0; background: #0b0e12; color: #dcdedf; font-size: 12px; text-align: left; }
+.b6t5-test, .b6t5-lan { flex: none; height: 38px; margin-bottom: 2px; box-sizing: border-box; border-radius: 4px; font-weight: 600; line-height: 1.15; }
+.b6t5-test { width: 68px; padding: 0 8px; font-size: 11px; border: 1px solid rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 100%); color: #e8eef5; }
+.b6t5-lan { padding: 0 4px; font-size: 10px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #c8d4e0; }
+.b6t5-ok { font-size: 11px; line-height: 1.35; color: #86efac; }
+.qam .b6t5-conn[data-stop].ring, .qam .b6t5-field[data-stop].ring, .qam .b6t5-test[data-stop].ring, .qam .b6t5-lan[data-stop].ring, .qam .b6t5-close[data-stop].ring {
+  outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
 
 /* The AI models box: a stand-in over the panel. Its title and the licence level are the plugin's words; the
    rest is a plain note saying the rows are not drawn, and a Close button so a tap can shut it. */
-.b6t5-box { position: absolute; inset: 0; z-index: 9; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; }
-.b6t5-box[hidden] { display: none; }
-.b6t5-boxin { width: 272px; box-sizing: border-box; background: rgb(14,20,27); border: 1px solid #2a323c; padding: 16px; }
+.b6t5-boxin { width: 100%; box-sizing: border-box; background: rgb(14,20,27); border: 1px solid #2a323c; padding: 16px; }
 .b6t5-boxt { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
 .b6t5-boxl { font-size: 12px; color: #dcdedf; margin-bottom: 8px; }
 .b6t5-boxl b { font-weight: 600; color: #9fb7d5; }
 .b6t5-boxn { font-size: 11px; line-height: 1.4; color: #8b929a; font-style: italic; margin-bottom: 12px; }
 .b6t5-close { display: block; width: 100%; height: 30px; border-radius: 2px; border: 0; background: #32373d; color: #dcdedf; font-size: 12px; cursor: pointer; }
-.qam .b6t5-close[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
 
-/* Under each panel: Show me, the press count, Start again, and what the last shown press did */
+/* Under each panel: Show me, the press count, Start again, the other state, and what the last press did */
 .b6t5-count { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
 .b6t5-count b { font-family: var(--font-mono); font-size: 13px; color: var(--leaf); font-weight: 500; }
 .b6t5-count button { font: inherit; font-size: 12px; padding: 3px 10px; border-radius: 6px; border: 1px solid var(--card-line); background: transparent; color: var(--ink-2); cursor: pointer; }

@@ -35,6 +35,8 @@
 .b6t9-p.last { margin-bottom: 0; }
 .b6t9-p.mark { box-shadow: -8px 0 0 -5px #fbbf24; }
 .b6t9-tag { color: #9ce7ff; }
+.b6t9-p.site { margin-bottom: 3px; padding-left: 10px; }
+.b6t9-p.site + .b6t9-p:not(.site) { margin-top: 8px; }
 .b6t9-more { height: 18px; line-height: 18px; margin-bottom: 10px; font-size: 11px; color: #8fa8c4; text-align: center; white-space: nowrap; overflow: hidden; }
 .b6t9-more[hidden] { display: none; }
 .b6t9-btns { display: flex; gap: 8px; }

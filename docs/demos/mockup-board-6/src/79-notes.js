@@ -9,7 +9,9 @@
    Call two: the honest answer's Speed-mode option. Numbers from the workshop's files
      kb-answer-eval-2026-11-15-p104-h1-sp-base-s0/-s1000, -sp-honest-s0/-s1000, -sp-honest-left-s0/-s1000
      (nine Speed questions no note can answer, two runs each: 18 answers per setup).
-   Call three: the starter-models box with Internet downloads off.
+   Call three: the starter-models box with Internet downloads off. Second drawing (2026-11-19, late): the first
+     one moved the closing paragraph to the top; the maintainer refused both and asked for far fewer words, so
+     two shorter wordings are drawn beside today's (B6T9_SHORT). Today's words come from:
      src/features/downloads/downloadNotice.tsx:280-329 (title, pinned site lines, closing paragraph, buttons),
      downloadSites.ts:53-87 and downloadSizes.ts:28-56 (sites and sizes), src/features/models/localOllamaStarterSet.tsx:
      58-68 and 98-139 (the words; Browse models' "Install the starter set", nothing left out, Ollama already there),
@@ -73,13 +75,40 @@ function b6t9Paras() {
   ];
 }
 
-/* The box. `first`: the closing paragraph goes above the site lines (option A). `onNote` hears what happened. */
-function b6t9Box(first, onNote) {
+/* The two shorter wordings, drawn after the maintainer's note on 2026-11-19: "Way to wordy on this pop-up.
+   Trim this down a lot". Both still name every site a download reaches. `hi` is the brighter ink, `mark` the
+   sentence that says what turning downloads on means, `site` a line that names a site. */
+const B6T9_SHORT = {
+  short: [
+    { hi: true, mark: true, html: B6T9_CLOSING },
+    { html: "The starter models are about 5.3 GB:" },
+    { site: true, html: `<span class="b6t9-tag">registry.ollama.ai</span> · the answer model and the note-search model · about 4.6 GB` },
+    { site: true, html: `<span class="b6t9-tag">huggingface.co</span> · the speech models · about 230 MB` },
+    { site: true, html: `<span class="b6t9-tag">ghcr.io and ubuntu.com</span> · the voice engine · about 500 MB` },
+    { hi: true, html: "The voice engine downloads too, even with the microphone permission off." },
+    { html: "It can take a while. Keep the Deck awake and online." },
+  ],
+  shortest: [
+    { hi: true, mark: true, html: "Internet downloads are off. Turn them on and download the starter models, about 5.3 GB?" },
+    { html: `From <span class="b6t9-tag">registry.ollama.ai</span>, <span class="b6t9-tag">huggingface.co</span>, <span class="b6t9-tag">ghcr.io</span> and <span class="b6t9-tag">ubuntu.com</span>.` },
+    { html: "You can turn downloads off again in Permissions." },
+  ],
+};
+
+/* The box. `kind` is "today", "short" or "shortest". `onNote` hears what happened. */
+function b6t9Box(kind, onNote) {
   const root = h("div", { class: "deck", tabindex: "0", role: "application", "aria-label": "Interactive mock-up. Use the arrow keys as the D-pad, Enter as A, Escape as B." });
-  const closing = h("div", { class: "b6t9-p hi mark" + (first ? "" : " last") }, B6T9_CLOSING);
-  const pinned = h("div", { class: "b6t9-pinned" }, ...B6T9_SITES.map((s) => h("div", {}, s)));
-  const paras = b6t9Paras().map((p, i, all) => h("div", { class: "b6t9-p" + (p.hi ? " hi" : "") + (first && i === all.length - 1 ? " last" : ""), html: p.html }));
-  const words = first ? h("div", { class: "b6t9-words" }, closing, pinned, ...paras) : h("div", { class: "b6t9-words" }, pinned, ...paras, closing);
+  let closing, words;
+  if (kind === "today") {
+    closing = h("div", { class: "b6t9-p hi mark last" }, B6T9_CLOSING);
+    const pinned = h("div", { class: "b6t9-pinned" }, ...B6T9_SITES.map((s) => h("div", {}, s)));
+    const paras = b6t9Paras().map((p) => h("div", { class: "b6t9-p" + (p.hi ? " hi" : ""), html: p.html }));
+    words = h("div", { class: "b6t9-words" }, pinned, ...paras, closing);
+  } else {
+    const lines = B6T9_SHORT[kind].map((p, i, all) => h("div", { class: "b6t9-p" + (p.hi ? " hi" : "") + (p.mark ? " mark" : "") + (p.site ? " site" : "") + (i === all.length - 1 ? " last" : ""), html: p.html }));
+    closing = lines[0];
+    words = h("div", { class: "b6t9-words" }, ...lines);
+  }
   const more = h("div", { class: "b6t9-more", hidden: true });
   const act = h("button", { class: "b6t9-btn act", type: "button", "data-stop": "", "data-row": "cf" }, "Turn on and download");
   const cancel = h("button", { class: "b6t9-btn safe", type: "button", "data-stop": "", "data-row": "cf", "data-start": "" }, "Cancel");
@@ -88,15 +117,16 @@ function b6t9Box(first, onNote) {
   cancel.classList.add("ring");
 
   let downs = 0, seenAt = null;
+  const count = words.textContent.trim().split(/\s+/).length;
   const inView = () => { const c = closing.getBoundingClientRect(), w = words.getBoundingClientRect(); return c.height > 0 && c.top >= w.top - 1 && c.bottom <= w.bottom + 1; };
-  const read = () => {
+  const read = (said) => {
     const max = words.scrollHeight - words.clientHeight;
     more.textContent = words.scrollTop < max - 1 ? "▾ More below (press Down)" : "";
     if (seenAt === null && inView()) seenAt = downs;
-    onNote && onNote({ downs, seenAt });
+    onNote && onNote({ downs, seenAt, count, steps: max > 1 ? Math.ceil(max / 64) : 0, said: typeof said === "string" ? said : "" });
   };
-  words.addEventListener("scroll", read);
-  const reset = (said) => { words.scrollTop = 0; downs = 0; seenAt = null; Deck.setRing(root, cancel, { scroll: false }); read(); if (said) onNote({ downs, seenAt, said }); };
+  words.addEventListener("scroll", () => read());
+  const reset = (said) => { words.scrollTop = 0; downs = 0; seenAt = null; Deck.setRing(root, cancel, { scroll: false }); read(said); };
   act.addEventListener("click", () => reset("You pressed Turn on and download. The box would close and the downloads start; here it opens again."));
   cancel.addEventListener("click", () => reset("You pressed Cancel. The box would close and nothing is downloaded; here it opens again."));
   root.addEventListener("deckkey", (e) => {
@@ -119,17 +149,18 @@ function b6t9Box(first, onNote) {
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(settle, 40));
   return root;
 }
-function b6t9BoxCard(first) {
+function b6t9BoxCard(kind) {
   return () => {
     const out = h("p", { class: "b6t9-count" });
-    const note = ({ downs, seenAt, said }) => {
+    const note = ({ seenAt, count, steps, said }) => {
       out.replaceChildren(
-        "The paragraph that explains “Turn on and download” (marked in yellow at its left edge):",
-        seenAt === null ? h("b", {}, "not in view yet") : h("b", {}, seenAt === 0 ? "in view when the box opens" : `in view after ${seenAt} Down ${seenAt === 1 ? "press" : "presses"}`),
+        h("span", {}, "Words in the box: ", h("b", {}, String(count || 0)), "."),
+        h("span", {}, steps ? ["They do not fit: ", h("b", {}, `${steps} Down ${steps === 1 ? "press" : "presses"}`), " to reach the end."] : h("b", {}, "They fit with nothing to scroll.")),
+        h("span", {}, "The sentence that says what turning downloads on means (yellow mark at its left edge): ",
+          seenAt === null ? h("b", {}, "not in view yet") : h("b", {}, seenAt === 0 ? "in view when the box opens" : `in view after ${seenAt} Down ${seenAt === 1 ? "press" : "presses"}`), "."),
         said ? h("span", {}, said) : "");
     };
-    const box = b6t9Box(first, note);
-    note({ downs: 0, seenAt: null });
+    const box = b6t9Box(kind, note);
     return [box, out];
   };
 }
@@ -140,14 +171,14 @@ TABS.push({
   today: [
     "Call one: when a game has no notes, the player sees a small line under every answer: “No notes for this game — this answer is from the model's own knowledge.” The AI itself is not told.",
     "Call two: inside the plugin there is an unused switch. It was meant to make Speed answers say “I don't know” more often. Tests showed it changes nothing. It is off, and no screen shows it.",
-    "Call three: when Internet downloads are off and you press a download button, a box asks “Turn on internet downloads?”. The sentence that says what turning them on means is the box's last paragraph, out of sight until you press Down several times.",
+    "Call three: when Internet downloads are off and you press a download button, a box asks “Turn on internet downloads?”. For the starter models it holds a lot of words, and you have to press Down several times to read them all.",
   ],
   deciding: [
     "Call one: tell the AI too, or leave it to the line the player sees. You picked: leave it.",
     "Call two (you can skip it): delete the unused switch from the code, or leave it there switched off. A player sees no difference either way. With no pick it stays.",
-    "Call three: leave the box as it is, or move the explaining sentence to the top.",
+    "Call three: you wrote “Way to wordy on this pop-up. Trim this down a lot”. Two shorter versions are drawn, Short and Shortest. Under each one it says what is left out.",
   ],
-  howto: "Call one shows a real answer from today's setup; no answer from the other setup was kept, so that side shows its numbers. Call two's numbers are just below. For call three, tap a box, then press Down and Up to scroll the words (the ring stays on Cancel), Left and Right to move between the buttons, A to press one, B to cancel. Use the pad at the bottom of the page, or a keyboard (arrow keys, Enter for A, Esc for B). The line under each box says when the explaining sentence comes into view. It has a yellow mark at its left edge.",
+  howto: "Call one shows a real answer from today's setup; no answer from the other setup was kept, so that side shows its numbers. Call two's numbers are just below. For call three, tap a box. Left and Right move between the two buttons, A presses one, B cancels. In today's box, Down and Up scroll the words (the ring stays on Cancel). Use the pad at the bottom of the page, or a keyboard (arrow keys, Enter for A, Esc for B). The line under each box counts its words and says whether they fit without scrolling.",
   controls: b6t9SpeedTable,
   options: [
     { id: "c1-leave", group: "c1", groupTitle: "Call one: should the AI also be told when a game has no notes?", label: "Today", today: true,
@@ -164,12 +195,15 @@ TABS.push({
     { id: "c2-remove", group: "c2", label: "A", title: "Delete it from the code",
       desc: "Nothing changes on any screen either: it is off today. The code gets a little smaller and there is one less thing to test.",
       build: () => null },
-    { id: "c3-today", group: "c3", groupTitle: "Call three: the box that asks before the first downloads (drawn for the starter models)", label: "Today", today: true,
-      title: "Today: the explaining sentence comes last",
-      desc: "The box opens on the three download sites and a long description of the starter models. The sentence that says what “Turn on and download” does is the last paragraph. You have to press Down several times to see it. Drawn as the box from Browse models, with Ollama already installed.",
-      build: b6t9BoxCard(false) },
-    { id: "c3-A", group: "c3", label: "A", title: "The explaining sentence comes first",
-      desc: "The same words in a new order: the sentence about Internet downloads is the first thing you read, above the site lines. Nothing else changes: same box, same size, same buttons.",
-      build: b6t9BoxCard(true) },
+    { id: "c3-today", group: "c3", groupTitle: "Call three: the box that asks before the first downloads (drawn for the starter models). Second try: you asked for far fewer words", label: "Today", today: true,
+      title: "Today: 238 words, and they scroll",
+      desc: "For comparison. Three long lines name the download sites, four paragraphs describe the starter models, and the sentence about turning downloads on comes last. Drawn as the box from Browse models, with Ollama already installed.",
+      build: b6t9BoxCard("today") },
+    { id: "c3-short", group: "c3", label: "Short", title: "Short: 80 words, nothing to scroll",
+      desc: "It starts with what turning downloads on means, in the plugin's own three sentences. Then the size, and one line for each site with what comes from it. It keeps one warning: the voice engine downloads even with the microphone permission off. Left out: the models' exact names, that a model you already have is not downloaded again, that one failed download does not stop the others, where the models are stored, and “plug in if you can”. Every other download box would get the same short site lines.",
+      build: b6t9BoxCard("short") },
+    { id: "c3-shortest", group: "c3", label: "Shortest", title: "Shortest: 27 words",
+      desc: "One question, the sites in one line, and how to turn downloads off again. Left out as well: what comes from which site and how big each part is, that the voice engine downloads with the microphone off, and that bonsAI only downloads when you press a download button. This is about the least a box can say and still name every site.",
+      build: b6t9BoxCard("shortest") },
   ],
 });
